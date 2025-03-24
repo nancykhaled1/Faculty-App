@@ -1,1 +1,1 @@
-# Facult-App
+# Faculty-App
