@@ -43,12 +43,12 @@ class buildTextField extends StatelessWidget {
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 23.w, vertical: 13.h),
         labelText: label,
-        labelStyle: TextStyle(color: Color(0xFF044C8C), fontSize: 15.sp),
+        labelStyle: TextStyle(color: Color(0xFF044C8C), fontSize: 13.sp, fontFamily: "Numans" , fontWeight: FontWeight.w400),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         fillColor: Colors.white,
         filled: true,
         hintText: hint,
-        hintStyle: TextStyle(color: Color(0xFF7A7A7A), fontSize: 14.sp),
+        hintStyle: TextStyle(color: Color(0xFF7A7A7A), fontSize: 12.sp, fontFamily: "Noto Kufi Arabic" , fontWeight: FontWeight.w400),
         prefixIcon: prefixIcon,
         suffixIcon:
         suffixIcon != null

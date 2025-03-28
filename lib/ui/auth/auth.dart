@@ -48,16 +48,20 @@ class _AuthScreenState extends State<AuthScreen> {
                         Text(
                           'تسجيل الدخول',
                           style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 14.sp,
+                            fontFamily: "Noto Kufi Arabic",
+                            fontWeight: FontWeight.w500,
                             color:
                             isLogin ? MyColors.primaryColor : MyColors.greyColor,
                           ),
                         ),
+                        SizedBox(
+                          height: 6.h,
+                        ),
                         if (isLogin)
                           Container(
-                            height: 7,
-                            width: 15,
+                            height: 5,
+                            width: 5,
                             decoration: BoxDecoration(
                               color: MyColors.primaryColor,
                               shape: BoxShape.circle,
@@ -81,16 +85,20 @@ class _AuthScreenState extends State<AuthScreen> {
                         Text(
                           'إنشاء حساب',
                           style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 14.sp,
+                            fontFamily: "Noto Kufi Arabic",
+                            fontWeight: FontWeight.w500,
                             color:
                             !isLogin ? MyColors.primaryColor : MyColors.greyColor,
                           ),
                         ),
+                        SizedBox(
+                          height: 6.h,
+                        ),
                         if (!isLogin)
                           Container(
-                            height: 7,
-                            width: 15,
+                            height: 5,
+                            width: 5,
                             decoration: BoxDecoration(
                               color: MyColors.primaryColor,
                               shape: BoxShape.circle,
@@ -143,8 +151,8 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
 
                         //هنا لو اليزر اختار منصه الخريجين  لكن لو اختار الشكاوى هيبقى اللوجين و الطالب
-                        child: isLogin ? LoginScreen() : StudentRegister(),
-                      //  child: isLogin ? LoginScreen() : AlumniRegisterScreen(),
+                       // child: isLogin ? LoginScreen() : StudentRegister(),
+                        child: isLogin ? LoginScreen() : AlumniRegisterScreen(),
 
 
                       ),

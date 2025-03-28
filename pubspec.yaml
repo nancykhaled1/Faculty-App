@@ -41,7 +41,7 @@ dependencies:
   intl: any
   file_picker: ^9.2.1
   flutter_svg: ^2.0.10
-
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +70,10 @@ flutter:
     - assets/images/log.png
     - assets/images/
     - assets/icons/
+    - assets/images/circle.svg
+    - assets/icons/dept.svg
+    - assets/images/Component.png
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
@@ -84,10 +88,17 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Noto Kufi Arabic
+      fonts:
+        - asset: assets/fonts/NotoKufiArabic-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoKufiArabic-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Numans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/WorkSans-Medium.ttf
+          weight: 500
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

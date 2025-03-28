@@ -38,6 +38,7 @@ class _StudentRegisterState extends State<StudentRegister> {
               'مرحباً بك ! 👋',
               style: TextStyle(
                 fontSize: 24.sp,
+                fontFamily: "Noto Kufi Arabic",
                 fontWeight: FontWeight.w400,
                 color: MyColors.primaryColor,
               ),
@@ -206,7 +207,8 @@ class _StudentRegisterState extends State<StudentRegister> {
                     child: Text(
                       "إنشاء حساب",
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 15.sp,
+                        fontFamily: "Noto Kufi Arabic",
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -215,7 +217,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                       foregroundColor: MyColors.whiteColor,
                       padding: EdgeInsets.symmetric(
                         vertical: 10.h,
-                        horizontal: 120.w,
+                        horizontal: 115.w,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.r),

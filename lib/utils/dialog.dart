@@ -39,13 +39,20 @@ class BuildDialog extends StatelessWidget {
               height: 61.h,
             ),
             SizedBox(height: 30.h),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w400,
-                color: MyColors.blackColor,
+            Padding(
+              padding:  EdgeInsets.symmetric(
+                vertical: 8.w,
+                horizontal: 20.h
+              ),
+              child: Text(
+                message,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Noto Kufi Arabic",
+                  color: MyColors.blackColor,
+                ),
               ),
             ),
             if (subMessage != null) ...[
@@ -53,7 +60,7 @@ class BuildDialog extends StatelessWidget {
               Text(
                 subMessage!,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                style: TextStyle(fontSize: 15.sp, color: Colors.grey[700]),
               ),
             ],
           ],

@@ -123,6 +123,7 @@ class _RePasswordState extends State<RePassword> {
                                   style: TextStyle(
                                     color: MyColors.primaryColor,
                                     fontSize: 20.sp,
+                                    fontFamily: "Noto Kufi Arabic",
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -226,7 +227,8 @@ class _RePasswordState extends State<RePassword> {
                                   child: Text(
                                     "تعيين كلمة المرور",
                                     style: TextStyle(
-                                      fontSize: 17.sp,
+                                      fontSize: 16.sp,
+                                      fontFamily: "Noto Kufi Arabic",
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -235,7 +237,7 @@ class _RePasswordState extends State<RePassword> {
                                     foregroundColor: MyColors.whiteColor,
                                     padding: EdgeInsets.symmetric(
                                       vertical: 10.h,
-                                      horizontal: 95.w,
+                                      horizontal: 85.w,
                                     ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.r),
