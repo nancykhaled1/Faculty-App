@@ -217,7 +217,8 @@ class _RegisterState extends State<Register> {
                         child: Text(
                           "التالي",
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 15.sp,
+                            fontFamily: "Noto Kufi Arabic",
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -325,7 +326,9 @@ class _RegisterState extends State<Register> {
                         status,
                         style: TextStyle(
                           color: MyColors.greyColor,
-                          fontSize: 14.sp,
+                          fontFamily: "Noto Kufi Arabic",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
                         ),
                       ),
                     ],

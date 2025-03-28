@@ -48,6 +48,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
               'مرحباً بك ! 👋',
               style: TextStyle(
                 fontSize: 24.sp,
+                fontFamily: "Noto Kufi Arabic",
                 fontWeight: FontWeight.w400,
                 color: MyColors.primaryColor,
               ),
@@ -237,7 +238,8 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                         child: Text(
                           "التالي",
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 15.sp,
+                            fontFamily: "Noto Kufi Arabic",
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -246,7 +248,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                           foregroundColor: MyColors.whiteColor,
                           padding: EdgeInsets.symmetric(
                             vertical: 10.h,
-                            horizontal: 135.w,
+                            horizontal: 130.w,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.r),
@@ -396,7 +398,9 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                             status,
                             style: TextStyle(
                               color: MyColors.greyColor,
-                              fontSize: 14.sp,
+                              fontFamily: "Noto Kufi Arabic",
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ],

@@ -1,4 +1,5 @@
 import 'package:faculty/ui/auth/login/forget_pass.dart';
+import 'package:faculty/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 'مرحباً بك من جديد! 👋',
                 style: TextStyle(
                   fontSize: 24.sp,
+                  fontFamily: "Noto Kufi Arabic",
                   fontWeight: FontWeight.w400,
                   color: MyColors.primaryColor,
                 ),
@@ -113,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 label: 'كلمة المرور',
 
               ),
-              SizedBox(height: 5.h),
+            //  SizedBox(height: 5.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -129,8 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: MyColors.greyColor,
                         ),
                       ),
-                      Text('تذكرني', style: TextStyle(color: MyColors.greyColor, fontSize: 15.sp,
-                          fontWeight: FontWeight.w400
+                      Text('تذكرني', style: TextStyle(color: MyColors.greyColor, fontSize: 10.sp,
+                          fontWeight: FontWeight.w400,
+                        fontFamily: "Noto Kufi Arabic"
                       )),
                     ],
                   ),
@@ -140,7 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Text('نسيت كلمة المرور',
                         style: TextStyle(color: MyColors.primaryColor,
-                            fontSize: 15.sp,
+                            fontSize: 10.sp,
+                            fontFamily: "Noto Kufi Arabic",
                             fontWeight: FontWeight.w400
                         )),
                   ),
@@ -151,12 +155,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-
+                  Navigator.pushReplacementNamed(context, HomePage.routeName);
                 },
                 child: Text(
                   "تسجيل الدخول",
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 15.sp,
+                    fontFamily: "Noto Kufi Arabic",
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -165,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   foregroundColor: MyColors.whiteColor,
                   padding: EdgeInsets.symmetric(
                     vertical: 10.h,
-                    horizontal: 110.w,
+                    horizontal: 105.w,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r),

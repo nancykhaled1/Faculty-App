@@ -17,10 +17,10 @@ class ForgetPassScreen extends StatelessWidget{
     return SafeArea(child: Scaffold(
       backgroundColor: MyColors.whiteColor,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 30.sp, left: 30.sp),
+            padding: EdgeInsets.only(top: 30.sp, right: 30.sp),
             child: GestureDetector(
               onTap: (){
                 Navigator.pushReplacementNamed(context, AuthScreen.routeName);
@@ -107,6 +107,7 @@ class ForgetPassScreen extends StatelessWidget{
                             Text('نسيت كلمة المرور؟',
                             style: TextStyle(
                               color: MyColors.primaryColor,
+                              fontFamily: "Noto Kufi Arabic",
                               fontSize: 20.sp,
                               fontWeight: FontWeight.w400
                             ),
@@ -119,6 +120,7 @@ class ForgetPassScreen extends StatelessWidget{
                             style: TextStyle(
                               color: MyColors.greyColor,
                               fontSize: 14.sp,
+                              fontFamily: "Noto Kufi Arabic",
                               fontWeight: FontWeight.w400
                             ),
                             ),
@@ -172,7 +174,8 @@ class ForgetPassScreen extends StatelessWidget{
                                 child: Text(
                                   "تسجيل الدخول",
                                   style: TextStyle(
-                                    fontSize: 16.sp,
+                                    fontSize: 15.sp,
+                                    fontFamily: "Noto Kufi Arabic",
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -181,7 +184,7 @@ class ForgetPassScreen extends StatelessWidget{
                                   foregroundColor: MyColors.whiteColor,
                                   padding: EdgeInsets.symmetric(
                                     vertical: 10.h,
-                                    horizontal: 98.w,
+                                    horizontal: 90.w,
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.r),

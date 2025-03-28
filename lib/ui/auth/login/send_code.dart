@@ -125,14 +125,16 @@ class _SendCodeState extends State<SendCode> {
                                 style: TextStyle(
                                   color: MyColors.primaryColor,
                                   fontSize: 20.sp,
+                                  fontFamily: "Noto Kufi Arabic",
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
                               SizedBox(height: 20.h),
-                              Text('تم ارسال كود مكون من 5 ارقام الي e33@gm.com قم \n بادخال الكود',
+                              Text('تم ارسال كود مكون من 5 ارقام الي e33@gm.com قم بادخال الكود',
                                 style: TextStyle(
                                   color: MyColors.greyColor,
                                   fontSize: 14.sp,
+                                  fontFamily: "Noto Kufi Arabic",
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -208,7 +210,8 @@ class _SendCodeState extends State<SendCode> {
                                 child: Text(
                                   "ارسال الكود",
                                   style: TextStyle(
-                                    fontSize: 17.sp,
+                                    fontSize: 16.sp,
+                                    fontFamily: "Noto Kufi Arabic",
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -219,7 +222,7 @@ class _SendCodeState extends State<SendCode> {
                                   foregroundColor: MyColors.whiteColor,
                                   padding: EdgeInsets.symmetric(
                                     vertical: 10.h,
-                                    horizontal: 110.w,
+                                    horizontal: 105.w,
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.r),

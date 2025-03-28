@@ -1,3 +1,4 @@
+import 'package:faculty/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,7 +31,8 @@ class SuccessScreen extends StatelessWidget{
               style: TextStyle(
                 color: MyColors.primaryColor,
                 fontSize: 30.sp,
-                fontWeight: FontWeight.w400
+                fontFamily: "Noto Kufi Arabic",
+                fontWeight: FontWeight.w500
               ),
               ),
               SizedBox(
@@ -40,6 +42,7 @@ class SuccessScreen extends StatelessWidget{
                 style: TextStyle(
                     color: MyColors.greyColor,
                     fontSize: 20.sp,
+                    fontFamily: "Work Sans",
                     fontWeight: FontWeight.w500
                 ),
               ),
@@ -48,13 +51,14 @@ class SuccessScreen extends StatelessWidget{
               ),
               ElevatedButton(
                 onPressed: () {
-
+                  Navigator.pushReplacementNamed(context, HomePage.routeName);
 
                 },
                 child: Text(
                   "التالي",
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 15.sp,
+                    fontFamily: "Noto Kufi Arabic",
                     fontWeight: FontWeight.w400,
                   ),
                 ),
