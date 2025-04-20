@@ -178,7 +178,7 @@ Padding(
                 child: SvgPicture.asset(
                   "assets/icons/accept.svg",
                   width: 51.w,
-                  height: 34.h,
+                  height: 40.h,
                 ),
               ),
             ],
