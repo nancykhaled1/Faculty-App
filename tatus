@@ -1,0 +1,148 @@
+[33mcommit 78530f7a2e25581e0d23db6f5ab71aea08136ce7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Farah <farahwaeh@gmail.com>
+Date:   Sun Apr 20 16:32:22 2025 +0200
+
+    save changes
+
+M	Faculty-App-master/lib/complaint/inquiriesComplaint.dart
+
+[33mcommit c977f0cf647623548449ccc16297440f8b75deae[m
+Merge: bbad7ee 35a97ab
+Author: Farah <farahwaeh@gmail.com>
+Date:   Fri Apr 18 21:39:15 2025 +0200
+
+    Merge branch 'main' of https://github.com/nancykhaled1/Faculty-App
+
+[33mcommit bbad7eee0c48d48ddd956a14660551674d98ae9b[m
+Author: Farah <farahwaeh@gmail.com>
+Date:   Fri Apr 18 21:30:11 2025 +0200
+
+    finish complaint page
+
+A	Faculty-App-master/.gitignore
+A	Faculty-App-master/.metadata
+A	Faculty-App-master/README.md
+A	Faculty-App-master/analysis_options.yaml
+A	Faculty-App-master/android/.gitignore
+A	Faculty-App-master/android/app/build.gradle.kts
+A	Faculty-App-master/android/app/src/debug/AndroidManifest.xml
+A	Faculty-App-master/android/app/src/main/AndroidManifest.xml
+A	Faculty-App-master/android/app/src/main/kotlin/com/example/faculty/MainActivity.kt
+A	Faculty-App-master/android/app/src/main/res/drawable-v21/launch_background.xml
+A	Faculty-App-master/android/app/src/main/res/drawable/launch_background.xml
+A	Faculty-App-master/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+A	Faculty-App-master/android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+A	Faculty-App-master/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+A	Faculty-App-master/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+A	Faculty-App-master/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+A	Faculty-App-master/android/app/src/main/res/values-night/styles.xml
+A	Faculty-App-master/android/app/src/main/res/values/styles.xml
+A	Faculty-App-master/android/app/src/profile/AndroidManifest.xml
+A	Faculty-App-master/android/build.gradle.kts
+A	Faculty-App-master/android/gradle.properties
+A	Faculty-App-master/android/gradle/wrapper/gradle-wrapper.properties
+A	Faculty-App-master/android/settings.gradle.kts
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-Black.ttf
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-Bold.ttf
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-ExtraBold.ttf
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-ExtraLight.ttf
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-Light.ttf
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-Medium.ttf
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-Regular.ttf
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-SemiBold.ttf
+A	Faculty-App-master/assets/fonts/NotoKufiArabic-Thin.ttf
+A	Faculty-App-master/assets/fonts/Numans-Regular.ttf
+A	Faculty-App-master/assets/fonts/WorkSans-Medium.ttf
+A	Faculty-App-master/assets/icons/Group 4.svg
+A	Faculty-App-master/assets/icons/Group.png
+A	Faculty-App-master/assets/icons/Student.svg
+A	Faculty-App-master/assets/icons/Vector.svg
+A	Faculty-App-master/assets/icons/accept.svg
+A	Faculty-App-master/assets/icons/alumni.svg
+A	Faculty-App-master/assets/icons/arrow.svg
+A	Faculty-App-master/assets/icons/attach.svg
+A	Faculty-App-master/assets/icons/dept.svg
+A	Faculty-App-master/assets/icons/dept_sel.svg
+A	Faculty-App-master/assets/icons/document.svg
+A	Faculty-App-master/assets/icons/downloadicon.svg
+A	Faculty-App-master/assets/icons/globe-alt.svg
+A	Faculty-App-master/assets/icons/homeIcon.svg
+A	Faculty-App-master/assets/icons/lock.svg
+A	Faculty-App-master/assets/icons/mail.svg
+A	Faculty-App-master/assets/icons/suit.svg
+A	Faculty-App-master/assets/icons/upload.svg
+A	Faculty-App-master/assets/icons/user-cross.svg
+A	Faculty-App-master/assets/icons/user-heart.svg
+A	Faculty-App-master/assets/icons/user-settings.svg
+A	Faculty-App-master/assets/icons/user-shield.svg
+A	Faculty-App-master/assets/icons/user-tick.svg
+A	Faculty-App-master/assets/icons/user.svg
+A	Faculty-App-master/assets/icons/wait.svg
+A	Faculty-App-master/assets/images/Chain.png
+A	Faculty-App-master/assets/images/Component.png
+A	Faculty-App-master/assets/images/Group 63.svg
+A	Faculty-App-master/assets/images/Group 65.svg
+A	Faculty-App-master/assets/images/Mail.svg
+A	Faculty-App-master/assets/images/Rectangle 40.png
+A	Faculty-App-master/assets/images/Upload.svg
+A	Faculty-App-master/assets/images/background-simple.svg
+A	Faculty-App-master/assets/images/boy1.svg
+A	Faculty-App-master/assets/images/boy2.svg
+A	Faculty-App-master/assets/images/boyy.png
+A	Faculty-App-master/assets/images/circle.svg
+A	Faculty-App-master/assets/images/cs.png
+A	Faculty-App-master/assets/images/doctors.png
+A	Faculty-App-master/assets/images/girl.svg
+A	Faculty-App-master/assets/images/inquiresComplaint.svg
+A	Faculty-App-master/assets/images/is.png
+A	Faculty-App-master/assets/images/it.png
+A	Faculty-App-master/assets/images/line.png
+A	Faculty-App-master/assets/images/line2.png
+A	Faculty-App-master/assets/images/lock.svg
+A	Faculty-App-master/assets/images/log.png
+A	Faculty-App-master/assets/images/logo2.svg
+A	Faculty-App-master/assets/images/message.svg
+A	Faculty-App-master/assets/images/onboarding1.png
+A	Faculty-App-master/assets/images/onboarding2.png
+A	Faculty-App-master/assets/images/onboarding3.png
+A	Faculty-App-master/assets/images/professor.png
+A	Faculty-App-master/assets/images/sendComplaint.svg
+A	Faculty-App-master/assets/images/sendcomplaintt.svg
+A	Faculty-App-master/assets/images/vector.svg
+A	Faculty-App-master/assets/images/vision.svg
+A	Faculty-App-master/assets/images/white_circle.png
+A	Faculty-App-master/ios/.gitignore
+A	Faculty-App-master/ios/Flutter/AppFrameworkInfo.plist
+A	Faculty-App-master/ios/Flutter/Debug.xcconfig
+A	Faculty-App-master/ios/Flutter/Release.xcconfig
+A	Faculty-App-master/ios/Runner.xcodeproj/project.pbxproj
+A	Faculty-App-master/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+A	Faculty-App-master/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+A	Faculty-App-master/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+A	Faculty-App-master/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+A	Faculty-App-master/ios/Runner.xcworkspace/contents.xcworkspacedata
+A	Faculty-App-master/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+A	Faculty-App-master/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+A	Faculty-App-master/ios/Runner/AppDelegate.swift
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
+A	Faculty-App-master/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png
+A	Faculty-App-master/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
+A	Faculty-App-master/ios/Runner/Base.
