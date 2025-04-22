@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: 2.h,
                                   fontFamily: "Noto Kufi Arabic",
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 6.sp,
+                                  fontSize: 8.sp,
                                 ),
                                 textAlign: TextAlign.right,
                                 softWrap: true, // يسمح بكسر النص عند الحاجة
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   fontFamily: "Noto Kufi Arabic",
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 6.sp,
+                                  fontSize: 8.sp,
                                 ),
                                 textAlign: TextAlign.right,
                               ),

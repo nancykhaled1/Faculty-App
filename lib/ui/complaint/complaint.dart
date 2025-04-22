@@ -1,8 +1,9 @@
 
 import 'package:faculty/colorManager.dart';
-import 'package:faculty/complaint/inquiriesComplaint.dart';
-import 'package:faculty/complaint/sendComplaint.dart';
+import 'package:faculty/ui/complaint/inquiriesComplaint.dart';
+import 'package:faculty/ui/complaint/sendComplaint.dart';
 import 'package:faculty/ui/home/homescreen.dart';
+import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +15,7 @@ class Complaint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.backgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(top:45,right:5),
         child: Center(

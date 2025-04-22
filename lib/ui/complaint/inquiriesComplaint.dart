@@ -1,7 +1,9 @@
 
 import 'package:faculty/colorManager.dart';
-import 'package:faculty/complaint/ComplaintDetailsPage.dart';
-import 'package:faculty/complaint/complaint.dart';
+import 'package:faculty/ui/complaint/ComplaintDetailsPage.dart';
+import 'package:faculty/ui/complaint/complaint.dart';
+
+import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,6 +19,7 @@ class _InquriescomplainState extends State<Inquriescomplaint> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+        backgroundColor: MyColors.backgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(top:45,right:5),
         child: Column(
@@ -176,7 +179,7 @@ Padding(
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: SvgPicture.asset(
-                  "assets/icons/accept.svg",
+                  "assets/icons/response.svg",
                   width: 51.w,
                   height: 34.h,
                 ),

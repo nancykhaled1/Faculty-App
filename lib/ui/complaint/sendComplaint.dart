@@ -1,5 +1,7 @@
 import 'package:faculty/colorManager.dart';
-import 'package:faculty/complaint/complaint.dart';
+import 'package:faculty/ui/complaint/complaint.dart';
+
+import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,6 +27,7 @@ class _SendComplainState extends State<SendComplaint> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.backgroundColor,
       resizeToAvoidBottomInset: true, // ✅ مهم علشان الكيبورد
       body: SafeArea(
         child: SingleChildScrollView(
