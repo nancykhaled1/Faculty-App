@@ -1,3 +1,4 @@
+import 'package:faculty/ui/students/student-activity-screen.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,19 +10,12 @@ class StudentLifeBody extends StatelessWidget {
   final List<Map<String, dynamic>> items = [
     {
       'title': 'أنشطة طلابية',
-      'subtitle': 'اذا كنت تريد صيغة استمارة التربية العسكرية',
-      'icon': 'assets/icons/Vector 1.svg',
+      'subtitle': 'اذا كنت تريد تفاصيل أنشطه طلابية',
+      'icon': 'assets/icons/users-two.svg',
+      'actionType': 'screen',
+      'data': 'activity',
     },
-    {
-      'title': 'خدمات طلابية',
-      'subtitle': 'اذا كنت تريد معرفة تفاصيل الدليل الأكاديمى',
-      'icon': 'assets/icons/_Group_.svg',
-    },
-    {
-      'title': 'اتحاد طلاب',
-      'subtitle': 'اذا كنت تريد معرفة الفرق الدراسية',
-      'icon': 'assets/icons/Pencil and pen.svg',
-    },
+
 
   ];
 
@@ -63,7 +57,32 @@ class StudentLifeBody extends StatelessWidget {
                     fontWeight: FontWeight.w500)),
 
             onTap: () {
-              // TODO: فتح تفاصيل
+              final actionType = item['actionType'];
+              final data = item['data'];
+
+              switch (actionType) {
+              // case 'pdf':
+              // // افتح ملف PDF
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => PdfViewerScreen(pdfPath: data),
+              //     ),
+              //   );
+              //   break;
+              //
+              // case 'link':
+              // // افتح لينك في المتصفح
+              //   launchUrl(Uri.parse(data));
+              //   break;
+
+                case 'screen':
+                // افتح شاشة داخل التطبيق
+                  if (data == 'activity') {
+                    Navigator.pushNamed(context, StudentActivityScreen.routeName);
+                  }
+                  break;
+              }
             },
           );
         },

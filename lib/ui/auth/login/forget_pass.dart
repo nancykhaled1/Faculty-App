@@ -1,4 +1,4 @@
-import 'package:faculty/ui/auth/auth.dart';
+import 'package:faculty/ui/auth/auth_alumni.dart';
 import 'package:faculty/ui/auth/login/loginscreen.dart';
 import 'package:faculty/ui/auth/login/send_code.dart';
 import 'package:faculty/utils/colors.dart';
@@ -23,7 +23,7 @@ class ForgetPassScreen extends StatelessWidget{
             padding: EdgeInsets.only(top: 30.sp, right: 30.sp),
             child: GestureDetector(
               onTap: (){
-                Navigator.pushReplacementNamed(context, AuthScreen.routeName);
+                Navigator.pushReplacementNamed(context, AlumniAuthScreen.routeName);
               },
               child: SvgPicture.asset(
                 'assets/icons/upload.svg', // الأيقونة الافتراضية

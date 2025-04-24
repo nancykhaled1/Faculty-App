@@ -12,11 +12,13 @@ import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home.dart';
 import 'package:faculty/ui/notification/notification_screen.dart';
 import 'package:faculty/ui/splash/splash_screen.dart';
+import 'package:faculty/ui/students/scholarships-screen.dart';
+import 'package:faculty/ui/students/student-activity-screen.dart';
 import 'package:faculty/ui/students/student_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'ui/auth/auth.dart';
+import 'ui/auth/auth_alumni.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,10 +49,10 @@ class MyApp extends StatelessWidget {
             ],
 
 
-            initialRoute: SplashScreen.routeName,
+            initialRoute: HomePage.routeName,
             routes: {
               Register.routeName : (context) => Register(),
-              AuthScreen.routeName : (context) => AuthScreen(),
+              AlumniAuthScreen.routeName : (context) => AlumniAuthScreen(),
               SuccessScreen.routeName : (context) => SuccessScreen(),
               LoginScreen.routeName : (context) => LoginScreen(),
               ForgetPassScreen.routeName : (context) => ForgetPassScreen(),
@@ -63,7 +65,8 @@ class MyApp extends StatelessWidget {
               StudentScreen.routeName : (context) => StudentScreen(),
               NotificationScreen.routeName : (context) => NotificationScreen(),
               Complaint.routeName: (context) => Complaint(),
-
+              ScholarshipsScreen.routeName : (context) => ScholarshipsScreen(),
+              StudentActivityScreen.routeName : (context) => StudentActivityScreen(),
             },
           );
     }

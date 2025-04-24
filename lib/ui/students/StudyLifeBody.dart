@@ -1,3 +1,5 @@
+import 'package:faculty/ui/departments/departments.dart';
+import 'package:faculty/ui/students/scholarships-screen.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,33 +13,46 @@ class StudyLifeBody extends StatelessWidget {
       'title': 'التربية العسكرية',
       'subtitle': 'اذا كنت تريد صيغة استمارة التربية العسكرية',
       'icon': 'assets/icons/Vector 1.svg',
+      'actionType': 'pdf',
+      'data': 'assets/pdfs/military_form.pdf',
     },
     {
       'title': 'الدليل الاكاديمى',
       'subtitle': 'اذا كنت تريد معرفة تفاصيل الدليل الأكاديمى',
       'icon': 'assets/icons/_Group_.svg',
+      'actionType': 'pdf',
+      'data': 'https://university.example.com/guide',
     },
     {
       'title': 'الفرق الدراسية',
       'subtitle': 'اذا كنت تريد معرفة الفرق الدراسية',
       'icon': 'assets/icons/Pencil and pen.svg',
+      'actionType': 'screen',
+      'data': 'Dept', // اسم الشاشة
     },
     {
       'title': 'اللائحة و القوانين',
       'subtitle': 'اذا كنت تريد معرفة اللائحة الدراسية',
       'icon': 'assets/icons/Wirite.svg',
+      'actionType': 'pdf',
+      'data': 'assets/pdfs/regulations.pdf',
     },
     {
       'title': 'المنح الدراسية',
       'subtitle': 'اذا كنت تريد معرفة تفاصيل المنح',
       'icon': 'assets/icons/Vector.svg',
+      'actionType': 'screen',
+      'data': 'ScholarshipScreen',
     },
     {
       'title': 'شروط التقديم',
       'subtitle': 'اذا كنت تريد معرفة شروط التقديم',
       'icon': 'assets/icons/document-file-sharing.svg',
+      'actionType': 'pdf',
+      'data': 'https://university.example.com/admission',
     },
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +92,36 @@ class StudyLifeBody extends StatelessWidget {
                     fontWeight: FontWeight.w500)),
 
             onTap: () {
-              // TODO: فتح تفاصيل
+              final actionType = item['actionType'];
+              final data = item['data'];
+
+              switch (actionType) {
+                // case 'pdf':
+                // // افتح ملف PDF
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => PdfViewerScreen(pdfPath: data),
+                //     ),
+                //   );
+                //   break;
+                //
+                // case 'link':
+                // // افتح لينك في المتصفح
+                //   launchUrl(Uri.parse(data));
+                //   break;
+
+                case 'screen':
+                // افتح شاشة داخل التطبيق
+                  if (data == 'Dept') {
+                    Navigator.pushNamed(context, Department.routeName);
+                  } else if (data == 'ScholarshipScreen') {
+                    Navigator.pushNamed(context, ScholarshipsScreen.routeName);
+                  }
+                  break;
+              }
             },
+
           );
         },
       ),
