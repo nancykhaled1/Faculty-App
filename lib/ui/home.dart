@@ -1,4 +1,5 @@
 import 'package:faculty/ui/auth/auth.dart';
+import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home/homescreen.dart';
 import 'package:faculty/ui/students/student_screen.dart';
@@ -93,14 +94,14 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     if (_isExpanded) {
                       // ✅ لو كانت مفتوحة، ننتقل للصفحة
-                      Navigator.pushReplacementNamed(context, Department.routeName); // لازم تضيفي المسار دا في routes
+                      Navigator.pushReplacementNamed(context, Complaint.routeName); // لازم تضيفي المسار دا في routes
                     } else {
                       // ✅ نفتح الأنيميشن أول مرة
                       setState(() {
                         _isExpanded = true;
                       });
                       // ❗️نخليها ترجع تلقائي بعد شوية لو ما دخلش
-                      Future.delayed(Duration(seconds: 5), () {
+                      Future.delayed(Duration(seconds: 3), () {
                         if (mounted) {
                           setState(() {
                             _isExpanded = false;

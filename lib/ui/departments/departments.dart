@@ -164,7 +164,7 @@ class Department extends StatelessWidget{
             ),
           ),
           Positioned(
-            top: 135.h,
+            bottom: 0,
             right: 155.w,
             child: SvgPicture.asset('assets/images/circle.svg'),
           ),
