@@ -11,7 +11,7 @@ import 'package:faculty/ui/auth/register/success.dart';
 import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home.dart';
-import 'package:faculty/ui/home/homescreen.dar;
+
 import 'package:faculty/ui/notification/notification_screen.dart';
 import 'package:faculty/ui/splash/splash_screen.dart';
 import 'package:faculty/ui/students/student_screen.dart';
@@ -65,14 +65,15 @@ class MyApp extends StatelessWidget {
 
                   Complaint.routeName: (context) => Complaint(),
                   AcademicTeams.routeName: (context) => AcademicTeams(),
+                    StudentScreen.routeName : (context) => StudentScreen(),
+              NotificationScreen.routeName : (context) => NotificationScreen()
+          
+
                  
             },
           );
 
-              StudentScreen.routeName : (context) => StudentScreen(),
-              NotificationScreen.routeName : (context) => NotificationScreen()
-              Complaint.routeName: (context) => Complaint(),
-
+            
 
             },
           );
