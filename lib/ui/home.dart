@@ -1,4 +1,5 @@
-import 'package:faculty/ui/auth/auth.dart';
+import 'package:faculty/ui/auth/auth_alumni.dart';
+import 'package:faculty/ui/auth/auth_student.dart';
 import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home/homescreen.dart';
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     HomeScreen(),
     Department(),
-    AuthScreen(),
+    AlumniAuthScreen(),
     StudentScreen(),
   ];
   bool _isExpanded = false;
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isAuthScreen = _pages[_selectedIndex] is AuthScreen; // تحقق إذا كانت الصفحة الحالية هي AuthScreen
+    bool isAuthScreen = _pages[_selectedIndex] is AlumniAuthScreen; // تحقق إذا كانت الصفحة الحالية هي AuthScreen
 
     return SafeArea(
       child: Scaffold(

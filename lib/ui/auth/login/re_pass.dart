@@ -1,4 +1,4 @@
-import 'package:faculty/ui/auth/auth.dart';
+import 'package:faculty/ui/auth/auth_alumni.dart';
 import 'package:faculty/ui/auth/login/loginscreen.dart';
 import 'package:faculty/ui/auth/login/send_code.dart';
 import 'package:flutter/material.dart';
@@ -217,7 +217,7 @@ class _RePasswordState extends State<RePassword> {
                                             message: "تم تعيين كلمة المرور بنجاح",
                                            // subMessage: "يمكنك الآن تسجيل الدخول باستخدام كلمة المرور الجديدة",
                                             onDismiss: () {
-                                              Navigator.pushReplacementNamed(context, AuthScreen.routeName); // الانتقال للـ login عند الإغلاق
+                                              Navigator.pushReplacementNamed(context, AlumniAuthScreen.routeName); // الانتقال للـ login عند الإغلاق
                                             },
                                           );
                                         },

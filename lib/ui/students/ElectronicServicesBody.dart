@@ -9,18 +9,31 @@ class ElectronicServicesBody extends StatelessWidget {
   final List<Map<String, dynamic>> items = [
     {
       'title': 'تسجيل المواد',
-      'subtitle': 'اذا كنت تريد صيغة استمارة التربية العسكرية',
-      'icon': 'assets/icons/Vector 1.svg',
+      'subtitle': 'اذا كنت تريد معرفه تفاصيل تسجيل المواد',
+      'icon': 'assets/icons/materials.svg',
+      'actionType': 'Link',
+      'data': 'link', // اسم الشاشة
     },
     {
       'title': 'نتائج الطلاب',
-      'subtitle': 'اذا كنت تريد معرفة تفاصيل الدليل الأكاديمى',
-      'icon': 'assets/icons/_Group_.svg',
+      'subtitle': 'اذا كنت تريد معرفة تفاصيل نتائج الطلاب',
+      'icon': 'assets/icons/result.svg',
+      'actionType': 'Link',
+      'data': 'link', // اسم الشاشة
     },
     {
       'title': 'SIS',
-      'subtitle': 'اذا كنت تريد معرفة الفرق الدراسية',
-      'icon': 'assets/icons/Pencil and pen.svg',
+      'subtitle': 'اذا كنت تريد معرفة SIS',
+      'icon': 'assets/icons/SIS.svg',
+      'actionType': 'Link',
+      'data': 'link', // اسم الشاشة
+    },
+    {
+      'title': 'خدمات طبية',
+      'subtitle': 'اذا كنت تريد معرفة تفاصيل خدمات طبية',
+      'icon': 'assets/icons/services.svg',
+      'actionType': 'Link',
+      'data': 'link', // اسم الشاشة
     },
 
   ];
