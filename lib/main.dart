@@ -1,4 +1,5 @@
 
+
 import 'package:faculty/ui/alumni/profilescreen.dart';
 import 'package:faculty/ui/auth/login/forget_pass.dart';
 import 'package:faculty/ui/auth/login/loginscreen.dart';
@@ -6,6 +7,7 @@ import 'package:faculty/ui/auth/login/re_pass.dart';
 import 'package:faculty/ui/auth/login/send_code.dart';
 import 'package:faculty/ui/auth/register/alumni_register.dart';
 import 'package:faculty/ui/auth/register/success.dart';
+import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home.dart';
 import 'package:faculty/ui/notification/notification_screen.dart';
@@ -44,7 +46,8 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
 
-            initialRoute: NotificationScreen.routeName,
+
+            initialRoute: HomePage.routeName,
             routes: {
               Register.routeName : (context) => Register(),
               AuthScreen.routeName : (context) => AuthScreen(),
@@ -59,6 +62,8 @@ class MyApp extends StatelessWidget {
               UserProfileScreen.routeName : (context) => UserProfileScreen(),
               StudentScreen.routeName : (context) => StudentScreen(),
               NotificationScreen.routeName : (context) => NotificationScreen()
+              Complaint.routeName: (context) => Complaint(),
+
             },
           );
     }
