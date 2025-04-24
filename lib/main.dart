@@ -43,6 +43,8 @@ class MyApp extends StatelessWidget {
               Locale('en', ''), // English (احتياطي)
             ],
             localizationsDelegates: [
+
+
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
