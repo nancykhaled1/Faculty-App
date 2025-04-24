@@ -34,13 +34,10 @@ class _ComplaintdetailspageState extends State<Complaintdetailspage> {
                       MaterialPageRoute(builder: (context) => Inquriescomplaint()),
                     );
                   },
-                  child: Transform(
-                    transform: Matrix4.identity()..scale(-1.0, 1.0),
-                    child: SvgPicture.asset(
-                      "assets/images/Upload.svg",
-                      width: 24.w,
-                      height: 24.h,
-                    ),
+                  child: SvgPicture.asset(
+                    "assets/images/Upload.svg",
+                    width: 24.w,
+                    height: 24.h,
                   ),
                 ),
               ],

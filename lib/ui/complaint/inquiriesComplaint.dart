@@ -37,13 +37,10 @@ class _InquriescomplainState extends State<Inquriescomplaint> {
                       MaterialPageRoute(builder: (context) => Complaint()),
                     );
                   },
-                  child: Transform(
-                      transform: Matrix4.identity()..scale(-1.0, 1.0), 
-                    child: SvgPicture.asset(
-                      "assets/images/Upload.svg",
-                      width: 24.w,
-                      height: 24.h,
-                    ),
+                  child: SvgPicture.asset(
+                    "assets/images/Upload.svg",
+                    width: 24.w,
+                    height: 24.h,
                   ),
                 ),
               ],
@@ -131,6 +128,9 @@ Padding(
       );
     },
     child: Container(
+
+
+      
       width: 343.w,
       height: 95.h,
       decoration: BoxDecoration(

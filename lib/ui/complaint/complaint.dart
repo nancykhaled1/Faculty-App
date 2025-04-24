@@ -33,13 +33,10 @@ class Complaint extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => HomeScreen()),
                       );
                     },
-                    child: Transform(
-           transform: Matrix4.identity()..scale(-1.0, 1.0), 
-                      child: SvgPicture.asset(
-                        "assets/images/Upload.svg", // استبدل باسم ملفك
-                        width: 24.w,
-                        height: 24.h,
-                      ),
+                    child: SvgPicture.asset(
+                      "assets/images/Upload.svg", // استبدل باسم ملفك
+                      width: 24.w,
+                      height: 24.h,
                     ),
                   ),
                 ],
@@ -123,6 +120,9 @@ class Complaint extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                           context,
+
+
+                          
                           MaterialPageRoute(builder: (context) => SendComplaint()), // ✅ استبدلي الصفحة باللي عايزاها
                     );
                   },

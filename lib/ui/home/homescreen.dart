@@ -1,3 +1,5 @@
+import 'package:faculty/ui/home/newsDetails.dart';
+import 'package:faculty/ui/home/newsModel.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,16 +13,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  static const String routeName = 'HomeScreen';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
-      body: SingleChildScrollView( // جعل الصفحة قابلة للتمرير
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // 🔹 الصورة الكبيرة
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: ClipRRect(
@@ -33,10 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
             SizedBox(height: 20.h),
-
-            // 🔹 قسم "الرؤية والرسالة"
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -45,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset("assets/images/Group 65.svg",),
-                       Text(
+                      SvgPicture.asset("assets/images/Group 65.svg"),
+                      Text(
                         "الرؤية و الرسالة",
                         style: TextStyle(
                           fontFamily: "Noto Kufi Arabic",
@@ -54,14 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 16.sp,
                         ),
                       ),
-
                       SizedBox(width: 5),
-
                     ],
                   ),
                   SizedBox(height: 20.h),
-
-                  // 🔹 قسم "الرؤية والتخطيط"
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(15),
@@ -84,11 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 10.h),
-
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-
                             Expanded(
                               flex: 2,
                               child: Text(
@@ -101,28 +94,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: 8.sp,
                                 ),
                                 textAlign: TextAlign.right,
-                                softWrap: true, // يسمح بكسر النص عند الحاجة
+                                softWrap: true,
                               ),
                             ),
                             SvgPicture.asset(
                               "assets/images/vision.svg",
-                              // width: 80.w, // تقليل حجم الصورة لحل المشكلة
-                              // height: 80.h,
                               fit: BoxFit.contain,
                             ),
                             SizedBox(width: 10.w),
-
                           ],
                         ),
-
-                       // SizedBox(height: 10.h),
                       ],
                     ),
-
                   ),
-
                   SizedBox(height: 35.h),
-                  // 🔹 قسم "رسالة الكلية"
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(15),
@@ -136,26 +121,23 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "رسالة الكلية",
                           style: TextStyle(
-
-                              height: 1.h,
-                              fontFamily: "Noto Kufi Arabic",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 8.sp,
-                              color: MyColors.yellowColor
+                            height: 1.h,
+                            fontFamily: "Noto Kufi Arabic",
+                            fontWeight: FontWeight.w600,
+                            fontSize: 8.sp,
+                            color: MyColors.yellowColor,
                           ),
                         ),
                         SizedBox(height: 10.h),
                         Row(
                           children: [
-
                             Expanded(
                               flex: 2,
-                              child: Text("إعداد خريجين متميزين في مجالات الحاسب الآلي ونظم وتكنولوجيا المعلومات وفقا لمتطلبات سوق العمل، وطبقا للمواصفات العالمية، وتعزيز الاستفادة من نتائج البحث العلمي في مجالات الحاسب الآلي ونظم وتكنولوجيا المعلومات بما يحقق مردود مجتمعي إيجابي وتقديم خدمات مميزة للمجتمع وفق المجالات المتاحة بالكلية"
-
-                                ,  style: TextStyle(
+                              child: Text(
+                                "إعداد خريجين متميزين في مجالات الحاسب الآلي ونظم وتكنولوجيا المعلومات وفقا لمتطلبات سوق العمل، وطبقا للمواصفات العالمية، وتعزيز الاستفادة من نتائج البحث العلمي في مجالات الحاسب الآلي ونظم وتكنولوجيا المعلومات بما يحقق مردود مجتمعي إيجابي وتقديم خدمات مميزة للمجتمع وفق المجالات المتاحة بالكلية",
+                                style: TextStyle(
                                   color: MyColors.softBlackColor,
                                   height: 2.h,
-
                                   fontFamily: "Noto Kufi Arabic",
                                   fontWeight: FontWeight.w400,
                                   fontSize: 8.sp,
@@ -163,35 +145,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                 textAlign: TextAlign.right,
                               ),
                             ),
-                            SvgPicture.asset(
-                              "assets/images/message.svg",
-                              // width: 100.w,
-                              // height: 100.h,
-                            ),
+                            SvgPicture.asset("assets/images/message.svg"),
                           ],
                         ),
-                      //  SizedBox(height: 10.h),
-
                       ],
                     ),
                   ),
-
-                  // Image.asset("assets/Line 63.png",width: 342.w,height: 0.h,),
                 ],
               ),
             ),
-
-            SizedBox(height: 15.h,),
+            SizedBox(height: 15.h),
             SizedBox(
-              width: 342.w, // تحديد العرض المطلوب
+              width: 342.w,
               child: Divider(
-                color:  Color(0XFFD4D4D4), // لون الخط
-                thickness: 1, // سمك الخط
-                height: 20, // المسافة حول الخط
+                color: Color(0XFFD4D4D4),
+                thickness: 1,
+                height: 20,
               ),
             ),
-            SizedBox(height: 35.h,),
-            // 🔹 "أحدث الفعاليات والأخبار"
+            SizedBox(height: 35.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Align(
@@ -207,19 +179,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
             SizedBox(height: 35.h),
-
-            // 🔹 قائمة الأخبار بشكل أفقي
             SizedBox(
               height: 260.h,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
+                itemCount:3,
                 itemBuilder: (context, index) {
                   return Container(
                     width: 147.w,
-                  //  height: 150.h,
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -241,7 +209,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             "assets/images/doctors.png",
                             width: 147.w,
                             height: 109.h,
-
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -250,7 +217,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               Text(
                                 "زيارة معالى رئيس جامعة دمنهور لكلية الحاسبات والمعلومات بالنوبارية",
                                 style: TextStyle(
@@ -258,66 +224,62 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: 8.sp,
                                   fontFamily: "Noto Kufi Arabic",
                                   fontWeight: FontWeight.w500,
-
                                 ),
                                 textAlign: TextAlign.right,
                               ),
-                              //  SizedBox(height: 15),
-
                               SizedBox(height: 10.h),
                               Divider(
-                                color: Color(0XFFD4D4D4), // لون الخط
-                                thickness: 1, // سمك الخط
-                                // height: 20, // المسافة حول الخط
+                                color: Color(0XFFD4D4D4),
+                                thickness: 1,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "17 Oct, 2024",
-                                    style: TextStyle(fontSize: 7.sp, color:MyColors.greyColor,fontFamily: "Noto Kufi Arabic",
-                                      fontWeight: FontWeight.w500,),
+                                    style: TextStyle(
+                                      fontSize: 7.sp,
+                                      color: MyColors.greyColor,
+                                      fontFamily: "Noto Kufi Arabic",
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                     textAlign: TextAlign.left,
                                   ),
                                   OutlinedButton(
-                                    onPressed: () {},
-                                    child:  Text(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Newsdetails(news: newsList[0]),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
                                       "التفاصيل",
                                       style: TextStyle(color: MyColors.yellowColor),
                                     ),
                                     style: OutlinedButton.styleFrom(
-                                      side: BorderSide(color: MyColors.yellowColor, width: 2), // لون الحدود أصفر
+                                      side: BorderSide(color: MyColors.yellowColor, width: 1),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15), // تدوير الحواف
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2), // تعديل الحواف الداخلية
+                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                                     ),
                                   ),
-
-
                                 ],
                               ),
-
-
                             ],
                           ),
-
                         ),
-
                       ],
                     ),
                   );
                 },
               ),
             ),
-
           ],
         ),
-
       ),
-
-
-
     );
   }
 }

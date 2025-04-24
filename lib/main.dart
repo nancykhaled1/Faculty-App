@@ -1,5 +1,6 @@
 
 
+import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
 import 'package:faculty/ui/alumni/profilescreen.dart';
 import 'package:faculty/ui/auth/login/forget_pass.dart';
 import 'package:faculty/ui/auth/login/loginscreen.dart';
@@ -41,6 +42,8 @@ class MyApp extends StatelessWidget {
               Locale('en', ''), // English (احتياطي)
             ],
             localizationsDelegates: [
+
+
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
@@ -63,13 +66,23 @@ class MyApp extends StatelessWidget {
               StudentScreen.routeName : (context) => StudentScreen(),
               NotificationScreen.routeName : (context) => NotificationScreen(),
               Complaint.routeName: (context) => Complaint(),
+              AcademicTeams.routeName: (context) => AcademicTeams(),
+              StudentScreen.routeName : (context) => StudentScreen(),
+              NotificationScreen.routeName : (context) => NotificationScreen()
+          
+
+                 
+            },
+          );
+
+   
 
             },
           );
     }
-    );
+    
 
   }
-}
+
 
 
