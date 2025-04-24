@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
             ],
 
 
-            initialRoute: HomePage.routeName,
+            initialRoute: SplashScreen.routeName,
             routes: {
               Register.routeName : (context) => Register(),
               AuthScreen.routeName : (context) => AuthScreen(),
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
               SplashScreen.routeName : (context) => SplashScreen(),
               UserProfileScreen.routeName : (context) => UserProfileScreen(),
               StudentScreen.routeName : (context) => StudentScreen(),
-              NotificationScreen.routeName : (context) => NotificationScreen()
+              NotificationScreen.routeName : (context) => NotificationScreen(),
               Complaint.routeName: (context) => Complaint(),
 
             },
