@@ -1,5 +1,6 @@
 
 
+import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
 import 'package:faculty/ui/alumni/profilescreen.dart';
 import 'package:faculty/ui/auth/login/forget_pass.dart';
 import 'package:faculty/ui/auth/login/loginscreen.dart';
@@ -10,6 +11,7 @@ import 'package:faculty/ui/auth/register/success.dart';
 import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home.dart';
+import 'package:faculty/ui/home/homescreen.dar;
 import 'package:faculty/ui/notification/notification_screen.dart';
 import 'package:faculty/ui/splash/splash_screen.dart';
 import 'package:faculty/ui/students/student_screen.dart';
@@ -60,16 +62,24 @@ class MyApp extends StatelessWidget {
               HomePage.routeName : (context) => HomePage(),
               SplashScreen.routeName : (context) => SplashScreen(),
               UserProfileScreen.routeName : (context) => UserProfileScreen(),
+
+                  Complaint.routeName: (context) => Complaint(),
+                  AcademicTeams.routeName: (context) => AcademicTeams(),
+                 
+            },
+          );
+
               StudentScreen.routeName : (context) => StudentScreen(),
               NotificationScreen.routeName : (context) => NotificationScreen()
               Complaint.routeName: (context) => Complaint(),
 
+
             },
           );
     }
-    );
+    
 
   }
-}
+
 
 
