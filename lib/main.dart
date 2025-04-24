@@ -8,7 +8,9 @@ import 'package:faculty/ui/auth/register/alumni_register.dart';
 import 'package:faculty/ui/auth/register/success.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home.dart';
+import 'package:faculty/ui/notification/notification_screen.dart';
 import 'package:faculty/ui/splash/splash_screen.dart';
+import 'package:faculty/ui/students/student_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
 
-            initialRoute: UserProfileScreen.routeName,
+            initialRoute: NotificationScreen.routeName,
             routes: {
               Register.routeName : (context) => Register(),
               AuthScreen.routeName : (context) => AuthScreen(),
@@ -54,7 +56,9 @@ class MyApp extends StatelessWidget {
               Department.routeName : (context) => Department(),
               HomePage.routeName : (context) => HomePage(),
               SplashScreen.routeName : (context) => SplashScreen(),
-              UserProfileScreen.routeName : (context) => UserProfileScreen()
+              UserProfileScreen.routeName : (context) => UserProfileScreen(),
+              StudentScreen.routeName : (context) => StudentScreen(),
+              NotificationScreen.routeName : (context) => NotificationScreen()
             },
           );
     }
