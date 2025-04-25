@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Newsdetails extends StatefulWidget {
-  final News news; // استقبال الكائن News
+  final News news; // استقبال خبر واحد فقط عبر الـ constructor.
 
-  const Newsdetails({super.key, required this.news}); // تمرير الكائن عبر الـ constructor
+  const Newsdetails({super.key, required this.news}); // استقبال الخبر المحدد
 
   @override
   State<Newsdetails> createState() => _NewsdetailsState();
@@ -17,8 +17,6 @@ class Newsdetails extends StatefulWidget {
 class _NewsdetailsState extends State<Newsdetails> {
   @override
   Widget build(BuildContext context) {
-    final news = widget.news; // الوصول إلى الكائن news الذي تم تمريره عبر الـ constructor
-
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
       body: Padding(
@@ -39,7 +37,7 @@ class _NewsdetailsState extends State<Newsdetails> {
                       );
                     },
                     child: SvgPicture.asset(
-                      "assets/images/Upload.svg",
+                      widget.news.image, // استخدام صورة الخبر المحدد
                       width: 24.w,
                       height: 24.h,
                     ),
@@ -48,49 +46,59 @@ class _NewsdetailsState extends State<Newsdetails> {
               ),
               SizedBox(height: 30.h),
               SvgPicture.asset(
-       news.image,
-  width: 342.w,
-  height: 255.h,
-),
-
+                widget.news.image, // استخدام صورة الخبر المحدد
+                width: 342.w,
+                height: 255.h,
+              ),
               SizedBox(height: 30.h),
               Text(
-                news.title, // استخدام المتغير `news` هنا
-                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500,fontFamily: "Noto Kufi Arabic",
-                color: MyColors.primaryColor,
-                
-                
+                widget.news.title, // استخدام العنوان من الخبر المحدد
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "Noto Kufi Arabic",
+                  color: MyColors.primaryColor,
                 ),
               ),
               SizedBox(height: 10.h),
               Text(
-                news.content, // عرض المحتوى الكامل
-              style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w400,fontFamily: "Noto Kufi Arabic",
-                color: MyColors.softBlackColor,
-                height: 2.h
+                widget.news.content, // عرض المحتوى الكامل من الخبر المحدد
+                style: TextStyle(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Noto Kufi Arabic",
+                  color: MyColors.softBlackColor,
+                  height: 2.h,
+                ),
+                textAlign: TextAlign.right,
+                textDirection: TextDirection.rtl,
+                softWrap: true,
               ),
-              textAlign: TextAlign.right,
-  textDirection: TextDirection.rtl,
-  softWrap: true,
-
-              ) ,
-              SizedBox(height: 40.h,),
-//               ListView.builder(
-//         itemCount:3, // عدد العناصر في القائمة
-//         itemBuilder: (context, index) {
-//           return Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: SvgPicture.asset(
-// "assets/images/newsDetails.svg",
-//               width: 147.w, // عرض الصورة
-//               height: 152.h, // ارتفاع الصورة
-//               fit: BoxFit.cover, 
-//             ),
-//           );
-//         },
-//       ),
-            ],
-            
+              SizedBox(height: 40.h),
+              // إذا كان لديك قائمة أخرى من الأخبار، يمكنك التعامل معها هنا
+              // وإذا كانت الأخبار موجودة في `widget.newsList` فيجب تمريرها بشكل صحيح.
+              // إذا كنت لا تحتاج إلى `newsList` في هذا الجزء، يمكنك إزالته.
+             SizedBox(
+              height: 137.h,
+               child: ListView.builder(
+                itemCount: 3,
+                       scrollDirection: Axis.horizontal,
+               
+                          itemBuilder: (context, index) {
+                       
+               
+                   return Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: SvgPicture.asset(
+                       widget.news.image, // استخدام الصورة الخاصة بالخبر
+                       width: 147.w, // عرض الصورة
+                       height: 152.h, // ارتفاع الصورة
+                       fit: BoxFit.cover,
+                     ),
+                   );
+                 },
+               ),
+             ),            ],
           ),
         ),
       ),

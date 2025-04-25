@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
             ],
 
 
-            initialRoute: HomePage.routeName,
+            initialRoute: SplashScreen.routeName,
             routes: {
               Register.routeName : (context) => Register(),
               AuthScreen.routeName : (context) => AuthScreen(),
@@ -64,24 +64,18 @@ class MyApp extends StatelessWidget {
               HomePage.routeName : (context) => HomePage(),
               SplashScreen.routeName : (context) => SplashScreen(),
               UserProfileScreen.routeName : (context) => UserProfileScreen(),
-
-                  Complaint.routeName: (context) => Complaint(),
-                  AcademicTeams.routeName: (context) => AcademicTeams(),
-                    StudentScreen.routeName : (context) => StudentScreen(),
-              NotificationScreen.routeName : (context) => NotificationScreen()
-          
-
-                 
-            },
-          );
-
-            
+              StudentScreen.routeName : (context) => StudentScreen(),
+              NotificationScreen.routeName : (context) => NotificationScreen(),
+              Complaint.routeName: (context) => Complaint(),
 
             },
           );
-    }
+      
+      }
     
 
+ );
+  } 
   }
 
 
