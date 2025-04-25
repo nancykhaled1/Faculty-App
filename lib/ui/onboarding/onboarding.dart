@@ -21,16 +21,16 @@ class _OnBoardingState extends State<OnBoarding> {
     OnBoardingDate(
         title: "خليك على اطلاع",
         description: "احدث أخبار الكلية دايمًا عندك و في مكان واحد",
-        image: "assets/images/onboarding1.png"
+        image: "assets/images/onboarding1.svg"
         ),
     OnBoardingDate(
         title: "جدولك في ايدك",
         description: "اعرف مواعيد محاضراتك وامتحاناتك بسهولة في أي وقت",
-        image: "assets/images/onboarding2.png"),
+        image: "assets/images/onboarding2.svg"),
     OnBoardingDate(
         title: "سجل إنجازاتك",
         description: "عرض خبراتك وشهاداتك في مكان واحد",
-        image: "assets/images/onboarding3.png")
+        image: "assets/images/onboarding3.svg")
   ];
 
   @override
@@ -60,82 +60,115 @@ class _OnBoardingState extends State<OnBoarding> {
                 itemBuilder: (context, index) {
                   // شرط تغيير مكان النص فقط في أول صفحة
                   if (index == 0) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            onboarding[index].title,
-                            style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Noto Kufi Arabic",
+                    return Stack(
+                      children: [
+                        SvgPicture.asset(
+                          onboarding[index].image,
+                          width: double.infinity,
+                          height: double.infinity, // قللنا الارتفاع
+                           fit: BoxFit.cover,
+                        ),
+                      Positioned(
+                        top : 60.h,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                        //  mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              onboarding[index].title,
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "Noto Kufi Arabic",
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 10.h),
-                          Text(
-                            onboarding[index].description,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "Noto Kufi Arabic",
+                            SizedBox(height: 15.h),
+                            Text(
+                              onboarding[index].description,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Noto Kufi Arabic",
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 30.h),
-                          Image.asset(
-                            onboarding[index].image,
-                            width: 297.w,
-                            height: 250.h, // قللنا الارتفاع
-                            fit: BoxFit.cover,
-                          ),
-                        ],
+                            SizedBox(height: 30.h),
+
+                          ],
+                                              ),
+                        ),
                       ),
+                        Positioned(
+                            bottom : 15.h,
+                            right : 150.w,
+                            child: bottomPageView()),
+
+                      ],
                     );
+
+
                   } else {
                     // باقي الصفحات: الصورة تحت النص
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            onboarding[index].image,
-                            width: 297.w,
-                            height: 250.h, // قللنا الارتفاع
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(height: 30.h),
-                          Text(
-                            onboarding[index].title,
-                            style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Noto Kufi Arabic",
+                    return Stack(
+                      children: [
+                        SvgPicture.asset(
+                          onboarding[index].image,
+                          width: double.infinity,
+                          height: double.infinity, // قللنا الارتفاع
+                          fit: BoxFit.cover,
+                        ),
+                        Center(
+                          child: Positioned(
+                            bottom : 100.h,
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                   // SizedBox(height: 30.h),
+                                    Text(
+                                      onboarding[index].title,
+                                      style: TextStyle(
+                                        fontSize: 22.sp,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: "Noto Kufi Arabic",
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      onboarding[index].description,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "Noto Kufi Arabic",
+                                      ),
+                                    ),
+                                    SizedBox(height: 35.h),
+                                    bottomPageView(),
+
+                                  ],
+                                ),
+                              ),
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 10.h),
-                          Text(
-                            onboarding[index].description,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "Noto Kufi Arabic",
-                            ),
-                          ),
-                        ],
-                      ),
+
+                        ),
+
+                      ],
                     );
+
+
                   }
                 },
               ),
             ),
             // المؤشر وزرار التالي
-            bottomPageView(),
+           // bottomPageView(),
           ],
         ),
       ),
@@ -149,25 +182,27 @@ class _OnBoardingState extends State<OnBoarding> {
         alignment: Alignment.topRight,
         child: TextButton(
           onPressed: () {
-            if (_currentIndex < onboarding.length - 1) {
-              _pageController.animateToPage(
-                _currentIndex + 1,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            } else {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-            }
+            Navigator.pushReplacementNamed(context, HomePage.routeName);
+            // if (_currentIndex < onboarding.length - 1) {
+            //   _pageController.animateToPage(
+            //     _currentIndex + 1,
+            //     duration: const Duration(milliseconds: 500),
+            //     curve: Curves.easeInOut,
+            //   );
+            // } else {
+            //   Navigator.pushReplacement(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => HomePage()),
+            //   );
+            // }
           },
-          child: const Text(
+          child: Text(
             "تخطي",
             style: TextStyle(
-                fontSize: 14,
+              color: MyColors.softBlackColor,
+                fontSize: 13.sp,
                 fontFamily: "Noto Kufi Arabic",
-                fontWeight: FontWeight.w500),
+                fontWeight: FontWeight.w300),
           ),
         ),
       ),
@@ -194,53 +229,53 @@ class _OnBoardingState extends State<OnBoarding> {
         },
         child: _currentIndex == onboarding.length - 1
             ? Container(
-                width: 125.w,
-                height: 30.h,
-                decoration: BoxDecoration(
-                  color: MyColors.primaryColor,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 5,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Text(
-                    "ابدأ",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Noto Kufi Arabic",
-                    ),
-                  ),
-                ),
-              )
-            : Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: MyColors.primaryColor,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 5,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
-                child: Transform(
-                  transform: Matrix4.identity()..scale(-1.0, 1.0),
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    "assets/icons/onboardingicon.svg",
-                  ),
-                ),
+          width: 125.w,
+          height: 30.h,
+          decoration: BoxDecoration(
+            color: MyColors.primaryColor,
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 5,
+                spreadRadius: 1,
               ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              "ابدأ",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: "Noto Kufi Arabic",
+              ),
+            ),
+          ),
+        )
+            : Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: MyColors.primaryColor,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 5,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
+          child: Transform(
+            transform: Matrix4.identity()..scale(-1.0, 1.0),
+            alignment: Alignment.center,
+            child: SvgPicture.asset(
+              "assets/icons/onboardingicon.svg",
+            ),
+          ),
+        ),
       ),
     );
   }

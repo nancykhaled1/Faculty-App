@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
             ],
 
 
-            initialRoute: HomePage.routeName,
+            initialRoute: SplashScreen.routeName,
             routes: {
               Register.routeName : (context) => Register(),
               AlumniAuthScreen.routeName : (context) => AlumniAuthScreen(),
