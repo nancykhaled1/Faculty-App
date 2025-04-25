@@ -5,14 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'login/loginscreen.dart';
 import 'register/alumniregisterscreen.dart';
 
-class AuthScreen extends StatefulWidget {
-  static const String routeName = 'auth';
+class StudentAuthScreen extends StatefulWidget {
+  static const String routeName = 'student-auth';
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  State<StudentAuthScreen> createState() => _StudentAuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _StudentAuthScreenState extends State<StudentAuthScreen> {
 
   bool isLogin = true;
 
@@ -28,7 +28,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 padding: const EdgeInsets.only(top: 10),
                 child: Image.asset(
                   'assets/images/log.png',
-                //  height: 150, // تأكد من أن الصورة ليست كبيرة جدًا
+                  //  height: 150, // تأكد من أن الصورة ليست كبيرة جدًا
                 ),
               ),
               SizedBox(height: 10.h),
@@ -151,8 +151,8 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
 
                         //هنا لو اليزر اختار منصه الخريجين  لكن لو اختار الشكاوى هيبقى اللوجين و الطالب
-                       // child: isLogin ? LoginScreen() : StudentRegister(),
-                        child: isLogin ? LoginScreen() : AlumniRegisterScreen(),
+                        child: isLogin ? LoginScreen() : StudentRegister(),
+                        //child: isLogin ? LoginScreen() : AlumniRegisterScreen(),
 
 
                       ),

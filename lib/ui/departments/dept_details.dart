@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DepartmentDetails extends StatelessWidget {
   final String imagePath;
@@ -117,7 +118,16 @@ class DepartmentDetails extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 50.h),
+                        SizedBox(height: 20.h),
+                        SizedBox(
+                          width: 342.w, // تحديد العرض المطلوب
+                          child: Divider(
+                            color:  Color(0XFFD4D4D4), // لون الخط
+                            thickness: 1, // سمك الخط
+                            height: 20, // المسافة حول الخط
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
                         Center(
                           child: Text(
                             'الرؤية و الرسالة',
@@ -165,6 +175,66 @@ class DepartmentDetails extends StatelessWidget {
                         ),
                         SizedBox(height: 20.h),
                         _buildProfessorsList(professors),
+                        SizedBox(height: 10.h),
+                        SizedBox(
+                          width: 342.w, // تحديد العرض المطلوب
+                          child: Divider(
+                            color:  Color(0XFFD4D4D4), // لون الخط
+                            thickness: 1, // سمك الخط
+                            height: 20, // المسافة حول الخط
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        Text(
+                          'لائحة القسم',
+                          style: TextStyle(
+                            color: MyColors.softBlackColor,
+                            fontSize: 15.sp,
+                            fontFamily: "Noto Kufi Arabic",
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                        GestureDetector(
+                          onTap: (){
+
+                          },
+                          child: Center(
+                            child: Container(
+                              width: 217.w,
+                              height: 91.h,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                // color: MyColors.softYellowColor,
+
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: Border.all(color: MyColors.yellowColor,)
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Column(
+                                 // crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset('assets/icons/Download.svg'),
+                                    SizedBox(height: 5.h),
+                                    Text(
+                                      "اضغط هنا لتحميل الملف",
+                                      style: TextStyle(
+                                          color: MyColors.blackColor,
+                                          fontSize: 10.sp,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Noto Kufi Arabic"
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+
                       ],
                     ),
                   ),
@@ -258,36 +328,40 @@ class DepartmentDetails extends StatelessWidget {
                 Container(
                   width: 90.w,
                   height: 30.h,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: MyColors.softYellowColor,
-                    borderRadius: BorderRadius.circular(10.r),
+                   // color: MyColors.softYellowColor,
+
+                    borderRadius: BorderRadius.circular(5.r),
+                    border: Border.all(color: MyColors.yellowColor,)
+                  ),
+                  child: Text(
+                    "سيرة ذاتية",
+                    style: TextStyle(
+                        color: MyColors.yellowColor,
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Noto Kufi Arabic"
+                    ),
                   ),
                 ),
 
                 // الحدود المنقطة فوق الـ Container مباشرةً
-                DottedBorder(
-                  color: MyColors.yellowColor, // لون النقاط
-                  strokeWidth: 2, // سمك النقاط
-                  dashPattern: [6, 7], // طول النقطة والمسافة بين النقاط
-                  borderType: BorderType.RRect, // يجعل الزوايا دائرية
-                  radius: Radius.circular(10.r), // تدوير الزوايا
-                  padding: EdgeInsets.zero, // بدون حشوات داخلية
-                  child: Container(
-                    width: 90.w,
-                    height: 30.h,
-                    color: Colors.transparent, // بدون لون داخلي
-                    alignment: Alignment.center,
-                    child: Text(
-                      "سيرة ذاتية",
-                      style: TextStyle(
-                          color: MyColors.yellowColor,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Noto Kufi Arabic"
-                      ),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   width: 90.w,
+                //   height: 30.h,
+                //   //color: Colors.transparent, // بدون لون داخلي
+                //   alignment: Alignment.center,
+                //   child: Text(
+                //     "سيرة ذاتية",
+                //     style: TextStyle(
+                //         color: MyColors.yellowColor,
+                //         fontSize: 10.sp,
+                //         fontWeight: FontWeight.w400,
+                //         fontFamily: "Noto Kufi Arabic"
+                //     ),
+                //   ),
+                // ),
             ]
           )
 

@@ -1,4 +1,6 @@
-import 'package:faculty/ui/auth/auth.dart';
+import 'package:faculty/ui/auth/auth_alumni.dart';
+import 'package:faculty/ui/auth/auth_student.dart';
+import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home/homescreen.dart';
 import 'package:faculty/ui/students/student_screen.dart';
@@ -21,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     HomeScreen(),
     Department(),
-    AuthScreen(),
+    AlumniAuthScreen(),
     StudentScreen(),
   ];
   bool _isExpanded = false;
@@ -35,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isAuthScreen = _pages[_selectedIndex] is AuthScreen; // تحقق إذا كانت الصفحة الحالية هي AuthScreen
+    bool isAuthScreen = _pages[_selectedIndex] is AlumniAuthScreen; // تحقق إذا كانت الصفحة الحالية هي AuthScreen
 
     return SafeArea(
       child: Scaffold(
@@ -93,14 +95,14 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     if (_isExpanded) {
                       // ✅ لو كانت مفتوحة، ننتقل للصفحة
-                      Navigator.pushReplacementNamed(context, Department.routeName); // لازم تضيفي المسار دا في routes
+                      Navigator.pushReplacementNamed(context, Complaint.routeName); // لازم تضيفي المسار دا في routes
                     } else {
                       // ✅ نفتح الأنيميشن أول مرة
                       setState(() {
                         _isExpanded = true;
                       });
                       // ❗️نخليها ترجع تلقائي بعد شوية لو ما دخلش
-                      Future.delayed(Duration(seconds: 5), () {
+                      Future.delayed(Duration(seconds: 3), () {
                         if (mounted) {
                           setState(() {
                             _isExpanded = false;
