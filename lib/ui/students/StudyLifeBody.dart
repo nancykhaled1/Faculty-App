@@ -1,3 +1,4 @@
+import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/students/scholarships-screen.dart';
 import 'package:faculty/utils/colors.dart';
@@ -28,7 +29,7 @@ class StudyLifeBody extends StatelessWidget {
       'subtitle': 'اذا كنت تريد معرفة الفرق الدراسية',
       'icon': 'assets/icons/Pencil and pen.svg',
       'actionType': 'screen',
-      'data': 'Dept', // اسم الشاشة
+      'data': 'academicTeams', // اسم الشاشة
     },
     {
       'title': 'اللائحة و القوانين',
@@ -113,8 +114,8 @@ class StudyLifeBody extends StatelessWidget {
 
                 case 'screen':
                 // افتح شاشة داخل التطبيق
-                  if (data == 'Dept') {
-                    Navigator.pushNamed(context, Department.routeName);
+                  if (data == 'academicTeams') {
+                    Navigator.pushNamed(context, AcademicTeams.routeName);
                   } else if (data == 'ScholarshipScreen') {
                     Navigator.pushNamed(context, ScholarshipsScreen.routeName);
                   }
