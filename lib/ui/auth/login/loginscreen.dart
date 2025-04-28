@@ -179,6 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 40.h),
               ElevatedButton(
                 onPressed: () {
+
                   if (formKey.currentState!.validate()) {
                     Provider.of<AuthProvider>(context, listen: false).login();
                     if (widget.userType == "graduates") {

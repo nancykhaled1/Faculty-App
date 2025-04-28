@@ -87,15 +87,18 @@ class MyApp extends StatelessWidget {
           
 
                  
+              StudentScreen.routeName : (context) => StudentScreen(),
+              NotificationScreen.routeName : (context) => NotificationScreen(),
+              Complaint.routeName: (context) => Complaint(),
+
             },
           );
-
-
-            },
-          );
-    }
+      
+      }
     
-
+// فرح وجيه 
+ );
+  } 
   }
 
 

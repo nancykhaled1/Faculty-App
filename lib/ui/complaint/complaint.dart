@@ -73,10 +73,74 @@ class Complaint extends StatelessWidget {
                           color:ColorManager.hintText,),
                         ),
                       ),
+                    ),
+                  ]
+                  ),
+          
+            SizedBox(height: 92.h), 
+          
+          
+          Padding(
+            padding: const EdgeInsets.only(right: 23,left: 22),
+            child: GestureDetector(
+              onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Inquriescomplaint()), // ✅ استبدلي الصفحة باللي عايزاها
+                       );
+              },
+                        
+             
+                        child: Center(
+            child: SvgPicture.asset("assets/images/inquiresComplaint.svg",
+            width: 348.w,
+            height: 106.h,
+            // fit: BoxFit.none,
+            ),
+                        ),
+                         ),
+          ),
+          
+          
+          
+            SizedBox(height: 72.h), 
+            Padding(
+              padding: const EdgeInsets.only(right: 23,left: 22),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                          context,
+                
+                
+                          
+                          MaterialPageRoute(builder: (context) => SendComplaint()), // ✅ استبدلي الصفحة باللي عايزاها
+                    );
+
+            
               
-                SizedBox(height: 92.h), 
+
+                  },
+              
+                 
+              child: Center(
+                child: SvgPicture.asset("assets/images/inquiresComplaint.svg",
+                width: 348.w,
+                height: 106.h,
+                // fit: BoxFit.none,
+                )
+                ),
+
               
               
+
+              ),
+            ),
+            
+            ),
+            
+              SizedBox(height: 72.h), 
+
               Padding(
                 padding: const EdgeInsets.only(right: 23,left: 22),
                 child: Container(
@@ -105,6 +169,7 @@ class Complaint extends StatelessWidget {
                  ),
                 ),
               ),
+
               
               
               
@@ -143,10 +208,14 @@ class Complaint extends StatelessWidget {
                   ),
                 ],
               ),
+
+             
+            
+
             ),
           ),
         ),
-      ),
+      
     );
   }
 }

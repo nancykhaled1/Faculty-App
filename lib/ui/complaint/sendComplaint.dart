@@ -42,19 +42,41 @@ class _SendComplainState extends State<SendComplaint> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Complaint()),
-                      );
-                    },
-                    child: SvgPicture.asset(
-                      "assets/images/Upload.svg", // استبدل باسم ملفك
-                      width: 24.w,
-                      height: 24.h,
-                    ),
+
+                  // 🔹 الصف في الأعلى
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Complaint()),
+                          );
+                        },
+                        child: SvgPicture.asset(
+                           "assets/images/Upload.svg",
+                          width: 24.w,
+                          height: 24.h,
+                        ),
+                      ),
+                    ],
                   ),
+                  SizedBox(height: 20.h),
+
+                  // 🔹 حقل اسم الشكوى
+                  TextFormField(
+                    validator: (text){
+                      if (text!.isEmpty ||
+                          text.trim().isEmpty) {
+                        return 'برجاء كتابة الشكوى';
+                      }
+                      return null;
+                 
+                    },
+                    ),
+                  
+                  
                   Padding(
                     padding: EdgeInsets.only(
                       left: 8.0,
@@ -209,14 +231,18 @@ class _SendComplainState extends State<SendComplaint> {
                         ],
                       ),
                     ),
+                  
                   ),
-                ],
-              ),
+              ],
             )
+            ),
+              ),
+            ),
+)
+);
+          
+        
       
-          ),
-        ),
-      ),
-    );
+    
   }
 }
