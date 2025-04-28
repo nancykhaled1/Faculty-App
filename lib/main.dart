@@ -2,6 +2,7 @@
 
 import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
 import 'package:faculty/ui/alumni/profilescreen.dart';
+import 'package:faculty/ui/auth/authProvider.dart';
 import 'package:faculty/ui/auth/login/forget_pass.dart';
 import 'package:faculty/ui/auth/login/loginscreen.dart';
 import 'package:faculty/ui/auth/login/re_pass.dart';
@@ -19,11 +20,21 @@ import 'package:faculty/ui/students/student_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'ui/auth/auth_alumni.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        // ممكن تزود providers تانين هنا
+      ],
+      child: MyApp(),
+    ),
+  );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -56,8 +67,8 @@ class MyApp extends StatelessWidget {
             routes: {
               Register.routeName : (context) => Register(),
               AlumniAuthScreen.routeName : (context) => AlumniAuthScreen(),
-              SuccessScreen.routeName : (context) => SuccessScreen(),
-              LoginScreen.routeName : (context) => LoginScreen(),
+              SuccessScreen.routeName : (context) => SuccessScreen(userType: '',),
+              LoginScreen.routeName : (context) => LoginScreen(userType: '',),
               ForgetPassScreen.routeName : (context) => ForgetPassScreen(),
               SendCode.routeName : (context) => SendCode(),
               RePassword.routeName : (context) => RePassword(),

@@ -29,21 +29,19 @@ class _RePasswordState extends State<RePassword> {
       child: Scaffold(
         backgroundColor: MyColors.whiteColor,
         body: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 30.sp, left: 30.sp),
+              padding: EdgeInsets.only(top: 10.sp, right: 20.sp),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    SendCode.routeName,
-                  );
+                  Navigator.pushReplacementNamed(context, SendCode.routeName);
+
                 },
                 child: SvgPicture.asset(
-                  'assets/icons/upload.svg', // الأيقونة الافتراضية
-                  width: 30.sp,
-                  height: 30.sp,
+                  'assets/icons/backarrow.svg', // الأيقونة الافتراضية
+                  width: 25.sp,
+                  height: 25.sp,
                   // color: Colors.black,
                 ),
               ),

@@ -2,9 +2,11 @@ import 'package:faculty/ui/auth/register/success.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../utils/colors.dart';
 import '../../../utils/text_field.dart';
+import '../authProvider.dart';
 
 class Register extends StatefulWidget{
   static const String routeName = 'register';
@@ -210,7 +212,14 @@ class _RegisterState extends State<Register> {
                       ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()){
-                            Navigator.pushReplacementNamed(context, SuccessScreen.routeName);
+                            Provider.of<AuthProvider>(context, listen: false).login();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SuccessScreen(userType: "graduates"), // أو "complaints"
+                              ),
+                            );
+
                           }
 
                         },

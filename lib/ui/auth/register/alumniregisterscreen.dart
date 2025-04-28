@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/text_field.dart';
+import '../authProvider.dart';
 
 class AlumniRegisterScreen extends StatefulWidget {
   @override
@@ -218,6 +220,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                   ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
+                            Provider.of<AuthProvider>(context, listen: false).login();
                             if (selectedEmploymentStatus == "موظف") {
                               Navigator.push(
                                 context,
@@ -229,9 +232,10 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SuccessScreen(),
+                                  builder: (context) => SuccessScreen(userType: "graduates"), // أو "complaints"
                                 ),
                               );
+
                             }
                           }
                         },

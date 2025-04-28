@@ -87,7 +87,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
-
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pushReplacementNamed(context, HomePage.routeName);
+          },
+          child: Icon(Icons.arrow_back, color: Colors.black),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.r),

@@ -51,7 +51,21 @@ class DepartmentDetails extends StatelessWidget {
                 Navigator.pop(context);
               }
             },
-              child: Icon(Icons.arrow_back)),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.sp, right: 20.sp),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, HomePage.routeName);
+
+                  },
+                  child: SvgPicture.asset(
+                    'assets/icons/backarrow.svg', // الأيقونة الافتراضية
+                    width: 20.sp,
+                    height: 20.sp,
+                    // color: Colors.black,
+                  ),
+                ),
+              ),),
         ),
         body:
         SingleChildScrollView(

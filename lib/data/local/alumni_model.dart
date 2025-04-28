@@ -27,5 +27,4 @@ class Alumni {
       jobInfo: null,
     );
   }
-
 }

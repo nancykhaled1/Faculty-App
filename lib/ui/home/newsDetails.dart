@@ -1,3 +1,4 @@
+import 'package:faculty/ui/home.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:faculty/ui/home/newsModel.dart'; // تأكد من استيراد NewsModel
@@ -35,7 +36,7 @@ class _NewsdetailsState extends State<Newsdetails> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                        MaterialPageRoute(builder: (context) => HomePage()),
                       );
                     },
                     child: SvgPicture.asset(
