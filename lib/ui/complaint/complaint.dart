@@ -72,7 +72,7 @@ class Complaint extends StatelessWidget {
                         color:ColorManager.hintText,),
                       ),
                     ),
-
+                  ]
                   ),
           
             SizedBox(height: 92.h), 
@@ -135,7 +135,7 @@ class Complaint extends StatelessWidget {
               ),
             ),
             
-            
+            ),
             
               SizedBox(height: 72.h), 
               Padding(
@@ -168,13 +168,14 @@ class Complaint extends StatelessWidget {
                             ),
                 ),
               ),
-                  ],
-                ),
+             
               ],
+                ),
+            
             ),
           ),
         ),
-      ),
+      
     );
   }
 }

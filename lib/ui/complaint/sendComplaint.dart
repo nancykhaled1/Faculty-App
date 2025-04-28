@@ -74,12 +74,9 @@ class _SendComplainState extends State<SendComplaint> {
                       return null;
                  
                     },
-                    child: SvgPicture.asset(
-                      "assets/images/Upload.svg", // استبدل باسم ملفك
-                      width: 24.w,
-                      height: 24.h,
                     ),
-                  ),
+                  
+                  
                   Padding(
                     padding: EdgeInsets.only(
                       left: 8.0,
@@ -234,14 +231,18 @@ class _SendComplainState extends State<SendComplaint> {
                         ],
                       ),
                     ),
+                  
                   ),
-                ],
-              ),
+              ],
             )
+            ),
+              ),
+            ),
+)
+);
+          
+        
       
-          ),
-        ),
-      ),
-    );
+    
   }
 }
