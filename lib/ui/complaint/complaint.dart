@@ -72,25 +72,52 @@ class Complaint extends StatelessWidget {
                         color:ColorManager.hintText,),
                       ),
                     ),
-            
-              SizedBox(height: 92.h), 
-            
-            
+
+                  ),
+          
+            SizedBox(height: 92.h), 
+          
+          
+          Padding(
+            padding: const EdgeInsets.only(right: 23,left: 22),
+            child: GestureDetector(
+              onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Inquriescomplaint()), // ✅ استبدلي الصفحة باللي عايزاها
+                       );
+              },
+                        
+             
+                        child: Center(
+            child: SvgPicture.asset("assets/images/inquiresComplaint.svg",
+            width: 348.w,
+            height: 106.h,
+            // fit: BoxFit.none,
+            ),
+                        ),
+                         ),
+          ),
+          
+          
+          
+            SizedBox(height: 72.h), 
             Padding(
               padding: const EdgeInsets.only(right: 23,left: 22),
-              child: Container(
-                width:348.w,
-                height: 106.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(32),
-                  //color: Color(0xffEF8D32),
-                ),
+              child: Center(
                 child: GestureDetector(
                   onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Inquriescomplaint()), // ✅ استبدلي الصفحة باللي عايزاها
-             );
+                    Navigator.push(
+                          context,
+                
+                
+                          
+                          MaterialPageRoute(builder: (context) => SendComplaint()), // ✅ استبدلي الصفحة باللي عايزاها
+                    );
+
+            
+              
+
                   },
               
                  
@@ -99,9 +126,12 @@ class Complaint extends StatelessWidget {
                 width: 348.w,
                 height: 106.h,
                 // fit: BoxFit.none,
+                )
                 ),
-              ),
-               ),
+
+              
+              
+
               ),
             ),
             

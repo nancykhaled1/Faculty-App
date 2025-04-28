@@ -153,8 +153,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       fontWeight: FontWeight.w500,
                                       fontFamily: "Noto Kufi Arabic"
                                   ),
-                                ),
-                                SizedBox(height: 5.h),
+                                ), 
+                                SizedBox(height: 5.h),     
                                 SizedBox(
                                   width: 180.w, // حطي العرض اللي يناسبك حسب تصميمك
                                   child: Text(

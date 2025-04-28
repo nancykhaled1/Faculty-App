@@ -37,7 +37,7 @@ class _NewsdetailsState extends State<Newsdetails> {
                       );
                     },
                     child: SvgPicture.asset(
-                      widget.news.image, // استخدام صورة الخبر المحدد
+                     "assets/images/Upload.svg" , 
                       width: 24.w,
                       height: 24.h,
                     ),
@@ -45,10 +45,14 @@ class _NewsdetailsState extends State<Newsdetails> {
                 ],
               ),
               SizedBox(height: 30.h),
-              SvgPicture.asset(
-                widget.news.image, // استخدام صورة الخبر المحدد
-                width: 342.w,
-                height: 255.h,
+              Padding(
+                padding: const EdgeInsets.only(left: 27),
+                child: Image.asset(
+                  widget.news.image, // استخدام صورة الخبر المحدد
+                  width: 342.w,
+                  height: 255.h,
+                     fit: BoxFit.cover,
+                ),
               ),
               SizedBox(height: 30.h),
               Text(
@@ -89,7 +93,7 @@ class _NewsdetailsState extends State<Newsdetails> {
                
                    return Padding(
                      padding: const EdgeInsets.all(8.0),
-                     child: SvgPicture.asset(
+                     child: Image.asset(
                        widget.news.image, // استخدام الصورة الخاصة بالخبر
                        width: 147.w, // عرض الصورة
                        height: 152.h, // ارتفاع الصورة
