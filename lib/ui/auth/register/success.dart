@@ -1,3 +1,4 @@
+import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,9 @@ import '../../../utils/colors.dart';
 
 class SuccessScreen extends StatelessWidget{
   static const String routeName = 'success';
+  final String userType; // graduates or complaints
+
+  const SuccessScreen({Key? key, required this.userType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +55,11 @@ class SuccessScreen extends StatelessWidget{
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, HomePage.routeName);
+                  if (userType == "graduates") {
+                    Navigator.pushNamed(context,HomePage.routeName);
+                  } else {
+                    Navigator.pushNamed(context, Complaint.routeName);
+                  }
 
                 },
                 child: Text(

@@ -198,10 +198,13 @@ class _StudentRegisterState extends State<StudentRegister> {
                   ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        Navigator.pushReplacementNamed(
+                        Navigator.push(
                           context,
-                          SuccessScreen.routeName,
+                          MaterialPageRoute(
+                            builder: (context) => SuccessScreen(userType: "complaints"), // أو "complaints"
+                          ),
                         );
+
                       }
                     },
                     child: Text(

@@ -38,7 +38,7 @@ class _SendComplainState extends State<SendComplaint> {
           child: SingleChildScrollView(
             // ✅ يخلي المحتوى يقدر يتحرك لما الكيبورد يظهر
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:  EdgeInsets.only(top:10.h,right:10.w,left: 10.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

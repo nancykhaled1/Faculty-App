@@ -1,20 +1,26 @@
 import 'package:faculty/ui/auth/login/forget_pass.dart';
+import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../utils/colors.dart';
 import '../../../utils/text_field.dart';
-class LoginScreen extends StatefulWidget{
+import '../authProvider.dart';
+
+class LoginScreen extends StatefulWidget {
   static const String routeName = 'login';
+  final String userType; // graduates or complaints (students)
+
+  const LoginScreen({Key? key, required this.userType}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
@@ -47,7 +53,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.emailAddress,
                 hint: 'ادخل بريدك الالكتروني',
                 prefixIcon: Padding(
-                  padding:  EdgeInsets.only(top: 14.sp,left: 6.sp,right: 6.sp,bottom: 4.sp),
+                  padding: EdgeInsets.only(
+                    top: 14.sp,
+                    left: 6.sp,
+                    right: 6.sp,
+                    bottom: 4.sp,
+                  ),
                   child: SvgPicture.asset(
                     'assets/icons/mail.svg', // الأيقونة الافتراضية
                     width: 15.sp,
@@ -60,13 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 controller: emailController,
                 validator: (text) {
-                  if (text!.isEmpty ||
-                      text.trim().isEmpty) {
+                  if (text!.isEmpty || text.trim().isEmpty) {
                     return 'برجاء ادخال البريد الالكترونى';
                   }
                   bool emailValid = RegExp(
-                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                      .hasMatch(text);
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                  ).hasMatch(text);
                   if (!emailValid) {
                     return 'برجاء ادخال بريد الكتروني صحيح';
                   }
@@ -74,14 +84,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 label: 'البريد الالكتروني',
               ),
-              SizedBox(
-                height: 30.h,
-              ),
+              SizedBox(height: 30.h),
               buildTextField(
                 keyboardType: TextInputType.text,
                 hint: 'ادخل كلمة المرور',
                 prefixIcon: Padding(
-                  padding:  EdgeInsets.only(top: 20.sp,left: 6.sp,right: 6.sp,bottom: 20.sp),
+                  padding: EdgeInsets.only(
+                    top: 20.sp,
+                    left: 6.sp,
+                    right: 6.sp,
+                    bottom: 20.sp,
+                  ),
                   child: SvgPicture.asset(
                     'assets/icons/lock.svg', // الأيقونة الافتراضية
                     width: 15.sp,
@@ -93,10 +106,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 isPassword: isPasswordVisible,
-                suffixIcon: Icon( isPasswordVisible
-                    ? Icons.visibility_off_outlined
-                    : Icons.visibility_outlined,
-                  size: 18.sp,color: MyColors.greyColor,),
+                suffixIcon: Icon(
+                  isPasswordVisible
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  size: 18.sp,
+                  color: MyColors.greyColor,
+                ),
                 suffixIconFunction: () {
                   setState(() {
                     isPasswordVisible = !isPasswordVisible;
@@ -113,50 +129,67 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },
                 label: 'كلمة المرور',
-
               ),
-            //  SizedBox(height: 5.h),
+              //  SizedBox(height: 5.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      Checkbox(value: isChecked, onChanged: (bool? value) {
-                        setState(() {
-                          isChecked = value!;
-                        });
-                      },
+                      Checkbox(
+                        value: isChecked,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isChecked = value!;
+                          });
+                        },
                         activeColor: MyColors.primaryColor,
-                        side: BorderSide(
+                        side: BorderSide(color: MyColors.greyColor),
+                      ),
+                      Text(
+                        'تذكرني',
+                        style: TextStyle(
                           color: MyColors.greyColor,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: "Noto Kufi Arabic",
                         ),
                       ),
-                      Text('تذكرني', style: TextStyle(color: MyColors.greyColor, fontSize: 10.sp,
-                          fontWeight: FontWeight.w400,
-                        fontFamily: "Noto Kufi Arabic"
-                      )),
                     ],
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, ForgetPassScreen.routeName);
+                      Navigator.pushReplacementNamed(
+                        context,
+                        ForgetPassScreen.routeName,
+                      );
                     },
-                    child: Text('نسيت كلمة المرور',
-                        style: TextStyle(color: MyColors.primaryColor,
-                            fontSize: 10.sp,
-                            fontFamily: "Noto Kufi Arabic",
-                            fontWeight: FontWeight.w400
-                        )),
+                    child: Text(
+                      'نسيت كلمة المرور',
+                      style: TextStyle(
+                        color: MyColors.primaryColor,
+                        fontSize: 10.sp,
+                        fontFamily: "Noto Kufi Arabic",
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 40.h,
-              ),
+              SizedBox(height: 40.h),
               ElevatedButton(
                 onPressed: () {
-                  
-                  Navigator.pushReplacementNamed(context, HomePage.routeName);
+
+                  if (formKey.currentState!.validate()) {
+                    Provider.of<AuthProvider>(context, listen: false).login();
+                    if (widget.userType == "graduates") {
+                      // يوديه لصفحة الخريجين
+                      Navigator.pushNamed(context, HomePage.routeName);
+                    } else {
+                      // يوديه لصفحة الشكاوى
+                      Navigator.pushNamed(context, Complaint.routeName);
+                    }
+                  }
                 },
                 child: Text(
                   "تسجيل الدخول",
@@ -185,7 +218,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-
-
-

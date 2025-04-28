@@ -1,7 +1,9 @@
 import 'package:faculty/ui/auth/register/student_register.dart';
+import 'package:faculty/ui/home.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'login/loginscreen.dart';
 import 'register/alumniregisterscreen.dart';
 
@@ -23,12 +25,30 @@ class _AlumniAuthScreenState extends State<AlumniAuthScreen> {
         backgroundColor: MyColors.whiteColor,
         body: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Image.asset(
-                  'assets/images/log.png',
-                //  height: 150, // تأكد من أن الصورة ليست كبيرة جدًا
+                padding: EdgeInsets.only(top: 10.sp, right: 20.sp),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, HomePage.routeName);
+
+                  },
+                  child: SvgPicture.asset(
+                    'assets/icons/backarrow.svg', // الأيقونة الافتراضية
+                    width: 25.sp,
+                    height: 25.sp,
+                    // color: Colors.black,
+                  ),
+                ),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Image.asset(
+                    'assets/images/log.png',
+                  //  height: 150, // تأكد من أن الصورة ليست كبيرة جدًا
+                  ),
                 ),
               ),
               SizedBox(height: 10.h),
@@ -152,7 +172,7 @@ class _AlumniAuthScreenState extends State<AlumniAuthScreen> {
 
                         //هنا لو اليزر اختار منصه الخريجين  لكن لو اختار الشكاوى هيبقى اللوجين و الطالب
                        // child: isLogin ? LoginScreen() : StudentRegister(),
-                        child: isLogin ? LoginScreen() : AlumniRegisterScreen(),
+                        child: isLogin ? LoginScreen(userType: "graduates") : AlumniRegisterScreen(),
 
 
                       ),

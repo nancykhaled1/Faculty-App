@@ -11,6 +11,11 @@ import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
+import 'alumni/profile_notemploee.dart';
+import 'alumni/profilescreen.dart';
+import 'auth/authProvider.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = 'home';
@@ -27,17 +32,42 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     HomeScreen(),
     Department(),
-    AlumniAuthScreen(),
+    UserProfileScreen(),
     StudentScreen(),
   ];
   bool _isExpanded = false;
 
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 2) { // لو ضغط على الخريجين
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+      if (authProvider.isLoggedIn) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => UserProfileScreen(),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AlumniAuthScreen(),
+          ),
+        );
+      }
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +223,13 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     if (_isExpanded) {
                       // ✅ لو كانت مفتوحة، ننتقل للصفحة
-                      Navigator.pushReplacementNamed(context, Complaint.routeName); // لازم تضيفي المسار دا في routes
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StudentAuthScreen(),
+                        ),
+                      );
+                      // لازم تضيفي المسار دا في routes
                     } else {
                       // ✅ نفتح الأنيميشن أول مرة
                       setState(() {

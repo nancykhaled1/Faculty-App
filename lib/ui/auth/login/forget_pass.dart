@@ -20,15 +20,16 @@ class ForgetPassScreen extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 30.sp, right: 30.sp),
+            padding: EdgeInsets.only(top: 10.sp, right: 20.sp),
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.pushReplacementNamed(context, AlumniAuthScreen.routeName);
+
               },
               child: SvgPicture.asset(
-                'assets/icons/upload.svg', // الأيقونة الافتراضية
-                width: 30.sp,
-                height: 30.sp,
+                'assets/icons/backarrow.svg', // الأيقونة الافتراضية
+                width: 25.sp,
+                height: 25.sp,
                 // color: Colors.black,
               ),
             ),
