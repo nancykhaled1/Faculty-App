@@ -39,7 +39,7 @@ class _AlumniAuthScreenState extends State<AlumniAuthScreen> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        isLogin = true;
+                        isLogin = true; 
                       });
                     },
                     child: Column(
@@ -58,7 +58,7 @@ class _AlumniAuthScreenState extends State<AlumniAuthScreen> {
                         SizedBox(
                           height: 6.h,
                         ),
-                        if (isLogin)
+                        if (isLogin)  
                           Container(
                             height: 5,
                             width: 5,

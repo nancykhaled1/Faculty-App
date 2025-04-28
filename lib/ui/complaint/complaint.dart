@@ -76,31 +76,23 @@ class Complaint extends StatelessWidget {
           
           Padding(
             padding: const EdgeInsets.only(right: 23,left: 22),
-            child: Container(
-              width:348.w,
-              height: 106.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(32),
-                //color: Color(0xffEF8D32),
-              ),
-              child: GestureDetector(
-                onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Inquriescomplaint()), // ✅ استبدلي الصفحة باللي عايزاها
-           );
-                },
-            
-               
-            child: Center(
-              child: SvgPicture.asset("assets/images/inquiresComplaint.svg",
-              width: 348.w,
-              height: 106.h,
-              // fit: BoxFit.none,
-              ),
+            child: GestureDetector(
+              onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Inquriescomplaint()), // ✅ استبدلي الصفحة باللي عايزاها
+                       );
+              },
+                        
+             
+                        child: Center(
+            child: SvgPicture.asset("assets/images/inquiresComplaint.svg",
+            width: 348.w,
+            height: 106.h,
+            // fit: BoxFit.none,
             ),
-             ),
-            ),
+                        ),
+                         ),
           ),
           
           
@@ -109,19 +101,12 @@ class Complaint extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 23,left: 22),
               child: Center(
-                child: Container(
-                width: 348.w,
-                height: 90.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(32),
-                  color: ColorManager.primaryColor0,
-                ),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
                           context,
-
-
+                
+                
                           
                           MaterialPageRoute(builder: (context) => SendComplaint()), // ✅ استبدلي الصفحة باللي عايزاها
                     );
@@ -133,7 +118,6 @@ class Complaint extends StatelessWidget {
                            // fit: BoxFit.fill,
                 ),
                 ),
-                          ),
               ),
             ),
           
