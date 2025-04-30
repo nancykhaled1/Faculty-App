@@ -18,92 +18,92 @@ class Newsdetails extends StatefulWidget {
 class _NewsdetailsState extends State<Newsdetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 45, right: 33),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔹 الصف في الأعلى
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    },
-                    child: SvgPicture.asset(
-                     "assets/images/Upload.svg" , 
-                      width: 24.w,
-                      height: 24.h,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: MyColors.backgroundColor,
+        body: Padding(
+          padding: EdgeInsets.only(top: 10.h, right: 15.w,left: 15.w),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 🔹 الصف في الأعلى
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      },
+                      child: SvgPicture.asset(
+                       "assets/images/Upload.svg" , 
+                        width: 24.w,
+                        height: 24.h,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30.h),
-              Padding(
-                padding: const EdgeInsets.only(left: 27),
-                child: Image.asset(
+                  ],
+                ),
+                SizedBox(height: 30.h),
+                Image.asset(
                   widget.news.image, // استخدام صورة الخبر المحدد
                   width: 342.w,
                   height: 255.h,
                      fit: BoxFit.cover,
                 ),
-              ),
-              SizedBox(height: 30.h),
-              Text(
-                widget.news.title, // استخدام العنوان من الخبر المحدد
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: "Noto Kufi Arabic",
-                  color: MyColors.primaryColor,
+                SizedBox(height: 30.h),
+                Text(
+                  widget.news.title, // استخدام العنوان من الخبر المحدد
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "Noto Kufi Arabic",
+                    color: MyColors.primaryColor,
+                  ),
                 ),
-              ),
-              SizedBox(height: 10.h),
-              Text(
-                widget.news.content, // عرض المحتوى الكامل من الخبر المحدد
-                style: TextStyle(
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: "Noto Kufi Arabic",
-                  color: MyColors.softBlackColor,
-                  height: 2.h,
+                SizedBox(height: 10.h),
+                Text(
+                  widget.news.content, // عرض المحتوى الكامل من الخبر المحدد
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Noto Kufi Arabic",
+                    color: MyColors.softBlackColor,
+                    height: 2.h,
+                  ),
+                  textAlign: TextAlign.right,
+                  textDirection: TextDirection.rtl,
+                  softWrap: true,
                 ),
-                textAlign: TextAlign.right,
-                textDirection: TextDirection.rtl,
-                softWrap: true,
-              ),
-              SizedBox(height: 40.h),
-              // إذا كان لديك قائمة أخرى من الأخبار، يمكنك التعامل معها هنا
-              // وإذا كانت الأخبار موجودة في `widget.newsList` فيجب تمريرها بشكل صحيح.
-              // إذا كنت لا تحتاج إلى `newsList` في هذا الجزء، يمكنك إزالته.
-             SizedBox(
-              height: 137.h,
-               child: ListView.builder(
-                itemCount: 3,
-                       scrollDirection: Axis.horizontal,
-               
-                          itemBuilder: (context, index) {
-                       
-               
-                   return Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Image.asset(
-                       widget.news.image, // استخدام الصورة الخاصة بالخبر
-                       width: 147.w, // عرض الصورة
-                       height: 152.h, // ارتفاع الصورة
-                       fit: BoxFit.cover,
-                     ),
-                   );
-                 },
-               ),
-             ),            ],
+                SizedBox(height: 40.h),
+                // إذا كان لديك قائمة أخرى من الأخبار، يمكنك التعامل معها هنا
+                // وإذا كانت الأخبار موجودة في `widget.newsList` فيجب تمريرها بشكل صحيح.
+                // إذا كنت لا تحتاج إلى `newsList` في هذا الجزء، يمكنك إزالته.
+               SizedBox(
+                height: 137.h,
+                 child: ListView.builder(
+                  itemCount: 3,
+                         scrollDirection: Axis.horizontal,
+                 
+                            itemBuilder: (context, index) {
+                         
+                 
+                     return Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Image.asset(
+
+                         widget.news.image, // استخدام الصورة الخاصة بالخبر
+                         width: 147.w, // عرض الصورة
+                         height: 152.h, // ارتفاع الصورة
+                         fit: BoxFit.cover,
+                       ),
+                     );
+                   },
+                 ),
+               ),            ],
+            ),
           ),
         ),
       ),

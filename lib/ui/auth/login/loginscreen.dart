@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
 
                   if (formKey.currentState!.validate()) {
-                    Provider.of<AuthProvider>(context, listen: false).login();
+                    Provider.of<AuthProvider>(context, listen: false).login(widget.userType);
                     if (widget.userType == "graduates") {
                       // يوديه لصفحة الخريجين
                       Navigator.pushNamed(context, HomePage.routeName);

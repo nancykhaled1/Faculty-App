@@ -1,10 +1,10 @@
 import 'package:faculty/colorManager.dart';
-import 'package:faculty/ui/complaint/inquiriesComplaint.dart';
-
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'inquiriesComplaint.dart';
 
 class Complaintdetailspage extends StatefulWidget {
   const Complaintdetailspage({super.key});
@@ -20,7 +20,7 @@ class _ComplaintdetailspageState extends State<Complaintdetailspage> {
       child: Scaffold(
         backgroundColor: MyColors.backgroundColor,
         body: Padding(
-          padding:  EdgeInsets.only(top: 10.h, right: 10.w),
+          padding: EdgeInsets.only(top: 10.h, right: 10.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -36,7 +36,7 @@ class _ComplaintdetailspageState extends State<Complaintdetailspage> {
                       );
                     },
                     child: SvgPicture.asset(
-                      "assets/images/Upload.svg",
+                      "assets/icons/backarrow.svg",
                       width: 24.w,
                       height: 24.h,
                     ),
@@ -80,7 +80,7 @@ class _ComplaintdetailspageState extends State<Complaintdetailspage> {
               ),
               SizedBox(height: 30.h,),
       
-               Padding(
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
                   width: 343.w,
@@ -101,7 +101,7 @@ class _ComplaintdetailspageState extends State<Complaintdetailspage> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 10,top: 25),
                     child: Text(
-                   "انت تحتاج للاتجاه لشئون الطلاب",
+                      "انت تحتاج للاتجاه لشئون الطلاب",
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontFamily: "Noto Kufi Arabic",

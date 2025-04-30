@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/text_field.dart';
+import '../authProvider.dart';
 
 class StudentRegister extends StatefulWidget {
   @override
@@ -198,6 +200,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                   ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
+                        Provider.of<AuthProvider>(context, listen: false).login("complaints");
                         Navigator.push(
                           context,
                           MaterialPageRoute(

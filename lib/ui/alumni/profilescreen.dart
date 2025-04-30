@@ -167,13 +167,30 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               SizedBox(height: 20),
 
               // زر الحفظ
-              ElevatedButton(
-                onPressed: saveChanges,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              Padding(
+                padding:  EdgeInsets.all(8.sp),
+                child: ElevatedButton(
+                  onPressed: saveChanges,
+                  child: Text(
+                    "حفظ التغيير",
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontFamily: "Noto Kufi Arabic",
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MyColors.primaryColor,
+                    foregroundColor: MyColors.whiteColor,
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10.h,
+                      horizontal: 90.w,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                  ),
                 ),
-                child: Text("حفظ التغيير", style: TextStyle(color: Colors.white)),
               ),
             ],
           ),

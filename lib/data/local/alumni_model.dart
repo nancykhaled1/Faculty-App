@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'job_info.dart';
 
 class Alumni {
@@ -28,3 +30,7 @@ class Alumni {
     );
   }
 }
+
+enum UserType { student, alumni }
+
+

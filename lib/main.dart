@@ -1,6 +1,7 @@
 
 
 import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
+import 'package:faculty/ui/alumni/profile_notemploee.dart';
 import 'package:faculty/ui/alumni/profilescreen.dart';
 import 'package:faculty/ui/auth/authProvider.dart';
 import 'package:faculty/ui/auth/login/forget_pass.dart';
@@ -81,6 +82,7 @@ class MyApp extends StatelessWidget {
               Complaint.routeName: (context) => Complaint(),
               ScholarshipsScreen.routeName : (context) => ScholarshipsScreen(),
               StudentActivityScreen.routeName : (context) => StudentActivityScreen(),
+              ProfileScreen.routeName : (context) => ProfileScreen(),
               AcademicTeams.routeName: (context) => AcademicTeams(),
               StudentScreen.routeName : (context) => StudentScreen(),
               NotificationScreen.routeName : (context) => NotificationScreen(),
