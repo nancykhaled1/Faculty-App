@@ -120,44 +120,43 @@ class _OnBoardingState extends State<OnBoarding> {
                           height: double.infinity, // قللنا الارتفاع
                           fit: BoxFit.cover,
                         ),
-                        Center(
-                          child: Positioned(
-                            bottom : 100.h,
-                            child: Padding(
-                              padding: EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                   // SizedBox(height: 30.h),
-                                    Text(
-                                      onboarding[index].title,
-                                      style: TextStyle(
-                                        fontSize: 22.sp,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: "Noto Kufi Arabic",
-                                      ),
-                                      textAlign: TextAlign.center,
+                        Positioned(
+                          bottom : 0.h,
+                          left: 0.w,
+                          right: 0.w,
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                 // SizedBox(height: 30.h),
+                                  Text(
+                                    onboarding[index].title,
+                                    style: TextStyle(
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "Noto Kufi Arabic",
                                     ),
-                                    SizedBox(height: 10.h),
-                                    Text(
-                                      onboarding[index].description,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: "Noto Kufi Arabic",
-                                      ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    onboarding[index].description,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "Noto Kufi Arabic",
                                     ),
-                                    SizedBox(height: 35.h),
-                                    bottomPageView(),
+                                  ),
+                                  SizedBox(height: 35.h),
+                                  bottomPageView(),
 
-                                  ],
-                                ),
+                                ],
                               ),
                             ),
-
-                        ),
+                          ),
 
                       ],
                     );

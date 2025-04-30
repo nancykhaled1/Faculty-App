@@ -49,16 +49,16 @@ class _RegisterState extends State<Register> {
         body: SingleChildScrollView(
           child:
           Padding(
-            padding:  EdgeInsets.all(30.sp),
+            padding:  EdgeInsets.all(20.sp),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
                   onTap: (){
                     Navigator.pop(context);
                   },
                   child: SvgPicture.asset(
-                    'assets/icons/upload.svg', // الأيقونة الافتراضية
+                    'assets/icons/backarrow.svg', // الأيقونة الافتراضية
                     width: 30.sp,
                     height: 30.sp,
                     // color: Colors.black,
@@ -212,7 +212,7 @@ class _RegisterState extends State<Register> {
                       ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()){
-                            Provider.of<AuthProvider>(context, listen: false).login();
+                            Provider.of<AuthProvider>(context, listen: false).login('graduates');
                             Navigator.push(
                               context,
                               MaterialPageRoute(

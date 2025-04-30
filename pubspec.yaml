@@ -74,6 +74,7 @@ flutter:
     - assets/images/log.png
     - assets/images/
     - assets/icons/
+    - assets/icons/profile.svg
     - assets/images/circle.svg
     - assets/icons/dept.svg
     - assets/images/Component.png

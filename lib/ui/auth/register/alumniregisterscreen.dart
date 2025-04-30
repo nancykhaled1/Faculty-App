@@ -220,7 +220,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                   ElevatedButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            Provider.of<AuthProvider>(context, listen: false).login();
+                            Provider.of<AuthProvider>(context, listen: false).login("graduates");
                             if (selectedEmploymentStatus == "موظف") {
                               Navigator.push(
                                 context,

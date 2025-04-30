@@ -19,16 +19,13 @@ import 'auth/authProvider.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = 'home';
-
-  const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-   bool isUserLoggedIn = false; 
+  bool isUserLoggedIn = false;
   final List<Widget> _pages = [
     HomeScreen(),
     Department(),
@@ -37,27 +34,29 @@ class _HomePageState extends State<HomePage> {
   ];
   bool _isExpanded = false;
 
-
   void _onItemTapped(int index) {
-    if (index == 2) { // لو ضغط على الخريجين
+    if (index == 2) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-      if (authProvider.isLoggedIn) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => UserProfileScreen(),
-          ),
-        );
+      if (authProvider.isLoggedIn && authProvider.userType == "graduates") {
+        setState(() {
+          _selectedIndex = index;
+        });
       } else {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => AlumniAuthScreen(),
-          ),
-        );
+          MaterialPageRoute(builder: (_) => AlumniAuthScreen()),
+        ).then((_) {
+          final authProvider = Provider.of<AuthProvider>(context, listen: false);
+          if (authProvider.isLoggedIn && authProvider.userType == "graduates") {
+            setState(() {
+              _selectedIndex = index;
+            });
+          }
+        });
       }
-    } else {
+    }
+    else {
       setState(() {
         _selectedIndex = index;
       });
@@ -66,156 +65,137 @@ class _HomePageState extends State<HomePage> {
 
 
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    bool isAuthScreen = _pages[_selectedIndex] is AlumniAuthScreen; // تحقق إذا كانت الصفحة الحالية هي AuthScreen
+    final authProvider = Provider.of<AuthProvider>(context, listen: true);
+    final userType = authProvider.userType;
+    bool isAlumniPage = _selectedIndex == 2;
+    bool isUserLoggedIn = authProvider.isLoggedIn;
+    bool isProfileScreen = isAlumniPage && isUserLoggedIn;
+    bool showIcons =  isUserLoggedIn; // لو داخل الخريجين ومسجل
+    bool isAuthScreen = isAlumniPage && !isUserLoggedIn; // لو داخل الخريجين ومش مسجل
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: MyColors.backgroundColor,
         body: Stack(
           children: [
-            // 🔹 المحتوى الأساسي
-           Column(
-  children: [
-    if (!isAuthScreen) 
-      Padding(
-        padding: EdgeInsets.only(right: 30.w, left: 30.w, top: 20.h, bottom: 5.h),
-        child: Container(
-          height: 40.sp,
-          decoration: BoxDecoration(
-            color: MyColors.whiteColor,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: MyColors.blackColor.withOpacity(0.1),
-                blurRadius: 5,
-                spreadRadius: 1,
-              ),
-            ],
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              prefixIcon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.sp),
-                child: Icon(Icons.search, color: MyColors.greyColor),
-              ),
-              hintText: 'ادخل كلمة البحث',
-              hintStyle: TextStyle(
-                color: MyColors.greyColor,
-                fontFamily: "Noto Kufi Arabic",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w500,
-              ),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            ),
-          ),
-        ),
-      )
-// لو راح على صفحة الخرجيين التغير اللى هيحصل فى السيرش بار 
+            Column(
+              children: [
+                if (_selectedIndex != 2)
+                // 🔵 السيرش بار
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: 30.w,
+                    left: 30.w,
+                    top: 20.h,
+                    bottom: 5.h,
+                  ),
+                  child: Row(
+                    children: [
 
-    
-    else
-      Padding(
-        padding: EdgeInsets.only(right: 30.w, left: 30.w, top: 20.h, bottom: 5.h),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 40.sp,
-                width: 237.w,
-                decoration: BoxDecoration(
-                  color: MyColors.whiteColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: MyColors.blackColor.withOpacity(0.1),
-                      blurRadius: 5,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.sp),
-                      child: Icon(Icons.search, color: MyColors.greyColor),
-                    ),
-                    hintText: 'ادخل كلمة البحث',
-                    hintStyle: TextStyle(
-                      color: MyColors.greyColor,
-                      fontFamily: "Noto Kufi Arabic",
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      // 🔵 صندوق البحث
+                      Expanded(
+                        child: Container(
+                          height: 40.sp,
+                          decoration: BoxDecoration(
+                            color: MyColors.whiteColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: MyColors.blackColor.withOpacity(0.1),
+                                blurRadius: 5,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.sp),
+                                child: Icon(
+                                  Icons.search,
+                                  color: MyColors.greyColor,
+                                ),
+                              ),
+                              hintText: 'ادخل كلمة البحث',
+                              hintStyle: TextStyle(
+                                color: MyColors.greyColor,
+                                fontFamily: "Noto Kufi Arabic",
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if(userType =="graduates") ...[
+                      // 🔵 لو المفروض تظهر الأيقونات
+                      if (showIcons) ...[
+                        SizedBox(width: 10.w),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NotificationScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 39.w,
+                            height: 39.h,
+                            decoration: BoxDecoration(
+                              color: ColorManager.backgroundColor,
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: SvgPicture.asset(
+                                "assets/icons/notification1.svg",
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 14.w),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NotificationScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 39.w,
+                            height: 39.h,
+                            decoration: BoxDecoration(
+                              color: ColorManager.backgroundColor,
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                            child: Image.asset("assets/icons/profiles.png",
+                            fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
+                      ],
+                    ],
                   ),
                 ),
-              ),
+
+                Expanded(child: _pages[_selectedIndex]),
+              ],
             ),
 
-            SizedBox(width: 10.w,),
-
-             GestureDetector(
-              onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NotificationScreen(), // هنا بتحطي صفحة التنقل
-      ),
-    );
-  },
-               child: Container(
-               width: 39.w,
-               height: 39.h,
-               
-               decoration: BoxDecoration(
-                 color: ColorManager.backgroundColor,
-                 borderRadius: BorderRadius.circular(9),
-               ),
-                child: SvgPicture.asset("assets/icons/notification1.svg",
-               )
-               ),
-             ),
-
-             SizedBox(width: 14.w,),
-             GestureDetector(
-              onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NotificationScreen(), // هنا بتحطي صفحة التنقل
-      ),
-    );
-  },
-               child: Container(
-               width: 39.w,
-               height: 39.h,
-               
-               decoration: BoxDecoration(
-                 color: ColorManager.backgroundColor,
-                 borderRadius: BorderRadius.circular(9),
-               ),
-                child: SvgPicture.asset("assets/images/person.svg",
-                )
-               ),
-             ),
-          ],
-        ),
-       
-      ),
-    Expanded(child: _pages[_selectedIndex]),
-  ],
-),
-
-
-            // ✅ الأيقونة الزرقا الثابتة
-            if (!isAuthScreen)
+            // باقي الكود كما هو: الأيقونة الزرقاء والثابتة (للطلبة)
+            if (!isAuthScreen && !isProfileScreen)
               Positioned(
                 bottom: 0.h,
                 right: 0.w,
@@ -248,7 +228,10 @@ class _HomePageState extends State<HomePage> {
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 10.h,
+                    ),
                     decoration: BoxDecoration(
                       color: MyColors.secondryColor,
                       borderRadius: BorderRadius.only(
@@ -266,8 +249,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         AnimatedSwitcher(
                           duration: Duration(milliseconds: 300),
-                          transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
-                          child: _isExpanded
+                          transitionBuilder:
+                              (child, animation) => FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          ),
+                          child:
+                          _isExpanded
                               ? Padding(
                             key: ValueKey('label'),
                             padding: EdgeInsets.only(right: 8.w),
@@ -288,15 +276,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-
           ],
         ),
 
-        // 🔹 الـ BottomNavigationBar
-        bottomNavigationBar: isAuthScreen
-            ? null
-            : Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
+        // 🔵 البوتوم بار
+        bottomNavigationBar: (isAuthScreen || isProfileScreen) ? null : Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 30.w,
+            vertical: 20.h,
+          ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.r),
             child: Container(
@@ -322,10 +310,22 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
-                  BottomNavigationBarItem(icon: Icon(Icons.pie_chart), label: 'الأقسام'),
-                  BottomNavigationBarItem(icon: Icon(Icons.school), label: 'الخريجين'),
-                  BottomNavigationBarItem(icon: Icon(Icons.people), label: 'الطلاب'),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'الرئيسية',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.pie_chart),
+                    label: 'الأقسام',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.school),
+                    label: 'الخريجين',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.people),
+                    label: 'الطلاب',
+                  ),
                 ],
               ),
             ),
@@ -333,5 +333,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
 
-  }}
+
+

@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../data/local/alumni_model.dart';
-
 class AuthProvider with ChangeNotifier {
-  bool _isLoggedIn = false;
+  bool isLoggedIn = false;
+  String _userType = ""; // graduate or student or admin
 
-  bool get isLoggedIn => _isLoggedIn;
+  String get userType => _userType;
 
-  void login() {
-    _isLoggedIn = true;
+  void login(String type) {
+    isLoggedIn = true;
+    _userType = type;
     notifyListeners();
   }
 
   void logout() {
-    _isLoggedIn = false;
+    isLoggedIn = false;
+    _userType = "";
     notifyListeners();
   }
 
@@ -25,4 +27,9 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearAlumni() {
+    _alumni = null;
+    notifyListeners();
+  }
 }
+
