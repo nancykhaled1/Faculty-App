@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:faculty/ui/auth/register/alumni_register.dart';
+import 'package:faculty/ui/auth/register/cubit/states.dart';
 import 'package:faculty/ui/auth/register/success.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../../data/local/preferences.dart';
+import '../../../domain/usecase/di.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/dialog.dart';
 import '../../../utils/text_field.dart';
 import '../authProvider.dart';
+import 'cubit/alumniregisterviewmodel.dart';
 
 class AlumniRegisterScreen extends StatefulWidget {
   @override
@@ -15,293 +22,308 @@ class AlumniRegisterScreen extends StatefulWidget {
 }
 
 class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController rePasswordController = TextEditingController();
-  TextEditingController employmentController = TextEditingController();
-  var formKey = GlobalKey<FormState>();
-  bool isRePasswordVisible = true;
 
-  bool isPasswordVisible = true;
-  bool showField = false; // تحكم في إظهار السيرة الذاتية
-  bool showDropdown = false; // تحكم في إظهار القائمة المنسدلة
 
-  String selectedEmploymentStatus = "ادخل حاله التوظيف"; // القيمة الافتراضية
-  String? resumeFilePath; // مسار السيرة الذاتية
 
-  final Map<String, String> employmentIcons = {
-    "موظف": "assets/icons/user-tick.svg",
-    "باحث عن عمل": "assets/icons/user-settings.svg",
-    "غير موظف": "assets/icons/user-cross.svg",
-    "طالب دراسات عليا": "assets/icons/user-shield.svg",
-    "يعمل عامل حر": "assets/icons/user-heart.svg",
-  };
+  var viewmodel = AlumniRegisterScreenViewModel(registerUseCase: injectRegisterUseCase());
+
+
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'مرحباً بك ! 👋',
-              style: TextStyle(
-                fontSize: 24.sp,
-                fontFamily: "Noto Kufi Arabic",
-                fontWeight: FontWeight.w400,
-                color: MyColors.primaryColor,
+    return BlocListener<AlumniRegisterScreenViewModel,RegisterStates>(
+      bloc: viewmodel,
+        listener: (context, state) async {
+          if (state is AlumniRegisterErrorState) {
+            Navigator.pop(context); // <-- قفل الـ dialog
+            showDialog(
+              context: context,
+              builder: (context) => BuildDialog(
+                message: state.errorMessage ?? "حدث خطأ غير متوقع",
               ),
-            ),
-            SizedBox(height: 35.h),
-            Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  buildTextField(
-                    keyboardType: TextInputType.text,
-                    hint: 'ادخل اسمك',
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.only(
-                        top: 14.sp,
-                        left: 6.sp,
-                        right: 6.sp,
-                        bottom: 4.sp,
+            );
+          }
+
+          if (state is AlumniRegisterLoadingState) {
+            showDialog(
+              context: context,
+              barrierDismissible: false, // لا يمكن اغلاق الديالوج بالضغط بالخارج
+              builder: (_) => WillPopScope(
+                onWillPop: () async => false, // يمنع زر الرجوع أيضاً
+                child: BuildDialog(message: 'جارٍ انشاء الحساب...'),
+              ),
+            );
+
+          }
+
+          if (state is AlumniRegisterSuccessState) {
+            Navigator.pop(context);
+
+            final authProvider = Provider.of<AuthProvider>(context, listen: false);
+            authProvider.login("graduates");
+
+            await SharedPrefsHelper.saveUserData(
+              username: viewmodel.userNameController.text,
+              email: viewmodel.emailController.text,
+              employmentStatus: viewmodel.selectedEmploymentStatus ?? '',
+            );
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SuccessScreen(userType: "graduates"),
+              ),
+            );
+          }
+
+
+
+
+        },
+
+        child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'مرحباً بك ! 👋',
+                style: TextStyle(
+                  fontSize: 24.sp,
+                  fontFamily: "Noto Kufi Arabic",
+                  fontWeight: FontWeight.w400,
+                  color: MyColors.primaryColor,
+                ),
+              ),
+              SizedBox(height: 35.h),
+              Form(
+                key: viewmodel.formKey,
+                child: Column(
+                  children: [
+                    buildTextField(
+                      keyboardType: TextInputType.text,
+                      hint: 'ادخل اسمك',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.only(
+                          top: 14.sp,
+                          left: 6.sp,
+                          right: 6.sp,
+                          bottom: 4.sp,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/user.svg', // الأيقونة الافتراضية
+                          width: 15.sp,
+                          height: 15.sp,
+                          // colorFilter: ColorFilter.mode(
+                          //   Color(0xFF7A7A7A),
+                          //   BlendMode.srcIn,
+                          // ),
+                        ),
                       ),
-                      child: SvgPicture.asset(
-                        'assets/icons/user.svg', // الأيقونة الافتراضية
-                        width: 15.sp,
-                        height: 15.sp,
-                        // colorFilter: ColorFilter.mode(
-                        //   Color(0xFF7A7A7A),
-                        //   BlendMode.srcIn,
-                        // ),
-                      ),
+                      controller: viewmodel.userNameController,
+                      validator: (text) {
+                        if (text!.isEmpty || text.trim().isEmpty) {
+                          return 'برجاء ادخال اسمك';
+                        } return null;
+                      },
+                      label: 'اسم المستخدم',
                     ),
-                    controller: userNameController,
-                    validator: (text) {
-                      if (text!.isEmpty || text.trim().isEmpty) {
-                        return 'برجاء ادخال اسمك';
-                      } return null;
-                    },
-                    label: 'اسم المستخدم',
-                  ),
-                  SizedBox(height: 30.h),
+                    SizedBox(height: 30.h),
 
-                  buildTextField(
-                    keyboardType: TextInputType.emailAddress,
-                    hint: 'ادخل بريدك الالكتروني',
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.only(
-                        top: 15.sp,
-                        left: 6.sp,
-                        right: 6.sp,
-                        bottom: 5.sp,
+                    buildTextField(
+                      keyboardType: TextInputType.emailAddress,
+                      hint: 'ادخل بريدك الالكتروني',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.only(
+                          top: 15.sp,
+                          left: 6.sp,
+                          right: 6.sp,
+                          bottom: 5.sp,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/mail.svg', // الأيقونة الافتراضية
+                          width: 15.sp,
+                          height: 15.sp,
+                          // colorFilter: ColorFilter.mode(
+                          //   Color(0xFF7A7A7A),
+                          //   BlendMode.srcIn,
+                          // ),
+                        ),
                       ),
-                      child: SvgPicture.asset(
-                        'assets/icons/mail.svg', // الأيقونة الافتراضية
-                        width: 15.sp,
-                        height: 15.sp,
-                        // colorFilter: ColorFilter.mode(
-                        //   Color(0xFF7A7A7A),
-                        //   BlendMode.srcIn,
-                        // ),
-                      ),
+                      controller: viewmodel.emailController,
+                      validator: (text) {
+                        if (text!.isEmpty || text.trim().isEmpty) {
+                          return 'برجاء ادخال البريد الالكتروني';
+                        }
+                        bool emailValid = RegExp(
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                        ).hasMatch(text);
+                        if (!emailValid) {
+                          return 'برجاء ادخال بريد الكتروني صحيح';
+                        }
+                        return null;
+                      },
+                      label: 'البريد الالكتروني',
                     ),
-                    controller: emailController,
-                    validator: (text) {
-                      if (text!.isEmpty || text.trim().isEmpty) {
-                        return 'برجاء ادخال البريد الالكتروني';
-                      }
-                      bool emailValid = RegExp(
-                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-                      ).hasMatch(text);
-                      if (!emailValid) {
-                        return 'برجاء ادخال بريد الكتروني صحيح';
-                      }
-                      return null;
-                    },
-                    label: 'البريد الالكتروني',
-                  ),
-                  SizedBox(height: 30.h),
+                    SizedBox(height: 30.h),
 
-                  buildTextField(
-                    keyboardType: TextInputType.visiblePassword,
-                    hint: 'ادخل كلمة المرور',
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 6.sp,
-                        vertical: 20.sp,
+                    buildTextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      hint: 'ادخل كلمة المرور',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 6.sp,
+                          vertical: 20.sp,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/lock.svg', // الأيقونة الافتراضية
+                          width: 15.sp,
+                          height: 15.sp,
+                          // colorFilter: ColorFilter.mode(
+                          //   Color(0xFF7A7A7A),
+                          //   BlendMode.srcIn,
+                          // ),
+                        ),
                       ),
-                      child: SvgPicture.asset(
-                        'assets/icons/lock.svg', // الأيقونة الافتراضية
-                        width: 15.sp,
-                        height: 15.sp,
-                        // colorFilter: ColorFilter.mode(
-                        //   Color(0xFF7A7A7A),
-                        //   BlendMode.srcIn,
-                        // ),
-                      ),
+                      suffixIcon: Icon( viewmodel.isPasswordVisible
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                        size: 18.sp,color: MyColors.greyColor,),
+                      suffixIconFunction: () {
+                        setState(() {
+                          viewmodel.isPasswordVisible = !viewmodel.isPasswordVisible;
+                        });
+                      },
+                      controller: viewmodel.passwordController,
+                      validator: (text) {
+                        if (text == null || text.isEmpty)
+                          return 'يرجى إدخال كلمة المرور';
+                        if (text.length < 6)
+                          return 'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
+                        return null;
+                      },
+                      label: 'كلمة المرور',
+                      isPassword: viewmodel.isPasswordVisible,
                     ),
-                    suffixIcon: Icon( isPasswordVisible
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                      size: 18.sp,color: MyColors.greyColor,),
-                    suffixIconFunction: () {
-                      setState(() {
-                        isPasswordVisible = !isPasswordVisible;
-                      });
-                    },
-                    controller: passwordController,
-                    validator: (text) {
-                      if (text == null || text.isEmpty)
-                        return 'يرجى إدخال كلمة المرور';
-                      if (text.length < 6)
-                        return 'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
-                      return null;
-                    },
-                    label: 'كلمة المرور',
-                    isPassword: isPasswordVisible,
-                  ),
-                  SizedBox(height: 30.h),
+                    SizedBox(height: 30.h),
 
-                  buildTextField(
-                    keyboardType: TextInputType.visiblePassword,
-                    hint: 'ادخل تأكيد كلمة المرور',
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 6.sp,
-                        vertical: 20.sp,
+                    buildTextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      hint: 'ادخل تأكيد كلمة المرور',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 6.sp,
+                          vertical: 20.sp,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/lock.svg', // الأيقونة الافتراضية
+                          width: 15.sp,
+                          height: 15.sp,
+                          // colorFilter: ColorFilter.mode(
+                          //   Color(0xFF7A7A7A),
+                          //   BlendMode.srcIn,
+                          // ),
+                        ),
                       ),
-                      child: SvgPicture.asset(
-                        'assets/icons/lock.svg', // الأيقونة الافتراضية
-                        width: 15.sp,
-                        height: 15.sp,
-                        // colorFilter: ColorFilter.mode(
-                        //   Color(0xFF7A7A7A),
-                        //   BlendMode.srcIn,
-                        // ),
-                      ),
+                      suffixIcon: Icon( viewmodel.isRePasswordVisible
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                        size: 18.sp,color: MyColors.greyColor,),
+                      suffixIconFunction: () {
+                        setState(() {
+                          viewmodel.isRePasswordVisible = !viewmodel.isRePasswordVisible;
+                        });
+                      },
+                      controller: viewmodel.rePasswordController,
+                      validator: (text) {
+                        if (text == null || text.isEmpty)
+                          return 'يرجى تأكيد كلمة المرور';
+                        if (text != viewmodel.passwordController.text)
+                          return 'كلمة المرور غير متطابقة';
+                        return null;
+                      },
+                      label: 'تأكيد كلمة المرور',
+                      isPassword: viewmodel.isRePasswordVisible,
                     ),
-                    suffixIcon: Icon( isRePasswordVisible
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                      size: 18.sp,color: MyColors.greyColor,),
-                    suffixIconFunction: () {
-                      setState(() {
-                        isRePasswordVisible = !isRePasswordVisible;
-                      });
-                    },
-                    controller: rePasswordController,
-                    validator: (text) {
-                      if (text == null || text.isEmpty)
-                        return 'يرجى تأكيد كلمة المرور';
-                      if (text != passwordController.text)
-                        return 'كلمة المرور غير متطابقة';
-                      return null;
-                    },
-                    label: 'تأكيد كلمة المرور',
-                    isPassword: isRePasswordVisible,
-                  ),
 
 
-                  // زر تحميل السيرة الذاتية
-                  // عرض رفع السيرة الذاتية وحالة التوظيف معًا عند اختيار "خريج"
-                 // if (showField)
-                  SizedBox(height: 30.h),
+                    // زر تحميل السيرة الذاتية
+                    // عرض رفع السيرة الذاتية وحالة التوظيف معًا عند اختيار "خريج"
+                    // if (showField)
 
-                  _buildResumeUploadField(),
                     SizedBox(height: 30.h),
                     _buildEmploymentStatusDropdown(),
 
-                  SizedBox(height: 40.h),
-                  ElevatedButton(
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            Provider.of<AuthProvider>(context, listen: false).login("graduates");
-                            if (selectedEmploymentStatus == "موظف") {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Register(),
-                                ),
-                              );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SuccessScreen(userType: "graduates"), // أو "complaints"
-                                ),
-                              );
+                    SizedBox(height: 40.h),
+                    ElevatedButton(
+                      onPressed: () {
+                        // أولاً تأكد من أن كل الحقول الأخرى صحيحة
+                        if (viewmodel.formKey.currentState!.validate()) {
 
-                            }
+                          // تحقق من السي
+
+                          // بيانات التسجيل
+                          AlumniRegisterData data = AlumniRegisterData(
+                            username: viewmodel.userNameController.text,
+                            email: viewmodel.emailController.text,
+                            password: viewmodel.passwordController.text,
+                            repeatPassword: viewmodel.rePasswordController.text,
+                            employmentStatus: viewmodel.selectedEmploymentStatus ?? '',
+                          );
+
+                          // هل هو موظف؟
+                          if (viewmodel.selectedEmploymentStatus == "موظف") {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Register(registerData: data),
+                              ),
+                            );
+                          } else {
+                            viewmodel.alumniRegister(data);
                           }
-                        },
-                        child: Text(
-                          "التالي",
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            fontFamily: "Noto Kufi Arabic",
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: MyColors.primaryColor,
-                          foregroundColor: MyColors.whiteColor,
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10.h,
-                            horizontal: 130.w,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                        ),
-                      )
+                        }
+                      },
 
-                ],
+
+
+
+                      child: Text(
+                        "التالي",
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          fontFamily: "Noto Kufi Arabic",
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MyColors.primaryColor,
+                        foregroundColor: MyColors.whiteColor,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.h,
+                          horizontal: 130.w,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                      ),
+                    )
+
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      ) ,
     );
+
   }
 
 
 
-  Widget _buildResumeUploadField() {
-    return buildTextField(
-      label: 'السيرة الذاتية',
-      hint: resumeFilePath ?? 'قم بتحميل الملف',
-      controller: TextEditingController(text: resumeFilePath ?? ''),
-      validator: (text) {
-        if (resumeFilePath == null) {
-          return 'يرجى تحميل السيرة الذاتية';
-        }
-        return null;
-      },
-      prefixIcon: GestureDetector(
-        onTap: pickResumeFile,
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 15.sp,
-            left: 5.sp,
-            right: 5.sp,
-            bottom: 5.sp,
-          ),
-          child: SvgPicture.asset(
-            'assets/icons/downloadicon.svg', // الأيقونة الافتراضية
-            width: 18.sp,
-            height: 18.sp,
-           // colorFilter: ColorFilter.mode(Color(0xFF7A7A7A), BlendMode.srcIn),
-          ),
-        ),
-      ),
-      readonly: true,
-    );
-  }
+
 
   Widget _buildEmploymentStatusDropdown() {
     return Column(
@@ -311,23 +333,23 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
         GestureDetector(
           onTap: () {
             setState(() {
-              showDropdown = !showDropdown;
+              viewmodel.showDropdown = !viewmodel.showDropdown;
             });
           },
           child: AbsorbPointer(
             child: buildTextField(
               label: 'حالة التوظيف',
               hint: 'اختار حالة التوظيف',
-              controller: employmentController,
+              controller: viewmodel.employmentController,
               readonly: true,
               suffixIcon: GestureDetector(
                 onTap: () {
                   setState(() {
-                    showDropdown = !showDropdown;
+                    viewmodel.showDropdown = !viewmodel.showDropdown;
                   });
                 },
                 child: Icon(
-                  showDropdown
+                  viewmodel.showDropdown
                       ? Icons.arrow_drop_up
                       : Icons.arrow_drop_down, // تغيير الأيقونة
                   size: 35.sp,
@@ -348,7 +370,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                   bottom: 4.sp,
                 ),
                 child: SvgPicture.asset(
-                  employmentIcons[selectedEmploymentStatus] ??
+                  viewmodel.employmentIcons[viewmodel.selectedEmploymentStatus] ??
                       'assets/icons/user.svg', // الأيقونة الافتراضية
                   width: 18.sp,
                   height: 18.sp,
@@ -363,19 +385,19 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
         ),
 
         // القائمة المنسدلة
-        if (showDropdown)
+        if (viewmodel.showDropdown)
           Column(
             children:
-                employmentIcons.entries.map((entry) {
+            viewmodel.employmentIcons.entries.map((entry) {
                   String status = entry.key;
                   String iconPath = entry.value;
 
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedEmploymentStatus = status;
-                        employmentController.text = status; // تحديث النص داخل `TextEditingController`
-                        showDropdown = false;
+                        viewmodel.selectedEmploymentStatus = status;
+                        viewmodel.employmentController.text = status; // تحديث النص داخل `TextEditingController`
+                        viewmodel.showDropdown = false;
                       });
                     },
                     child: Container(
@@ -417,16 +439,70 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
     );
   }
 
-  Future<void> pickResumeFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf'],
-    );
 
-    if (result != null && result.files.isNotEmpty) {
-      setState(() {
-        resumeFilePath = result.files.single.name;
-      });
-    }
+}
+
+class AlumniRegisterData {
+  final String username;
+  final String email;
+  final String password;
+  final String repeatPassword;
+  final String employmentStatus;
+
+  final String? jobName;
+  final String? location;
+  final String? companyEmail;
+  final String? companyPhone;
+  final String? companyLink;
+  final String? cv;
+  final String? aboutCompany;
+
+  AlumniRegisterData({
+    required this.username,
+    required this.email,
+    required this.password,
+    required this.repeatPassword,
+    required this.employmentStatus,
+    this.jobName,
+    this.location,
+    this.companyEmail,
+    this.companyPhone,
+    this.companyLink,
+    this.cv,
+    this.aboutCompany
+  });
+
+  // ⬇️ copyWith method
+  AlumniRegisterData copyWith({
+    String? username,
+    String? email,
+    String? password,
+    String? repeatPassword,
+    String? employmentStatus,
+    String? jobName,
+    String? location,
+    String? companyEmail,
+    String? companyPhone,
+    String? companyLink,
+    String? cv,
+    String? aboutCompany
+  }) {
+    return AlumniRegisterData(
+      username: username ?? this.username,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      repeatPassword: repeatPassword ?? this.repeatPassword,
+      employmentStatus: employmentStatus ?? this.employmentStatus,
+      jobName: jobName ?? this.jobName,
+      location: location ?? this.location,
+      companyEmail: companyEmail ?? this.companyEmail,
+      companyPhone: companyPhone ?? this.companyPhone,
+      companyLink: companyLink ?? this.companyLink,
+      cv: cv ?? this.cv,
+      aboutCompany: aboutCompany ?? this.aboutCompany
+    );
   }
 }
+
+
+

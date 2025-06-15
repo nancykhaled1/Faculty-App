@@ -1,6 +1,7 @@
 
 
 import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
+import 'package:faculty/ui/alumni/cubit/profileviewmodel.dart';
 import 'package:faculty/ui/alumni/profile_notemploee.dart';
 import 'package:faculty/ui/alumni/profilescreen.dart';
 import 'package:faculty/ui/auth/authProvider.dart';
@@ -15,19 +16,31 @@ import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home.dart';
 import 'package:faculty/ui/notification/notification_screen.dart';
 import 'package:faculty/ui/splash/splash_screen.dart';
+import 'package:faculty/ui/students/cubit/studentviewmodel.dart';
 import 'package:faculty/ui/students/scholarships-screen.dart';
 import 'package:faculty/ui/students/student-activity-screen.dart';
 import 'package:faculty/ui/students/student_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'domain/usecase/di.dart';
+import 'domain/usecase/get_userdata_usecase.dart';
 import 'ui/auth/auth_alumni.dart';
 
-void main() {
+void main() async {
+    WidgetsFlutterBinding
+        .ensureInitialized(); // مهم جداً لتهيئة القنوات قبل استخدام async
+
+
   runApp(
     MultiProvider(
       providers: [
+       // ChangeNotifierProvider(create: (_) => StudentViewModel()),
+        BlocProvider<ProfileViewModel>(
+          create: (_) => ProfileViewModel(getUserdataUseCase: injectGetUserDataServiceUseCase()), // مرري الـ use case المناسب هنا
+        ),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         // ممكن تزود providers تانين هنا
       ],
@@ -35,6 +48,7 @@ void main() {
     ),
   );
 }
+
 
 
 class MyApp extends StatelessWidget {
@@ -66,7 +80,7 @@ class MyApp extends StatelessWidget {
 
             initialRoute: SplashScreen.routeName,
             routes: {
-              Register.routeName : (context) => Register(),
+            //  Register.routeName : (context) => Register(),
               AlumniAuthScreen.routeName : (context) => AlumniAuthScreen(),
               SuccessScreen.routeName : (context) => SuccessScreen(userType: '',),
               LoginScreen.routeName : (context) => LoginScreen(userType: '',),

@@ -1,13 +1,18 @@
 import 'package:faculty/ui/auth/register/alumni_register.dart';
+import 'package:faculty/ui/auth/register/cubit/studentregisterviewmodel.dart';
 import 'package:faculty/ui/auth/register/success.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../../domain/usecase/di.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/dialog.dart';
 import '../../../utils/text_field.dart';
 import '../authProvider.dart';
+import 'cubit/states.dart';
 
 class StudentRegister extends StatefulWidget {
   @override
@@ -15,22 +20,53 @@ class StudentRegister extends StatefulWidget {
 }
 
 class _StudentRegisterState extends State<StudentRegister> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController rePasswordController = TextEditingController();
-  TextEditingController employmentController = TextEditingController();
-  var formKey = GlobalKey<FormState>();
+
 
   bool isPasswordVisible = true;
   bool isRePasswordVisible = true;
 
 
-
+  var viewmodel = StudentRegisterViewModel(registerUseCase: injectRegisterUseCase());
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return BlocListener<StudentRegisterViewModel,RegisterStates>(
+      bloc: viewmodel,
+        listener:(context, state) {
+          if (state is RegisterErrorState) {
+          //  BuildDialog.hideLoading(context);
+            Navigator.pop(context); // لإغلاق الديالوج لو كان مفتوح
+            showDialog(
+              context: context,
+              builder: (context) => BuildDialog(
+                message: state.errorMessage ?? "حدث خطأ غير متوقع",
+              ),
+            );
+          }
+          if (state is RegisterSuccessState) {
+          //  BuildDialog.hideLoading(context);
+            Navigator.pop(context); // لإغلاق الديالوج لو كان مفتوح
+            Provider.of<AuthProvider>(context, listen: false).login("complaints");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SuccessScreen(userType: "complaints"), // أو "complaints"
+              ),
+            );
+           // BuildDialog(message: state.response.username ?? "no username");
+          }
+          if (state is RegisterLoadingState) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => BuildDialog(
+                message: 'جارٍ انشاء الحساب...',
+              ),
+            );
+          }
+        },
+
+      child: Padding(
       padding: const EdgeInsets.all(10.0),
       child: SingleChildScrollView(
         child: Column(
@@ -47,7 +83,7 @@ class _StudentRegisterState extends State<StudentRegister> {
             ),
             SizedBox(height: 35.h),
             Form(
-              key: formKey,
+              key: viewmodel.formKey,
               child: Column(
                 children: [
                   buildTextField(
@@ -70,7 +106,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                         // ),
                       ),
                     ),
-                    controller: userNameController,
+                    controller: viewmodel.userNameController,
                     validator: (text) {
                       if (text!.isEmpty || text.trim().isEmpty) {
                         return 'برجاء ادخال اسمك';
@@ -100,7 +136,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                         // ),
                       ),
                     ),
-                    controller: emailController,
+                    controller: viewmodel.emailController,
                     validator: (text) {
                       if (text!.isEmpty || text.trim().isEmpty) {
                         return 'برجاء ادخال البريد الالكتروني';
@@ -144,7 +180,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                         isPasswordVisible = !isPasswordVisible;
                       });
                     },
-                    controller: passwordController,
+                    controller: viewmodel.passwordController,
                     validator: (text) {
                       if (text == null || text.isEmpty)
                         return 'يرجى إدخال كلمة المرور';
@@ -184,11 +220,11 @@ class _StudentRegisterState extends State<StudentRegister> {
                         isRePasswordVisible = !isRePasswordVisible;
                       });
                     },
-                    controller: rePasswordController,
+                    controller: viewmodel.rePasswordController,
                     validator: (text) {
                       if (text == null || text.isEmpty)
                         return 'يرجى تأكيد كلمة المرور';
-                      if (text != passwordController.text)
+                      if (text != viewmodel.passwordController.text)
                         return 'كلمة المرور غير متطابقة';
                       return null;
                     },
@@ -199,16 +235,11 @@ class _StudentRegisterState extends State<StudentRegister> {
 
                   ElevatedButton(
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        Provider.of<AuthProvider>(context, listen: false).login("complaints");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SuccessScreen(userType: "complaints"), // أو "complaints"
-                          ),
-                        );
+                     // if (formKey.currentState!.validate()) {
+                      //  Provider.of<AuthProvider>(context, listen: false).login("complaints");
+                        viewmodel.studentRegister();
 
-                      }
+                    //  }
                     },
                     child: Text(
                       "إنشاء حساب",
@@ -236,6 +267,7 @@ class _StudentRegisterState extends State<StudentRegister> {
           ],
         ),
       ),
+    )
     );
   }
 }

@@ -39,10 +39,21 @@ class _HomePageState extends State<HomePage> {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
       if (authProvider.isLoggedIn && authProvider.userType == "graduates") {
-        setState(() {
-          _selectedIndex = index;
-        });
-      } else {
+        // final employmentStatus = authProvider.userData?.employmentStatus ?? 'غير موظف';
+        //
+        // // بناء الصفحة بناءً على حالة التوظيف
+        // setState(() {
+        //   _pages[2] = (employmentStatus == "موظف")
+        //       ? UserProfileScreen()
+        //       : ProfileScreen();
+        //   _selectedIndex = index;
+        // });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => UserProfileScreen()),
+        );
+      }
+      else {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => AlumniAuthScreen()),

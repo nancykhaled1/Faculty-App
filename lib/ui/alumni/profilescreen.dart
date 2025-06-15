@@ -1,9 +1,18 @@
+import 'dart:io';
+
 import 'package:faculty/ui/home.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
+import '../../data/local/preferences.dart';
+import '../../domain/usecase/di.dart';
 import '../../utils/colors.dart';
+import '../auth/authProvider.dart';
+
 
 class UserProfileScreen extends StatefulWidget {
   static const String routeName = 'profile';
@@ -13,219 +22,135 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  TextEditingController nameController = TextEditingController(
-    text: "أحمد خالد",
-  );
-  TextEditingController emailController = TextEditingController(
-    text: "Ahm12@gmail.com",
-  );
-  TextEditingController cvController = TextEditingController(text: "اسم الملف");
-  TextEditingController jobController = TextEditingController(text: "مهندس برمجيات");
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController jobController = TextEditingController();
+  TextEditingController emailCompanyController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController urlController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  String employmentStatus = "unemployed";
 
- // TextEditingController locationController = TextEditingController();
+  File? cvController;
+  bool _isInit = false;
 
-  TextEditingController emailCompanyController = TextEditingController(text: "asdfgh@gmail.com");
 
-  TextEditingController phoneController = TextEditingController(text: "01234668");
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final data = await SharedPrefsHelper.getUserData();
 
-  TextEditingController urlController = TextEditingController(text: "asdfhhut");
+      nameController.text = data['username'] ?? '';
+      emailController.text = data['email'] ?? '';
 
-  TextEditingController descriptionController = TextEditingController(text: "شركه تعمل باعمال السوفت وير");
+      String rawStatus = data['employment_status'] ?? 'unemployed';
+      if (!employmentOptionsMap.containsKey(rawStatus)) {
+        employmentStatus = employmentOptionsMap.entries
+            .firstWhere(
+              (entry) => entry.value == rawStatus,
+          orElse: () => MapEntry('unemployed', 'غير موظف'),
+        )
+            .key;
+      } else {
+        employmentStatus = rawStatus;
+      }
 
-  String employmentStatus = "يعمل عامل حر";
-  List<String> employmentOptions = ["يعمل عامل حر", "باحث عن عمل", "موظف","طالب دراسات عليا", "غير موظف"];
+      // ✅ صححنا هنا
+      if (employmentStatus == 'employee') {
+        jobController.text = data['jobName'] ?? '';
+        emailCompanyController.text = data['companyEmail'] ?? '';
+        phoneController.text = data['companyPhone'] ?? '';
+        urlController.text = data['companyLink'] ?? '';
+        descriptionController.text = data['aboutCompany'] ?? '';
+      }
 
-  void saveChanges() {
-    // هنا يتم حفظ البيانات عند الضغط على الزرار
-    print("تم حفظ البيانات بنجاح");
+      Provider.of<AuthProvider>(context, listen: false)
+          .setEmploymentStatus(employmentStatus);
+
+      setState(() {});
+    });
+  }
+
+
+  void saveChanges() async {
+    final username = nameController.text.trim();
+    final email = emailController.text.trim();
+    final jobName = jobController.text.trim();
+    final companyEmail = emailCompanyController.text.trim();
+    final companyPhone = phoneController.text.trim();
+    final companyUrl = urlController.text.trim();
+    final companyDesc = descriptionController.text.trim();
+    final employmentStatus =
+        Provider.of<AuthProvider>(context, listen: false).employmentStatus;
+
+    await SharedPrefsHelper.saveUserData(
+      username: username,
+      email: email,
+      employmentStatus: employmentStatus,
+      jobName: jobName,
+      companyEmail: companyEmail,
+      companyPhone: companyPhone,
+      companyLink: companyUrl,
+      aboutCompany: companyDesc,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("تم حفظ التعديلات")),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pushReplacementNamed(context, HomePage.routeName);
-          },
-          child: Icon(Icons.arrow_back, color: Colors.black),
-        ),
+        title: Text('الملف الشخصي'),
+        backgroundColor: MyColors.primaryColor,
       ),
+      backgroundColor: MyColors.backgroundColor,
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20.r),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // كونتينر يحتوي على صورة البروفايل والاسم والبريد الإلكتروني
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  // الخلفية الملونة (الشريط)
-                  Container(
-                    height: 100.h,
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [MyColors.primaryColor, MyColors.secondryColor],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                  ),
-                  // الكونتينر الخاص بالمعلومات
-                  Positioned(
-                    top: 4, // رفع الكونتينر الأبيض لأعلى قليلًا
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      //height: 100.h,
-                      decoration: BoxDecoration(
-                        color: MyColors.whiteColor,
-                        borderRadius: BorderRadius.circular(10.r)
-                      ),
-                      child: Row(
-                      //  mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.r),
-                              child: Image.asset(
-                                'assets/images/Rectangle 40.png', // مسار الصورة
-                                width: 70.w,
-                                height: 70.h,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical:25.h, horizontal: 10.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "أحمد خالد",
-                                  style: TextStyle(
-                                      color: MyColors.blackColor,
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Noto Kufi Arabic"
-                                  ),
-                                ),
-                                SizedBox(height: 5.h),
-                                Text(
-                                  "Ahm12@gmail.com",
-                                  style: TextStyle(
-                                      color: MyColors.greyColor,
-                                      fontSize: 15.sp,
-                                      fontFamily: "Noto Kufi Arabic",
-                                      fontWeight: FontWeight.w500
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-
-
-              SizedBox(height: 20),
-
-              // الحقول القابلة للتحرير
-              buildTextField("اسم المستخدم", nameController),
-              buildTextField("البريد الإلكتروني", emailController),
-              buildTextField(
-                "السيرة الذاتية",
-                cvController,
-                isReadOnly: true,
-                isFileField: true,
-              ),
-
-              // حالة التوظيف Dropdown
-              buildDropdownField("حالة التوظيف"),
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            buildTextField("اسم المستخدم", nameController),
+            buildTextField("البريد الإلكتروني", emailController),
+            buildDropdownField("حالة التوظيف"),
+            if (authProvider.employmentStatus == 'employee') ...[
               buildTextField("اسم الوظيفة", jobController),
-              buildTextField("البريد الإلكتروني", emailCompanyController),
+              buildTextField("البريد الإلكتروني للشركة", emailCompanyController),
               buildTextField("رقم الهاتف", phoneController),
               buildTextField("رابط الشركة", urlController),
               buildTextField("وصف الشركة", descriptionController),
-
-              SizedBox(height: 20),
-
-              // زر الحفظ
-              Padding(
-                padding:  EdgeInsets.all(8.sp),
-                child: ElevatedButton(
-                  onPressed: saveChanges,
-                  child: Text(
-                    "حفظ التغيير",
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontFamily: "Noto Kufi Arabic",
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.primaryColor,
-                    foregroundColor: MyColors.whiteColor,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.h,
-                      horizontal: 90.w,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                  ),
-                ),
-              ),
+              buildCVField("السيرة الذاتية"),
             ],
-          ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: saveChanges,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyColors.primaryColor,
+              ),
+              child: Text("حفظ التغييرات"),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget buildTextField(
-      String label,
-      TextEditingController controller, {
-        bool isReadOnly = false,
-        bool isFileField = false,
-      }) {
+  Widget buildTextField(String label, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, fontFamily: "Numans", color: MyColors.greyColor),
-        ),
+        Text(label),
         SizedBox(height: 5),
         TextField(
           controller: controller,
-          readOnly: isReadOnly,
           decoration: InputDecoration(
             filled: true,
             fillColor: MyColors.whiteColor,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide.none,
-            ),
-            prefixIcon: isFileField
-                ? Icon(Icons.picture_as_pdf, color: Colors.red)
-                : null,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
         SizedBox(height: 15),
@@ -234,45 +159,84 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget buildDropdownField(String label) {
+    return Consumer<AuthProvider>(
+      builder: (_, provider, __) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label),
+          SizedBox(height: 5),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: MyColors.whiteColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: provider.employmentStatus, // مثلًا "employee"
+                items: employmentOptionsMap.entries.map((entry) {
+                  return DropdownMenuItem<String>(
+                    value: entry.key, // "employee"
+                    child: Text(entry.value), // "موظف"
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  provider.setEmploymentStatus(val!);
+                },
+              ),
+            ),
+          ),
+          SizedBox(height: 15),
+        ],
+      ),
+    );
+  }
+
+  Widget buildCVField(String label) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, fontFamily: "Numans", color: MyColors.greyColor),
-        ),
-        SizedBox(height: 5.h),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w),
-          decoration: BoxDecoration(
-            color: MyColors.whiteColor,
-            borderRadius: BorderRadius.circular(10.r),
-           // border: Border.all(color: MyColors.greyColor, width: 0.5),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              dropdownColor: MyColors.whiteColor,
-              value: employmentStatus,
-              icon: Icon(Icons.arrow_drop_down, color: MyColors.greyColor),
-              isExpanded: true,
-              style: TextStyle(fontSize: 15.sp, fontFamily: "Numans", color: MyColors.blackColor),
-              items: employmentOptions.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  employmentStatus = newValue!;
-                });
-              },
+        Text(label),
+        GestureDetector(
+          onTap: () {
+            if (cvController != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('تم تحميل السيرة الذاتية')),
+              );
+            }
+          },
+          child: Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: MyColors.whiteColor,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.picture_as_pdf, color: Colors.red),
+                SizedBox(width: 10),
+                Text(cvController?.path.split('/').last ?? 'لا يوجد ملف'),
+              ],
             ),
           ),
         ),
-        SizedBox(height: 15.h),
+        SizedBox(height: 15),
       ],
     );
   }
 
+  Map<String, String> employmentOptionsMap = {
+    "employee": "موظف",
+    "unemployed": "غير موظف",
+    "job_seeker": "باحث عن عمل",
+    "graduate_student": "طالب دراسات عليا",
+    "freelancer": "يعمل عامل حر", // ✅ القيمة الصح المفروض تتخزن هي المفتاح: freelancer
+  };
+
+
 }
+
+
+
+
