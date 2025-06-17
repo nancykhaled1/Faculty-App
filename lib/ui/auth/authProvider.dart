@@ -18,7 +18,7 @@ class AuthProvider with ChangeNotifier {
   String? get token => _token;
 
 
-  String _employmentStatus = "freelance";
+  String _employmentStatus = "موظف";
 
   String get employmentStatus => _employmentStatus;
 

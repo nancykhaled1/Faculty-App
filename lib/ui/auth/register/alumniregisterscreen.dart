@@ -62,10 +62,16 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
             final authProvider = Provider.of<AuthProvider>(context, listen: false);
             authProvider.login("graduates");
 
+
             await SharedPrefsHelper.saveUserData(
               username: viewmodel.userNameController.text,
               email: viewmodel.emailController.text,
               employmentStatus: viewmodel.selectedEmploymentStatus ?? '',
+              aboutCompany: state.response.aboutCompany ?? '',
+              companyEmail: state.response.companyEmail ?? '',
+              companyLink: state.response.companyLink ?? '',
+              companyPhone: state.response.companyPhone ?? '',
+              jobName: state.response.jobName ?? '',
             );
 
             Navigator.push(

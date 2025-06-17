@@ -10,6 +10,12 @@ class SharedPrefsHelper {
   static const _urlKey = 'companyLink';
   static const _descriptionKey = 'aboutCompany';
 
+  static late final SharedPreferences prefs;
+
+  static Future<void> init() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
 
 
   static Future<void> saveUserData({
@@ -22,27 +28,29 @@ class SharedPrefsHelper {
     String? companyLink,
     String? aboutCompany,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
+
+    print('jobName: $jobName');
+    print('companyEmail: $companyEmail');
+    print('companyPhone: $companyPhone');
+    print('companyLink: $companyLink');
+    print('aboutCompany: $aboutCompany');
+
 
     await prefs.setString(_usernameKey, username);
     await prefs.setString(_emailKey, email);
     await prefs.setString(_employmentStatusKey, employmentStatus);
 
-    // فقط لو موظف، خزّن البيانات المرتبطة بالوظيفة
-    if (employmentStatus == 'employee') {
-      await prefs.setString(_jobKey, jobName ?? '');
-      await prefs.setString(_emailCompanyKey, companyEmail ?? '');
-      await prefs.setString(_phoneKey, companyPhone ?? '');
-      await prefs.setString(_urlKey, companyLink ?? '');
-      await prefs.setString(_descriptionKey, aboutCompany ?? '');
-    } else {
-      // امسح بيانات الوظيفة لو كانت موجودة من تسجيل سابق
-      await prefs.remove(_jobKey);
-      await prefs.remove(_emailCompanyKey);
-      await prefs.remove(_phoneKey);
-      await prefs.remove(_urlKey);
-      await prefs.remove(_descriptionKey);
-    }
+    await prefs.remove(_jobKey);
+    await prefs.remove(_emailCompanyKey);
+    await prefs.remove(_phoneKey);
+    await prefs.remove(_urlKey);
+    await prefs.remove(_descriptionKey);
+
+    await prefs.setString(_jobKey, jobName ?? '');
+    await prefs.setString(_emailCompanyKey, companyEmail ?? '');
+    await prefs.setString(_phoneKey, companyPhone ?? '');
+    await prefs.setString(_urlKey, companyLink ?? '');
+    await prefs.setString(_descriptionKey, aboutCompany ?? '');
   }
 
 

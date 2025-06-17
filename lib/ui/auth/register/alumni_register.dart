@@ -49,13 +49,14 @@ class _RegisterState extends State<Register> {
       companyPhone: viewmodel.phoneController.text,
       companyLink: viewmodel.urlController.text,
       cv: viewmodel.resumeFilePath, // لو فيه رفع سيرة ذاتية
+      aboutCompany: viewmodel.descriptionController.text,
     );
 
     viewmodel.alumniRegister(data);
     await SharedPrefsHelper.saveUserData(
-      username: data.username!,
-      email: data.email!,
-      employmentStatus: data.employmentStatus!,
+      username: data.username,
+      email: data.email,
+      employmentStatus: data.employmentStatus,
       jobName: data.jobName,
       companyEmail: data.companyEmail,
       companyPhone: data.companyPhone,
