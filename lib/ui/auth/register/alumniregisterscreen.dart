@@ -217,7 +217,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                           vertical: 20.sp,
                         ),
                         child: SvgPicture.asset(
-                          'assets/icons/lock.svg', // الأيقونة الافتراضية
+                          'assets/icons/lock.svg',
                           width: 15.sp,
                           height: 15.sp,
                           // colorFilter: ColorFilter.mode(
@@ -329,7 +329,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // الحقل الرئيسي
+
         GestureDetector(
           onTap: () {
             setState(() {

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:faculty/ui/auth/register/alumniregisterscreen.dart';
 import 'package:faculty/ui/auth/register/cubit/states.dart';
 import 'package:file_picker/file_picker.dart';
@@ -57,10 +56,10 @@ class AlumniRegisterScreenViewModel extends Cubit<RegisterStates> {
 
   final Map<String, String> employmentOptionsMap = {
     "employee": "موظف",
-    "unemployed": "غير موظف",
-    "job_seeker": "باحث عن عمل",
-    "graduate_student": "طالب دراسات عليا",
-    "freelancer": "يعمل عمل حر",
+    "unemployee": "غير موظف",
+    "seeking_job": "باحث عن عمل",
+    "postgraduate": "طالب دراسات عليا",
+    "freelance": "يعمل عمل حر",
   };
 
 
@@ -87,7 +86,7 @@ class AlumniRegisterScreenViewModel extends Cubit<RegisterStates> {
     final String arabicStatus = selectedEmploymentStatus;
     final String englishStatus = employmentOptionsMap.entries
         .firstWhere((entry) => entry.value == arabicStatus,
-        orElse: () => MapEntry('unemployed', 'غير موظف'))
+        orElse: () => MapEntry('unemployee', 'غير موظف'))
         .key;
 
     emit(AlumniRegisterLoadingState(loadingMessage: 'جارٍ إرسال البيانات...'));
