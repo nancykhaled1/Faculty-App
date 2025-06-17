@@ -13,7 +13,6 @@ import '../../domain/usecase/di.dart';
 import '../../utils/colors.dart';
 import '../auth/authProvider.dart';
 
-
 class UserProfileScreen extends StatefulWidget {
   static const String routeName = 'profile';
 
@@ -29,11 +28,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController urlController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  String employmentStatus = "unemployed";
+  String employmentStatus = "unemployee";
 
   File? cvController;
   bool _isInit = false;
-
 
   @override
   void initState() {
@@ -44,14 +42,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       nameController.text = data['username'] ?? '';
       emailController.text = data['email'] ?? '';
 
-      String rawStatus = data['employment_status'] ?? 'unemployed';
+      String rawStatus = data['employment_status'] ?? 'unemployee';
       if (!employmentOptionsMap.containsKey(rawStatus)) {
-        employmentStatus = employmentOptionsMap.entries
-            .firstWhere(
-              (entry) => entry.value == rawStatus,
-          orElse: () => MapEntry('unemployed', 'غير موظف'),
-        )
-            .key;
+        employmentStatus =
+            employmentOptionsMap.entries
+                .firstWhere(
+                  (entry) => entry.value == rawStatus,
+                  orElse: () => MapEntry('unemployee', 'غير موظف'),
+                )
+                .key;
       } else {
         employmentStatus = rawStatus;
       }
@@ -65,13 +64,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         descriptionController.text = data['aboutCompany'] ?? '';
       }
 
-      Provider.of<AuthProvider>(context, listen: false)
-          .setEmploymentStatus(employmentStatus);
+      Provider.of<AuthProvider>(
+        context,
+        listen: false,
+      ).setEmploymentStatus(employmentStatus);
 
       setState(() {});
     });
   }
-
 
   void saveChanges() async {
     final username = nameController.text.trim();
@@ -95,9 +95,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       aboutCompany: companyDesc,
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("تم حفظ التعديلات")),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("تم حفظ التعديلات")));
   }
 
   @override
@@ -119,7 +119,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             buildDropdownField("حالة التوظيف"),
             if (authProvider.employmentStatus == 'employee') ...[
               buildTextField("اسم الوظيفة", jobController),
-              buildTextField("البريد الإلكتروني للشركة", emailCompanyController),
+              buildTextField(
+                "البريد الإلكتروني للشركة",
+                emailCompanyController,
+              ),
               buildTextField("رقم الهاتف", phoneController),
               buildTextField("رابط الشركة", urlController),
               buildTextField("وصف الشركة", descriptionController),
@@ -160,35 +163,37 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget buildDropdownField(String label) {
     return Consumer<AuthProvider>(
-      builder: (_, provider, __) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label),
-          SizedBox(height: 5),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: MyColors.whiteColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: provider.employmentStatus, // مثلًا "employee"
-                items: employmentOptionsMap.entries.map((entry) {
-                  return DropdownMenuItem<String>(
-                    value: entry.key, // "employee"
-                    child: Text(entry.value), // "موظف"
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  provider.setEmploymentStatus(val!);
-                },
+      builder:
+          (_, provider, __) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label),
+              SizedBox(height: 5),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: MyColors.whiteColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: provider.employmentStatus,
+                    items:
+                        employmentOptionsMap.entries.map((entry) {
+                          return DropdownMenuItem<String>(
+                            value: entry.key, // "employee"
+                            child: Text(entry.value), // "موظف"
+                          );
+                        }).toList(),
+                    onChanged: (val) {
+                      provider.setEmploymentStatus(val!);
+                    },
+                  ),
+                ),
               ),
-            ),
+              SizedBox(height: 15),
+            ],
           ),
-          SizedBox(height: 15),
-        ],
-      ),
     );
   }
 
@@ -205,19 +210,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               );
             }
           },
-          child: Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: MyColors.whiteColor,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey.shade300),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.picture_as_pdf, color: Colors.red),
-                SizedBox(width: 10),
-                Text(cvController?.path.split('/').last ?? 'لا يوجد ملف'),
-              ],
+          child: GestureDetector(
+            onTap: () {
+              // open cv when tapped using cvController?.path
+              // https://pub.dev/packages/flutter_pdfview
+            },
+            child: Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: MyColors.whiteColor,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.picture_as_pdf, color: Colors.red),
+                  SizedBox(width: 10),
+                  Text(cvController?.path.split('/').last ?? 'لا يوجد ملف'),
+                ],
+              ),
             ),
           ),
         ),
@@ -228,15 +239,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Map<String, String> employmentOptionsMap = {
     "employee": "موظف",
-    "unemployed": "غير موظف",
-    "job_seeker": "باحث عن عمل",
-    "graduate_student": "طالب دراسات عليا",
-    "freelancer": "يعمل عامل حر", // ✅ القيمة الصح المفروض تتخزن هي المفتاح: freelancer
+    "unemployee": "غير موظف",
+    "seeking_job": "باحث عن عمل",
+    "postgraduate": "طالب دراسات عليا",
+    "freelance": "يعمل عمل حر",
   };
-
-
 }
-
-
-
-

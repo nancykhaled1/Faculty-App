@@ -21,7 +21,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  List<String> employmentOptions = ["يعمل عامل حر", "باحث عن عمل", "موظف", "طالب دراسات عليا", "غير موظف"];
+  List<String> employmentOptions = ["يعمل عمل حر", "باحث عن عمل", "موظف", "طالب دراسات عليا", "غير موظف"];
   bool _isInit = false;
 
   @override

@@ -25,13 +25,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'data/local/preferences.dart';
 import 'domain/usecase/di.dart';
 import 'domain/usecase/get_userdata_usecase.dart';
 import 'ui/auth/auth_alumni.dart';
 
-void main() async {
+Future<void> main() async {
     WidgetsFlutterBinding
         .ensureInitialized(); // مهم جداً لتهيئة القنوات قبل استخدام async
+
+    await SharedPrefsHelper.init(); // تهيئة SharedPreferences
 
 
   runApp(
@@ -51,10 +54,26 @@ void main() async {
 
 
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  Future<void> getUserData() async {
+    Map<String, String?> data = await SharedPrefsHelper.getUserData();
+    print('User Datajasdasg: $data');
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -100,22 +119,22 @@ class MyApp extends StatelessWidget {
               AcademicTeams.routeName: (context) => AcademicTeams(),
               StudentScreen.routeName : (context) => StudentScreen(),
               NotificationScreen.routeName : (context) => NotificationScreen(),
-          
 
-                 
+
+
               StudentScreen.routeName : (context) => StudentScreen(),
               NotificationScreen.routeName : (context) => NotificationScreen(),
               Complaint.routeName: (context) => Complaint(),
 
             },
           );
-      
+
       }
-    
-// فرح وجيه 
+
+// فرح وجيه
  );
-  } 
   }
+}
 
 
 
