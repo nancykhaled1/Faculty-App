@@ -262,7 +262,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, fontFamily: "Numans", color: MyColors.greyColor)),
+        Text(label,
+            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400,
+                fontFamily: "Numans", color: MyColors.greyColor)),
         SizedBox(height: 5.h),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w),

@@ -9,6 +9,8 @@ class ApiConstants{
   static const String studentApi = '/services/section/';
   static const String portalApi = '/studentportal/portal/';
   static String dataApi(int userId) => '/users/graduation/$userId/';
+  static const String notificationApi = '/studentportal/mynotifications/';
+
 
 
 

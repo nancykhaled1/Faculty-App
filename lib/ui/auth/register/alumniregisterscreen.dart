@@ -72,6 +72,8 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
               companyLink: state.response.companyLink ?? '',
               companyPhone: state.response.companyPhone ?? '',
               jobName: state.response.jobName ?? '',
+              location: state.response.location ?? '',
+              cv: state.response.cv ?? ''
             );
 
             Navigator.push(

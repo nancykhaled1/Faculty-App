@@ -35,16 +35,22 @@ Future<void> main() async {
         .ensureInitialized(); // مهم جداً لتهيئة القنوات قبل استخدام async
 
     await SharedPrefsHelper.init(); // تهيئة SharedPreferences
+    final authProvider = AuthProvider();
+    await authProvider.loadUserDataFromPrefs();
 
 
-  runApp(
+
+    runApp(
     MultiProvider(
       providers: [
        // ChangeNotifierProvider(create: (_) => StudentViewModel()),
         BlocProvider<ProfileViewModel>(
           create: (_) => ProfileViewModel(getUserdataUseCase: injectGetUserDataServiceUseCase()), // مرري الـ use case المناسب هنا
         ),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider<AuthProvider>.value(
+          value: authProvider,
+        ),
+
         // ممكن تزود providers تانين هنا
       ],
       child: MyApp(),

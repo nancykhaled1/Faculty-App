@@ -72,60 +72,30 @@ class AlumniRegisterScreenViewModel extends Cubit<RegisterStates> {
     return prefs.getString('user_id');
   }
 
-
   Future<void> alumniRegister(AlumniRegisterData data) async {
     if (!formKey.currentState!.validate()) return;
-
-    // ✅ تحقق من السيرة الذاتية فقط إذا كان المستخدم "موظف"
     if (data.employmentStatus == "employee" && resumeFilePath == null) {
       emit(AlumniRegisterErrorState(errorMessage: "يرجى رفع السيرة الذاتية."));
-      return;
-    }
-
-    // ✅ هنا هنضيف التحويل من العربي إلى الإنجليزي
+      return;}
     final String arabicStatus = selectedEmploymentStatus;
     final String englishStatus = employmentOptionsMap.entries
         .firstWhere((entry) => entry.value == arabicStatus,
         orElse: () => MapEntry('unemployee', 'غير موظف'))
         .key;
-
     emit(AlumniRegisterLoadingState(loadingMessage: 'جارٍ إرسال البيانات...'));
-
     try {
-      print("📤 Calling registerUseCase...");
       final result = await registerUseCase.alumniInvoke(
-        data.username.trim(),
-        data.email.trim(),
-        data.password,
-        data.repeatPassword,
-        cv,
-        englishStatus, // ✅ استخدام المفتاح الإنجليزي هنا
-        jobController.text,
-        locationController.text,
-        emailCompanyController.text,
-        phoneController.text,
-        urlController.text,
-        descriptionController.text,
-      );
-
-      print("✅ Finished registerUseCase.");
-
-      result.fold(
-            (failure) {
+        data.username.trim(), data.email.trim(), data.password,
+        data.repeatPassword, cv, englishStatus,
+        jobController.text, locationController.text,
+        emailCompanyController.text, phoneController.text, urlController.text, descriptionController.text,
+      );result.fold((failure) {
           final errorMessage = _getErrorMessage(failure);
-          print("❌ Failure: ${errorMessage}");
           emit(AlumniRegisterErrorState(errorMessage: errorMessage));
         },
-            (user) {
-          print("🎉 Success!");
-          emit(AlumniRegisterSuccessState(response: user));
-        },
-      );
-    } catch (e) {
-      print("❗Exception caught: $e");
-      emit(RegisterErrorState(errorMessage: "حدث خطأ أثناء التسجيل. حاول مرة أخرى."));
-    }
-  }
+            (user) { emit(AlumniRegisterSuccessState(response: user));},
+      );}
+    catch (e) {emit(RegisterErrorState(errorMessage: "حدث خطأ أثناء التسجيل. حاول مرة أخرى."));}}
 
 
 

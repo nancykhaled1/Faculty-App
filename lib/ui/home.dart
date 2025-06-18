@@ -85,6 +85,10 @@ class _HomePageState extends State<HomePage> {
     bool isProfileScreen = isAlumniPage && isUserLoggedIn;
     bool showIcons =  isUserLoggedIn; // لو داخل الخريجين ومسجل
     bool isAuthScreen = isAlumniPage && !isUserLoggedIn; // لو داخل الخريجين ومش مسجل
+    String? name = Provider.of<AuthProvider>(context).alumni?.graduationData?.user?.username;
+    print(authProvider.userData);
+    print("👤 username: ${authProvider.userData?.username}");
+
 
     return SafeArea(
       child: Scaffold(
@@ -150,7 +154,9 @@ class _HomePageState extends State<HomePage> {
                       if (showIcons) ...[
                         SizedBox(width: 10.w),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            await Provider.of<AuthProvider>(context, listen: false).loadUserDataFromPrefs();
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -179,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => NotificationScreen(),
+                                builder: (context) => UserProfileScreen(),
                               ),
                             );
                           },
@@ -187,12 +193,20 @@ class _HomePageState extends State<HomePage> {
                             width: 39.w,
                             height: 39.h,
                             decoration: BoxDecoration(
-                              color: ColorManager.backgroundColor,
-                              borderRadius: BorderRadius.circular(9),
+                              color: MyColors.primaryColor.withOpacity(0.2), // لون الخلفية
+                              borderRadius: BorderRadius.circular(9.r), // نفس الشكل القديم
                             ),
-                            child: Image.asset("assets/icons/profiles.png",
-                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                            child: Text(
+                              name != null && name.isNotEmpty ? name[0] : '?',
+                              style: TextStyle(
+                                fontSize: 30.sp,
+                                fontWeight: FontWeight.bold,
+                                color: MyColors.primaryColor,
+                                fontFamily: "Noto Kufi Arabic",
+                              ),
                             ),
+
                           ),
                         ),
                       ],

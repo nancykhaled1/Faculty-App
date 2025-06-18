@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:faculty/data/remote/model/request/loginRequest.dart';
@@ -11,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import '../model/request/studentRegisterRequest.dart';
 import '../model/response/AlumniRegisterResponse.dart';
+import '../model/response/NotificationResponse.dart';
 import '../model/response/StudentPortalResponse.dart';
 import '../model/response/errors.dart';
 import '../model/response/studentRegisterResponse.dart';
@@ -314,4 +314,38 @@ class ApiManager {
 
   }
 
+
+  static Future<Either<Failures, List<NotificationResponse>>> getNotification(String token) async {
+      final connectivityResult = await Connectivity().checkConnectivity();
+
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+
+        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.notificationApi);
+
+
+        var response = await http.get(
+          url,
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+        );
+
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+       // var jsonResponse = jsonDecode(response.body);
+
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          var jsonList = jsonDecode(response.body) as List;
+          var getNotificationResponse = jsonList.map((e) => NotificationResponse.fromJson(e)).toList();
+          return right(getNotificationResponse);
+        } else {
+          return Left(ServerError(errorMessage: "error in server"));
+        }
+      } else {
+        return Left(NetworkError(errorMessage: 'please check connection'));
+      }
+  }
 }

@@ -9,6 +9,10 @@ class SharedPrefsHelper {
   static const _phoneKey = 'companyPhone';
   static const _urlKey = 'companyLink';
   static const _descriptionKey = 'aboutCompany';
+  static const _cvKey = 'cv';
+  static const _locationKey = 'location';
+
+
 
   static late final SharedPreferences prefs;
 
@@ -27,6 +31,8 @@ class SharedPrefsHelper {
     String? companyPhone,
     String? companyLink,
     String? aboutCompany,
+    dynamic cv,
+    String? location
   }) async {
 
     print('jobName: $jobName');
@@ -34,6 +40,8 @@ class SharedPrefsHelper {
     print('companyPhone: $companyPhone');
     print('companyLink: $companyLink');
     print('aboutCompany: $aboutCompany');
+    print('location: $location');
+
 
 
     await prefs.setString(_usernameKey, username);
@@ -51,6 +59,9 @@ class SharedPrefsHelper {
     await prefs.setString(_phoneKey, companyPhone ?? '');
     await prefs.setString(_urlKey, companyLink ?? '');
     await prefs.setString(_descriptionKey, aboutCompany ?? '');
+    await prefs.setString(_cvKey, cv ?? '');
+    await prefs.setString(_locationKey, location ?? '');
+
   }
 
 
@@ -65,9 +76,15 @@ class SharedPrefsHelper {
       'companyPhone': prefs.getString(_phoneKey),
       'companyLink': prefs.getString(_urlKey),
       'aboutCompany': prefs.getString(_descriptionKey),
+      'cv': prefs.getString(_cvKey),
+      'location': prefs.getString(_locationKey),
 
+
+      // ✅ أضف السطر دا
+      'token': prefs.getString('token'),
     };
   }
+
 
   static Future<void> clearUserData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -79,5 +96,19 @@ class SharedPrefsHelper {
     await prefs.remove(_phoneKey);
     await prefs.remove(_urlKey);
     await prefs.remove(_descriptionKey);
+    await prefs.remove(_cvKey);
+    await prefs.remove(_locationKey);
+
   }
+
+  static Future<void> setToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
+  }
+
+  static Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
 }

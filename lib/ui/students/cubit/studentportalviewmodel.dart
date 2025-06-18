@@ -9,7 +9,7 @@ class StudentPortalViewModel extends Cubit<StudentStates> {
 
   StudentPortalViewModel({required this.getStudentPortalUseCase})
       : super(StudentInitialStates());
-  List<StudentPortalResponseEntity> allPortals = []; // كل البيانات الجاية من الAPI
+  List<StudentPortalResponseEntity> allPortals = [];
   List<StudentPortalResponseEntity> scholarShip = [];
   List<StudentPortalResponseEntity> activity = [];
 
@@ -26,7 +26,11 @@ class StudentPortalViewModel extends Cubit<StudentStates> {
           (response) {
             allPortals = response;
             filterPortal();
-        emit(StudentPortalSuccessStates(studentPortalResponseEntity: response));
+            print("✅ Scholarships length: ${scholarShip.length}");
+            print("✅ activity length: ${activity.length}");
+            print("📦 Scholarships data: $scholarShip");
+
+            emit(StudentPortalSuccessStates(studentPortalResponseEntity: response));
       },
     );
   }
@@ -34,12 +38,12 @@ class StudentPortalViewModel extends Cubit<StudentStates> {
   void filterPortal() {
     scholarShip = allPortals
         .where((element) =>
-    element.types == "المنح الدراسيه" )
+    element.types == "المنح الدراسية" )
         .toList();
 
     activity = allPortals
         .where((element) =>
-    element.types == "الانشطه الطلابيه" )
+    element.types == "انشطة الطلابية" )
         .toList();
 
 
@@ -48,6 +52,5 @@ class StudentPortalViewModel extends Cubit<StudentStates> {
 
   void selectPortal() {
     filterPortal();
-    // emit(DepartmentDoctorFiltered()); // حالة وهمية لإعادة البناء
   }
 }

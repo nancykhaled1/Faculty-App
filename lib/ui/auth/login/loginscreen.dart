@@ -283,6 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
           companyPhone: userData.graduationData?.companyPhone,
           companyLink: userData.graduationData?.companyLink,
           aboutCompany: userData.graduationData?.aboutCompany,
+
         );
       } else {
         await SharedPrefsHelper.saveUserData(
@@ -291,6 +292,7 @@ class _LoginScreenState extends State<LoginScreen> {
           employmentStatus: employmentStatus,
         );
       }
+      await SharedPrefsHelper.setToken(token); // ✅ مهم جدًا
 
       if (widget.userType == "graduates") {
         Navigator.pushNamed(context, HomePage.routeName);

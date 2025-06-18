@@ -34,8 +34,10 @@ class AuthProvider with ChangeNotifier {
 
   void setToken(String token) {
     _token = token;
+    SharedPrefsHelper.setToken(token); // <-- أضيفي السطر ده
     notifyListeners();
   }
+
 
   // void setUserData(Alumni newAlumni, String newToken) {
   // alumni = newAlumni;
@@ -86,20 +88,23 @@ class AuthProvider with ChangeNotifier {
           companyPhone: data['companyPhone'],
           companyLink: data['companyLink'],
           aboutCompany: data['aboutCompany'],
+          location: data['location'],
+          cv: data['cv'],
           user: UserResponseEntity(
             username: data['username'],
             email: data['email'],
           ),
-          location: "", // حطي هنا location لو كنتي مخزناه في SharedPrefs
-          // باقي القيم ممكن تبقي null عادي
         ),
       );
 
       _employmentStatus = data['employment_status'] ?? '';
+      _token = data['token']; // 🟢 مهم جدًا
       isLoggedIn = true;
       notifyListeners();
     }
   }
+
+
 
 
 

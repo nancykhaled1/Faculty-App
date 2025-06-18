@@ -51,7 +51,7 @@ class _StudentScreenState extends State<StudentScreen> {
                                   bool isSelected = index == viewModel.selectedIndex;
                                   return GestureDetector(
                                     onTap: () {
-                                      if (viewModel.selectedIndex != index) { // تأكد من التحديث فقط عند اختلاف الفئة
+                                      if (viewModel.selectedIndex != index) {
                                         setState(() {
                                           viewModel.selectedIndex = index;
                                           viewModel.selectedType = viewModel.categories[index].toLowerCase();
@@ -74,8 +74,6 @@ class _StudentScreenState extends State<StudentScreen> {
                                           children: [
                                             SvgPicture.asset(
                                               viewModel.categoryIcons[index],
-                                              //  width: 30.w,
-                                              //  height: 30.h,
                                               color: isSelected ? MyColors.yellowColor : MyColors.blackColor,
                                             ),
                                             SizedBox(

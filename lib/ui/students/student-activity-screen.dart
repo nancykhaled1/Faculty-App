@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/colors.dart';
@@ -65,6 +66,8 @@ class _StudentActivityScreenState extends State<StudentActivityScreen> {
                           itemCount: viewModel.activity.length,
                           itemBuilder: (context, index) {
                             final item = viewModel.activity[index];
+                            final DateTime parsedDate = DateTime.parse(item.createdAt ??'').toLocal();
+                            final String formattedDate = DateFormat('HH:mm – dd/MM/yyyy').format(parsedDate);
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               child: Column(
@@ -123,16 +126,19 @@ class _StudentActivityScreenState extends State<StudentActivityScreen> {
                                     ),
                                   ),
                                   SizedBox(height: 20.h),
-                                  Text(
-                                    item.createdAt ??'',
-                                    style: TextStyle(
-                                      fontSize: 10.sp,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Noto Kufi Arabic",
-                                      color: MyColors.greyColor,
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Text(
+                                      formattedDate,
+                                      style: TextStyle(
+                                        fontSize: 10.sp,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "Noto Kufi Arabic",
+                                        color: MyColors.greyColor,
+                                      ),
+                                      // textDirection: TextDirection.rtl,
+                                      // textAlign: TextAlign.center,
                                     ),
-                                    // textDirection: TextDirection.rtl,
-                                    // textAlign: TextAlign.center,
                                   ),
                                   Divider(thickness: 1, color: Colors.grey.shade300), // فاصل بين العناصر
                                 ],

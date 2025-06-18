@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/colors.dart';
@@ -25,7 +26,6 @@ class _ScholarshipsScreenState extends State<ScholarshipsScreen> {
       child: BlocBuilder<StudentPortalViewModel,StudentStates>(
           builder: (context,state){
               final viewModel = BlocProvider.of<StudentPortalViewModel>(context);
-
               return SafeArea(
                 child: Scaffold(
                   backgroundColor: MyColors.backgroundColor,
@@ -33,7 +33,6 @@ class _ScholarshipsScreenState extends State<ScholarshipsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        /// 🔹 زر الرجوع
                         Padding(
                           padding: EdgeInsets.only(top: 10.h, right: 20.w, bottom: 10.h,left: 40.w),
                           child: GestureDetector(
@@ -47,7 +46,6 @@ class _ScholarshipsScreenState extends State<ScholarshipsScreen> {
                             ),
                           ),
                         ),
-                        /// 🔹 ليستة الصور والنصوص
                         if (state is StudentLoadingStates)
                           Center(
                             child: Padding(
@@ -60,12 +58,14 @@ class _ScholarshipsScreenState extends State<ScholarshipsScreen> {
                             child: Text(state.errorMessage ?? '', style: TextStyle(color: Colors.red)),
                           )
                         else if (state is StudentPortalSuccessStates)
-                        ListView.builder(
+                           ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: viewModel.scholarShip.length,
                           itemBuilder: (context, index) {
                             final item = viewModel.scholarShip[index];
+                            final DateTime parsedDate = DateTime.parse(item.createdAt ??'').toLocal();
+                            final String formattedDate = DateFormat('HH:mm – dd/MM/yyyy').format(parsedDate);
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               child: Column(
@@ -105,7 +105,7 @@ class _ScholarshipsScreenState extends State<ScholarshipsScreen> {
                                   GestureDetector(
                                     onTap: () async {
                                       if (item.link != null && item.link!.isNotEmpty) {
-                                        launchUrl(Uri.parse(item.link!));  // افتح اللينك أولاً لو موجود
+                                        launchUrl(Uri.parse(item.link!));
                                       }else {
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(content: Text('لا يمكن فتح الرابط')),
@@ -124,18 +124,21 @@ class _ScholarshipsScreenState extends State<ScholarshipsScreen> {
                                     ),
                                   ),
                                   SizedBox(height: 20.h),
-                                  Text(
-                                    item.createdAt ??'',
-                                    style: TextStyle(
-                                      fontSize: 10.sp,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Noto Kufi Arabic",
-                                      color: MyColors.greyColor,
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Text(
+                                      formattedDate,
+                                      style: TextStyle(
+                                        fontSize: 10.sp,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "Noto Kufi Arabic",
+                                        color: MyColors.greyColor,
+                                      ),
+                                      // textDirection: TextDirection.rtl,
+                                      // textAlign: TextAlign.center,
                                     ),
-                                    // textDirection: TextDirection.rtl,
-                                    // textAlign: TextAlign.center,
                                   ),
-                                  Divider(thickness: 1, color: Colors.grey.shade300), // فاصل بين العناصر
+                                  Divider(thickness: 1, color: Colors.grey.shade300),
                                 ],
                               ),
                             );

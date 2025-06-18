@@ -30,13 +30,11 @@ class StudentRegisterViewModel extends Cubit<RegisterStates> {
           passwordController.text,
           rePasswordController.text,
           userTypeController.text
-      );
-      either.fold(
+      ); either.fold(
             (failure) {
           String errorMessage = _getErrorMessage(failure);
           emit(RegisterErrorState(errorMessage: errorMessage));
-        },
-            (response) async {
+        }, (response) async {
           if (response.id != null) {
             final prefs = await SharedPreferences.getInstance();
             await prefs.setString('user_id', response.id.toString());
@@ -44,13 +42,7 @@ class StudentRegisterViewModel extends Cubit<RegisterStates> {
           } else {
             print('❌ response.id is null!');
           }
-
-          emit(RegisterSuccessState(response: response));
-        },
-
-      );
-    }
-  }
+          emit(RegisterSuccessState(response: response));},);}}
 
 
   String _getErrorMessage(RegisterError error) {

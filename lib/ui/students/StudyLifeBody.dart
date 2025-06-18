@@ -25,9 +25,6 @@ class StudyLifeBody extends StatefulWidget {
 }
 
 class _StudyLifeBodyState extends State<StudyLifeBody> {
-  // final List<Map<String, dynamic>> items = [
-
-
   late StudentViewModel viewModel;
 
   @override
@@ -36,7 +33,7 @@ class _StudyLifeBodyState extends State<StudyLifeBody> {
     viewModel = StudentViewModel(getStudentServiceUseCase: injectGetStudentServiceUseCase()
 
     );
-    viewModel.selectService(); // 🟢 هنا التصنيف
+    viewModel.selectService();
   }
 
   @override
@@ -48,7 +45,6 @@ class _StudyLifeBodyState extends State<StudyLifeBody> {
         body: ListView.separated(
           separatorBuilder: (context, index) => SizedBox(height: 15.h),
           itemCount: widget.services.length,
-         // padding: const EdgeInsets.all(8.0),
           itemBuilder: (context, index) {
             final item = widget.services[index];
             return ListTile(
@@ -134,7 +130,7 @@ class _StudyLifeBodyState extends State<StudyLifeBody> {
                       ),
                     );
                   } else {
-                    if(item.name == 'منح دراسيه'){
+                    if(item.name == 'المنح الدراسيه'){
                       Navigator.pushNamed(context, ScholarshipsScreen.routeName);
                     }else if (item.name == 'الفرق الدراسيه'){
                       Navigator.pushNamed(context, AcademicTeams.routeName);

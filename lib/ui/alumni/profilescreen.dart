@@ -12,6 +12,9 @@ import '../../data/local/preferences.dart';
 import '../../domain/usecase/di.dart';
 import '../../utils/colors.dart';
 import '../auth/authProvider.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+
+import 'pdfviewer.dart';
 
 class UserProfileScreen extends StatefulWidget {
   static const String routeName = 'profile';
@@ -28,6 +31,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController urlController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+
   String employmentStatus = "unemployee";
 
   File? cvController;
@@ -38,7 +43,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final data = await SharedPrefsHelper.getUserData();
-
+      print("📥 loaded user data: $data");
       nameController.text = data['username'] ?? '';
       emailController.text = data['email'] ?? '';
 
@@ -62,6 +67,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         phoneController.text = data['companyPhone'] ?? '';
         urlController.text = data['companyLink'] ?? '';
         descriptionController.text = data['aboutCompany'] ?? '';
+        locationController.text = data['location'] ?? '';
+        if (data['cv'] != null && data['cv'].toString().isNotEmpty) {
+          cvController = File(data['cv']??'');
+        }
+
       }
 
       Provider.of<AuthProvider>(
@@ -81,8 +91,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final companyPhone = phoneController.text.trim();
     final companyUrl = urlController.text.trim();
     final companyDesc = descriptionController.text.trim();
-    final employmentStatus =
-        Provider.of<AuthProvider>(context, listen: false).employmentStatus;
+    final location = locationController.text.trim();
+    final employmentStatus = Provider.of<AuthProvider>(context, listen: false).employmentStatus;
 
     await SharedPrefsHelper.saveUserData(
       username: username,
@@ -93,7 +103,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       companyPhone: companyPhone,
       companyLink: companyUrl,
       aboutCompany: companyDesc,
+      location: location,
+      cv: cvController?.path,
+
+
     );
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.loadUserDataFromPrefs(); // تحديث الـ provider بعد التخزين
+
 
     ScaffoldMessenger.of(
       context,
@@ -105,20 +123,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
+      backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
             Navigator.pushReplacementNamed(context, HomePage.routeName);
           },
-          child: Icon(Icons.arrow_back, color: Colors.black),
+          child: Padding(
+            padding: EdgeInsets.only(top: 10.sp, right: 20.sp,left: 10.sp),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushReplacementNamed(context, HomePage.routeName);
+              },
+              child: SvgPicture.asset(
+                'assets/icons/backarrow.svg', // الأيقونة الافتراضية
+                width: 5.w,
+                height: 5.h,
+                // color: Colors.black,
+              ),
+            ),
+          ),
         ),
       ),
-      backgroundColor: MyColors.backgroundColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(20.r),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
             Stack(
               alignment: Alignment.center,
@@ -136,7 +170,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 4,
+                  top: 5,
                   left: 0,
                   right: 0,
                   bottom: 0,
@@ -149,16 +183,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.r),
-                            child: Image.asset(
-                              'assets/images/Rectangle 40.png',
-                              width: 70.w,
-                              height: 70.h,
-                              fit: BoxFit.cover,
+                          child: Container(
+                            width: 75.w,
+                            height: 70.h,
+                            decoration: BoxDecoration(
+                              color: MyColors.primaryColor.withOpacity(0.2), // لون الخلفية
+                              borderRadius: BorderRadius.circular(10.r), // نفس الشكل القديم
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              nameController.text.isNotEmpty
+                                  ? nameController.text[0]
+                                  : '?',
+                              style: TextStyle(
+                                fontSize: 45.sp,
+                                fontWeight: FontWeight.bold,
+                                color: MyColors.primaryColor,
+                                fontFamily: "Noto Kufi Arabic",
+                              ),
                             ),
                           ),
                         ),
+
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 10.w),
                           child: Column(
@@ -173,7 +219,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   color: MyColors.blackColor,
                                 ),
                               ),
-                              SizedBox(height: 5.h),
+                              SizedBox(height: 10.h),
                               SizedBox(
                                 width: 180.w,
                                 child: Text(
@@ -188,16 +234,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 ),
                               ),
                               SizedBox(height: 5.h),
-                              Consumer<AuthProvider>(
-                                builder: (_, provider, __) => Text(
-                                  provider.employmentStatus,
-                                  style: TextStyle(
-                                    fontSize: 13.sp,
-                                    fontFamily: "Noto Kufi Arabic",
-                                    color: MyColors.primaryColor,
-                                  ),
-                                ),
-                              ),
+                              // Consumer<AuthProvider>(
+                              //   builder: (_, provider, __) => Text(
+                              //     provider.employmentStatus,
+                              //     style: TextStyle(
+                              //       fontSize: 13.sp,
+                              //       fontFamily: "Noto Kufi Arabic",
+                              //       color: MyColors.primaryColor,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         )
@@ -222,14 +268,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               buildCVField("السيرة الذاتية"),
             ],
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: saveChanges,
-              child: Text("حفظ التغيير", style: TextStyle(fontSize: 15.sp, fontFamily: "Noto Kufi Arabic")),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: MyColors.primaryColor,
-                foregroundColor: MyColors.whiteColor,
-                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 90.w),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+            Container(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: saveChanges,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: MyColors.primaryColor,
+                  foregroundColor: MyColors.whiteColor,
+                  padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 90.w),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                ),
+                child: Text("حفظ التغيير", style: TextStyle(fontSize: 15.sp, fontFamily: "Noto Kufi Arabic")),
               ),
             ),
           ],
@@ -266,16 +315,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           (_, provider, __) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label),
+              Text(label , style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400,
+                  fontFamily: "Numans", color: MyColors.greyColor)),
               SizedBox(height: 5),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
                 decoration: BoxDecoration(
                   color: MyColors.whiteColor,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
+                    dropdownColor: MyColors.whiteColor, // ✅ لون الخلفية للقائمة المنسدلة
+                    style: TextStyle(
+                      fontFamily: 'Numans',
+                      fontSize: 14.sp,
+                      color: MyColors.greyColor, // ✅ لون الخط
+                    ),
                     value: provider.employmentStatus,
                     items:
                         employmentOptionsMap.entries.map((entry) {
@@ -295,6 +352,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
     );
   }
+  
 
   Widget buildCVField(String label) {
     return Column(
@@ -302,32 +360,47 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       children: [
         Text(label),
         GestureDetector(
-          onTap: () {
-            if (cvController != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('تم تحميل السيرة الذاتية')),
-              );
+          onTap: () async {
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+              type: FileType.custom,
+              allowedExtensions: ['pdf'],
+            );
+            if (result != null && result.files.single.path != null) {
+              setState(() {
+                cvController = File(result.files.single.path!);
+              });
             }
           },
-          child: GestureDetector(
-            onTap: () {
-              // open cv when tapped using cvController?.path
-              // https://pub.dev/packages/flutter_pdfview
-            },
-            child: Container(
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: MyColors.whiteColor,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.picture_as_pdf, color: Colors.red),
-                  SizedBox(width: 10),
-                  Text(cvController?.path.split('/').last ?? 'لا يوجد ملف'),
-                ],
-              ),
+          child: Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: MyColors.whiteColor,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.picture_as_pdf, color: Colors.red),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    cvController?.path.split('/').last ?? 'اضغط لاختيار ملف PDF',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (cvController != null)
+                  IconButton(
+                    icon: Icon(Icons.open_in_new, color: MyColors.primaryColor),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PDFViewerScreen(filePath: cvController!.path),
+                        ),
+                      );
+                    },
+                  ),
+              ],
             ),
           ),
         ),
@@ -335,6 +408,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ],
     );
   }
+
+
 
   Map<String, String> employmentOptionsMap = {
     "employee": "موظف",
@@ -344,3 +419,5 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     "freelance": "يعمل عمل حر",
   };
 }
+
+

@@ -39,6 +39,7 @@ class _RegisterState extends State<Register> {
     print("password: ${widget.registerData.password}");
     print("repeatPassword: ${widget.registerData.repeatPassword}");
     print("employmentStatus: ${widget.registerData.employmentStatus}");
+
   }
 
   Future<void> completeRegistration() async {
@@ -62,7 +63,10 @@ class _RegisterState extends State<Register> {
       companyPhone: data.companyPhone,
       companyLink: data.companyLink,
       aboutCompany: data.aboutCompany,
+      location: data.location,
+      cv: data.cv
     );
+
 
   }
 
