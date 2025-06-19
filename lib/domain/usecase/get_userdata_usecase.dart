@@ -9,9 +9,9 @@ class GetUserdataUseCase{
   AuthRepositoryContract repositoryContract;
   GetUserdataUseCase({required this.repositoryContract});
 
-  Future<Either<RegisterError,UserDataResponseEntity>>invoke(int id , String token )
+  Future<Either<RegisterError,UserDataResponseEntity>>invoke(String token )
   async{
-    var either = await repositoryContract.fetchGraduationProfile(id, token);
+    var either = await repositoryContract.fetchGraduationProfile(token);
     return either.fold((l)  {
       return Left(l);
     },

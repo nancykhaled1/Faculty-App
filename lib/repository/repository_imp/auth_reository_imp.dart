@@ -32,8 +32,8 @@ class AuthRepositoryImp implements AuthRepositoryContract{
   }
 
   @override
-  Future<Either<RegisterError, UserDataResponseEntity>> fetchGraduationProfile(int id, String token) {
-    return remoteDataSource.fetchGraduationProfile(id, token);
+  Future<Either<RegisterError, UserDataResponseEntity>> fetchGraduationProfile(String token) {
+    return remoteDataSource.fetchGraduationProfile(token);
   }
 
 

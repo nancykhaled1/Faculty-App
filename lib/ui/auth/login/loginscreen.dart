@@ -251,11 +251,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   }
   void _handleLoginSuccess(String token) async {
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    final userId = decodedToken['user_id'];
+   // Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+   // final userId = decodedToken['user_id'];
 
     final profileViewModel = context.read<ProfileViewModel>();
-    await profileViewModel.getUserData(userId, token);
+    await profileViewModel.getUserData(token);
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final userData = profileViewModel.state is UserDataSuccessStates

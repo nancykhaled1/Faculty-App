@@ -45,11 +45,12 @@ Future<void> main() async {
       providers: [
        // ChangeNotifierProvider(create: (_) => StudentViewModel()),
         BlocProvider<ProfileViewModel>(
-          create: (_) => ProfileViewModel(getUserdataUseCase: injectGetUserDataServiceUseCase()), // مرري الـ use case المناسب هنا
+          create: (_) => ProfileViewModel(getUserdataUseCase: injectGetUserDataServiceUseCase(), updateDataUseCase: injectUpdateDataUseCase()), // مرري الـ use case المناسب هنا
         ),
         ChangeNotifierProvider<AuthProvider>.value(
           value: authProvider,
         ),
+
 
         // ممكن تزود providers تانين هنا
       ],
@@ -121,16 +122,8 @@ class _MyAppState extends State<MyApp> {
               Complaint.routeName: (context) => Complaint(),
               ScholarshipsScreen.routeName : (context) => ScholarshipsScreen(),
               StudentActivityScreen.routeName : (context) => StudentActivityScreen(),
-              ProfileScreen.routeName : (context) => ProfileScreen(),
+              //ProfileScreen.routeName : (context) => ProfileScreen(),
               AcademicTeams.routeName: (context) => AcademicTeams(),
-              StudentScreen.routeName : (context) => StudentScreen(),
-              NotificationScreen.routeName : (context) => NotificationScreen(),
-
-
-
-              StudentScreen.routeName : (context) => StudentScreen(),
-              NotificationScreen.routeName : (context) => NotificationScreen(),
-              Complaint.routeName: (context) => Complaint(),
 
             },
           );

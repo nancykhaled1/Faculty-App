@@ -9,9 +9,11 @@ import 'package:faculty/data/remote/model/response/UserDataesponse.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import '../model/request/studentRegisterRequest.dart';
+import '../model/request/updatedataRequest.dart';
 import '../model/response/AlumniRegisterResponse.dart';
 import '../model/response/NotificationResponse.dart';
 import '../model/response/StudentPortalResponse.dart';
+import '../model/response/UpdataDataResponse.dart';
 import '../model/response/errors.dart';
 import '../model/response/studentRegisterResponse.dart';
 import 'api_constant.dart';
@@ -268,17 +270,14 @@ class ApiManager {
     }
   }
 
-  static Future<Either<RegisterError, UserDataResponse>> fetchGraduationProfile(
-  int id,
-  String token,
-      ) async {
+  static Future<Either<RegisterError, UserDataResponse>> fetchGraduationProfile(String token) async {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
 
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
 
-        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.dataApi(id));
+        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.dataApi);
 
 
         var response = await http.get(
@@ -348,4 +347,70 @@ class ApiManager {
         return Left(NetworkError(errorMessage: 'please check connection'));
       }
   }
+
+
+
+  static Future<Either<Failures, UpdataDataResponse>> updateData(
+      String token,
+      UpdateDataRequest request,
+      ) async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      try {
+        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.updateDataApi);
+
+        var requestMultipart = http.MultipartRequest("PATCH", url);
+
+        requestMultipart.headers.addAll({
+          "Authorization": "Bearer $token",
+          // ❌ لاحظ أننا لا نضيف Content-Type هنا يدويًا
+        });
+
+        // 🟢 إضافة البيانات
+        requestMultipart.fields['username'] = request.username;
+        requestMultipart.fields['email'] = request.email;
+        requestMultipart.fields['employment_status'] = request.employmentStatus;
+        requestMultipart.fields['jobName'] = request.jobName!;
+        requestMultipart.fields['companyEmail'] = request.companyEmail!;
+        requestMultipart.fields['companyPhone'] = request.companyPhone!;
+        requestMultipart.fields['companyLink'] = request.companyLink!;
+        requestMultipart.fields['aboutCompany'] = request.aboutCompany!;
+        requestMultipart.fields['location'] = request.location!;
+
+        // ✅ إضافة ملف الـ CV إن وُجد
+        if (request.cv != null && request.cv!.isNotEmpty) {
+          requestMultipart.files.add(await http.MultipartFile.fromPath('cv', request.cv!));
+        }
+
+        var streamedResponse = await requestMultipart.send();
+        var response = await http.Response.fromStream(streamedResponse);
+
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        var jsonResponse = jsonDecode(response.body);
+        print('hgggg');
+
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          var updateDataResponse = UpdataDataResponse.fromJson(jsonResponse);
+          print('right');
+
+          return right(updateDataResponse);
+        } else {
+          print('left');
+
+          return Left(ServerError(errorMessage: jsonResponse["message"] ?? "حدث خطأ في السيرفر"));
+        }
+      } catch (e) {
+        print('error');
+
+        return Left(ServerError(errorMessage: "Exception: $e"));
+      }
+    } else {
+      return Left(NetworkError(errorMessage: 'من فضلك تحقق من الاتصال بالإنترنت'));
+    }
+  }
+
 }

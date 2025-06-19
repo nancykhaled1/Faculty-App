@@ -9,11 +9,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/local/preferences.dart';
+import '../../data/remote/model/request/updatedataRequest.dart';
 import '../../domain/usecase/di.dart';
 import '../../utils/colors.dart';
 import '../auth/authProvider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
+import 'cubit/profileviewmodel.dart';
+import 'cubit/states.dart';
 import 'pdfviewer.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -83,210 +86,246 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     });
   }
 
-  void saveChanges() async {
-    final username = nameController.text.trim();
-    final email = emailController.text.trim();
-    final jobName = jobController.text.trim();
-    final companyEmail = emailCompanyController.text.trim();
-    final companyPhone = phoneController.text.trim();
-    final companyUrl = urlController.text.trim();
-    final companyDesc = descriptionController.text.trim();
-    final location = locationController.text.trim();
-    final employmentStatus = Provider.of<AuthProvider>(context, listen: false).employmentStatus;
-
-    await SharedPrefsHelper.saveUserData(
-      username: username,
-      email: email,
-      employmentStatus: employmentStatus,
-      jobName: jobName,
-      companyEmail: companyEmail,
-      companyPhone: companyPhone,
-      companyLink: companyUrl,
-      aboutCompany: companyDesc,
-      location: location,
-      cv: cvController?.path,
-
-
-    );
-
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    authProvider.loadUserDataFromPrefs(); // تحديث الـ provider بعد التخزين
-
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("تم حفظ التعديلات")));
-  }
-
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final profileViewModel = ProfileViewModel(
+      updateDataUseCase: injectUpdateDataUseCase(),
+      getUserdataUseCase: injectGetUserDataServiceUseCase(),
+    );
 
-    return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        scrolledUnderElevation: 0,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pushReplacementNamed(context, HomePage.routeName);
-          },
-          child: Padding(
-            padding: EdgeInsets.only(top: 10.sp, right: 20.sp,left: 10.sp),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushReplacementNamed(context, HomePage.routeName);
-              },
-              child: SvgPicture.asset(
-                'assets/icons/backarrow.svg', // الأيقونة الافتراضية
-                width: 5.w,
-                height: 5.h,
-                // color: Colors.black,
+// لو التوكن موجود، هات البيانات
+    if (authProvider.token != null) {
+      profileViewModel.getUserData(authProvider.token!);
+    }
+    return BlocProvider.value(
+     value: profileViewModel,
+      child: BlocBuilder<ProfileViewModel,UserDataStates>(
+        builder: (context, state){
+          if (state is UserDataLoadingStates) {
+            return Scaffold(
+              backgroundColor: MyColors.backgroundColor,
+              body: const Center(
+                child: CircularProgressIndicator(
+                  color: MyColors.primaryColor,
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: 120.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [MyColors.primaryColor, MyColors.secondryColor],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+            );
+          }
+          else if (state is UserDataErrorStates) {
+            return Center(child: Text(state.errorMessage?? ''));
+          }else if (state is UserDataSuccessStates) {
+            return Scaffold(
+              backgroundColor: MyColors.backgroundColor,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                scrolledUnderElevation: 0,
+                elevation: 0,
+                leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, HomePage.routeName);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10.sp, right: 20.sp,left: 10.sp),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, HomePage.routeName);
+                      },
+                      child: SvgPicture.asset(
+                        'assets/icons/backarrow.svg', // الأيقونة الافتراضية
+                        width: 5.w,
+                        height: 5.h,
+                        // color: Colors.black,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
-                Positioned(
-                  top: 5,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: MyColors.whiteColor,
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Row(
+              ),
+              body: SingleChildScrollView(
+                padding: EdgeInsets.all(20.r),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 75.w,
-                            height: 70.h,
-                            decoration: BoxDecoration(
-                              color: MyColors.primaryColor.withOpacity(0.2), // لون الخلفية
-                              borderRadius: BorderRadius.circular(10.r), // نفس الشكل القديم
+                        Container(
+                          height: 120.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [MyColors.primaryColor, MyColors.secondryColor],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              nameController.text.isNotEmpty
-                                  ? nameController.text[0]
-                                  : '?',
-                              style: TextStyle(
-                                fontSize: 45.sp,
-                                fontWeight: FontWeight.bold,
-                                color: MyColors.primaryColor,
-                                fontFamily: "Noto Kufi Arabic",
-                              ),
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                        ),
+                        Positioned(
+                          top: 5,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: MyColors.whiteColor,
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: 75.w,
+                                    height: 70.h,
+                                    decoration: BoxDecoration(
+                                      color: MyColors.primaryColor.withOpacity(0.2), // لون الخلفية
+                                      borderRadius: BorderRadius.circular(10.r), // نفس الشكل القديم
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      nameController.text.isNotEmpty
+                                          ? nameController.text[0]
+                                          : '?',
+                                      style: TextStyle(
+                                        fontSize: 45.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: MyColors.primaryColor,
+                                        fontFamily: "Noto Kufi Arabic",
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 10.w),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        nameController.text,
+                                        style: TextStyle(
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Noto Kufi Arabic",
+                                          color: MyColors.blackColor,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.h),
+                                      SizedBox(
+                                        width: 180.w,
+                                        child: Text(
+                                          emailController.text,
+                                          style: TextStyle(
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "Noto Kufi Arabic",
+                                            color: MyColors.greyColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      // Consumer<AuthProvider>(
+                                      //   builder: (_, provider, __) => Text(
+                                      //     provider.employmentStatus,
+                                      //     style: TextStyle(
+                                      //       fontSize: 13.sp,
+                                      //       fontFamily: "Noto Kufi Arabic",
+                                      //       color: MyColors.primaryColor,
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 10.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                nameController.text,
-                                style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "Noto Kufi Arabic",
-                                  color: MyColors.blackColor,
-                                ),
-                              ),
-                              SizedBox(height: 10.h),
-                              SizedBox(
-                                width: 180.w,
-                                child: Text(
-                                  emailController.text,
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Noto Kufi Arabic",
-                                    color: MyColors.greyColor,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              SizedBox(height: 5.h),
-                              // Consumer<AuthProvider>(
-                              //   builder: (_, provider, __) => Text(
-                              //     provider.employmentStatus,
-                              //     style: TextStyle(
-                              //       fontSize: 13.sp,
-                              //       fontFamily: "Noto Kufi Arabic",
-                              //       color: MyColors.primaryColor,
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                        )
                       ],
                     ),
-                  ),
+                    buildTextField("اسم المستخدم", nameController),
+                    buildTextField("البريد الإلكتروني", emailController),
+                    buildDropdownField("حالة التوظيف"),
+                    if (authProvider.employmentStatus == 'employee') ...[
+                      buildTextField("اسم الوظيفة", jobController),
+                      buildTextField(
+                        "البريد الإلكتروني للشركة",
+                        emailCompanyController,
+                      ),
+                      buildTextField("رقم الهاتف", phoneController),
+                      buildTextField("رابط الشركة", urlController),
+                      buildTextField("وصف الشركة", descriptionController),
+                      buildCVField("السيرة الذاتية"),
+                    ],
+                    SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final viewModel = context.read<ProfileViewModel>();
+                          final authProvider = context.read<AuthProvider>();
+
+                          final token = authProvider.token;
+
+                          if (token == null || token.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("⚠️ لم يتم العثور على التوكن")),
+                            );
+                            return;
+                          }
+
+                          final request = UpdateDataRequest(
+                            username: nameController.text.trim(),
+                            email: emailController.text.trim(),
+                            employmentStatus: authProvider.employmentStatus,
+                            jobName: jobController.text.trim(),
+                            companyEmail: emailCompanyController.text.trim(),
+                            companyPhone: phoneController.text.trim(),
+                            companyLink: urlController.text.trim(),
+                            aboutCompany: descriptionController.text.trim(),
+                            location: locationController.text.trim(),
+                            cv: cvController?.path,
+                          );
+
+                          await viewModel.updateData(request,token,);
+// ✅ نعمل إعادة تحميل للبيانات من السيرفر بعد التحديث
+                          await viewModel.getUserData(token);
+
+
+                          // بعد الحفظ بنجاح نرجع لصفحة البروفايل أو نعرض رسالة نجاح
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("✅ تم حفظ التغييرات بنجاح")),
+                            );
+                            Navigator.pushReplacementNamed(context, UserProfileScreen.routeName);
+                          }
+                        },
+
+
+
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MyColors.primaryColor,
+                          foregroundColor: MyColors.whiteColor,
+                          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 90.w),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                        ),
+                        child: Text("حفظ التغيير", style: TextStyle(fontSize: 15.sp, fontFamily: "Noto Kufi Arabic")),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            buildTextField("اسم المستخدم", nameController),
-            buildTextField("البريد الإلكتروني", emailController),
-            buildDropdownField("حالة التوظيف"),
-            if (authProvider.employmentStatus == 'employee') ...[
-              buildTextField("اسم الوظيفة", jobController),
-              buildTextField(
-                "البريد الإلكتروني للشركة",
-                emailCompanyController,
               ),
-              buildTextField("رقم الهاتف", phoneController),
-              buildTextField("رابط الشركة", urlController),
-              buildTextField("وصف الشركة", descriptionController),
-              buildCVField("السيرة الذاتية"),
-            ],
-            SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: saveChanges,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: MyColors.primaryColor,
-                  foregroundColor: MyColors.whiteColor,
-                  padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 90.w),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-                ),
-                child: Text("حفظ التغيير", style: TextStyle(fontSize: 15.sp, fontFamily: "Noto Kufi Arabic")),
-              ),
-            ),
-          ],
-        ),
+            );
+          }
+          return Container();
+        },
+
       ),
     );
   }
-
   Widget buildTextField(String label, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +347,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ],
     );
   }
-
   Widget buildDropdownField(String label) {
     return Consumer<AuthProvider>(
       builder:
@@ -352,8 +390,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
     );
   }
-  
-
   Widget buildCVField(String label) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -408,8 +444,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ],
     );
   }
-
-
 
   Map<String, String> employmentOptionsMap = {
     "employee": "موظف",

@@ -72,8 +72,8 @@ class AuthRemoteDataSourceImp implements AuthRemoteDataSource{
   }
 
   @override
-  Future<Either<RegisterError, UserDataResponseEntity>> fetchGraduationProfile(int id, String token) async {
-    var either = await ApiManager.fetchGraduationProfile(id, token);
+  Future<Either<RegisterError, UserDataResponseEntity>> fetchGraduationProfile(String token) async {
+    var either = await ApiManager.fetchGraduationProfile(token);
     return either.fold((l)  {
       return Left(l);
     },

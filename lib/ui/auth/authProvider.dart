@@ -104,6 +104,31 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  // void saveUserProfile(
+  //     String? username,
+  //     String? email,
+  //     String? employmentStatus,
+  //     String? jobName,
+  //     String? companyEmail,
+  //     String? companyPhone,
+  //     String? companyLink,
+  //     String? aboutCompany,
+  //     String? location,
+  //     String? cv,
+  //     ) {
+  //   this.username = username ?? '';
+  //   this.email = email ?? '';
+  //   this.employmentStatus = employmentStatus ?? 'unemployee';
+  //   this.jobName = jobName ?? '';
+  //   this.companyEmail = companyEmail ?? '';
+  //   this.companyPhone = companyPhone ?? '';
+  //   this.companyLink = companyLink ?? '';
+  //   this.aboutCompany = aboutCompany ?? '';
+  //   this.location = location ?? '';
+  //   this.cv = cv;
+  //   notifyListeners();
+  // }
+
 
 
 

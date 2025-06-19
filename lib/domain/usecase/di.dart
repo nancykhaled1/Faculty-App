@@ -2,6 +2,9 @@ import 'package:faculty/domain/repository/datasource/notification_remote_datasou
 import 'package:faculty/domain/usecase/get_studentportal_usecase.dart';
 import 'package:faculty/domain/usecase/get_userdata_usecase.dart';
 import 'package:faculty/domain/usecase/registerusecase.dart';
+import 'package:faculty/domain/usecase/updatedata_usecase.dart';
+import 'package:faculty/repository/datasource_imp/updatedata_remote_datasource_imp.dart';
+import 'package:faculty/repository/repository_imp/updatedata_repository_imp.dart';
 import '../../data/remote/api/api_manager.dart';
 import '../../repository/datasource_imp/auth-remote_datasource_imp.dart';
 import '../../repository/datasource_imp/dept_remote_datasource_imp.dart';
@@ -14,10 +17,12 @@ import '../../repository/repository_imp/student_repository_imp.dart';
 import '../repository/datasource/auth_remote_datasource.dart';
 import '../repository/datasource/dept_remote_datasource.dart';
 import '../repository/datasource/student_remote_datasource.dart';
+import '../repository/datasource/update_data_datasource.dart';
 import '../repository/repository/auth_repository_contract.dart';
 import '../repository/repository/dept_repository_contract.dart';
 import '../repository/repository/notification_repository_contract.dart';
 import '../repository/repository/student_repository_contract.dart';
+import '../repository/repository/updatedata_repository_contract.dart';
 import 'get_all_dept_usecase.dart';
 import 'get_notification_usecase.dart';
 import 'get_studentservice_usecase.dart';
@@ -83,5 +88,17 @@ NotificationRepositoryContract injectNotificationRepositoryContract(){
 
 GetNotificationUseCase injectNotificationUseCase(){
   return GetNotificationUseCase(repositoryContract: injectNotificationRepositoryContract() );
+}
+
+UpdateDataDatasource injectUpdateDataRemoteDataSource(){
+  return UpdateDataRemoteDatasourceImp(apiManager: ApiManager.getInstance());
+}
+
+UpdateDataRepositoryContract injectUpdateDataRepositoryContract(){
+  return UpdateDataRepositoryImp(remoteDataSource: injectUpdateDataRemoteDataSource() );
+}
+
+UpdateDataUseCase injectUpdateDataUseCase(){
+  return UpdateDataUseCase(repositoryContract: injectUpdateDataRepositoryContract() );
 }
 

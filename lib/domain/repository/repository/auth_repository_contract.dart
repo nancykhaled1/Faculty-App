@@ -36,8 +36,7 @@ abstract class AuthRepositoryContract{
 
 
   Future<Either<RegisterError,LoginEntity>> login(String email , String password);
-  Future<Either<RegisterError,UserDataResponseEntity>> fetchGraduationProfile(int id,
-      String token);
+  Future<Either<RegisterError,UserDataResponseEntity>> fetchGraduationProfile(String token);
 
 
 }
