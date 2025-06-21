@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'job_info.dart';
 
 class Alumni {
+  int id;
   String name;
   String email;
   String password;
@@ -11,6 +12,7 @@ class Alumni {
   JobInfo? jobInfo;
 
   Alumni({
+    required this.id,
     required this.name,
     required this.email,
     required this.password,
@@ -21,6 +23,7 @@ class Alumni {
 
   factory Alumni.defaultAlumni() {
     return Alumni(
+      id: -1 ,
       name: 'الاسم غير متاح',
       email: 'غير متاح',
       password: '',

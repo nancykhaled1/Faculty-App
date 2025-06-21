@@ -7,12 +7,14 @@ class BuildDialog extends StatelessWidget {
   final String message;
   final String? subMessage;
   final VoidCallback? onDismiss; // دالة اختيارية للتنفيذ عند النقر
+  final String? image;
 
   const BuildDialog({
     Key? key,
     required this.message,
     this.subMessage,
     this.onDismiss, // السماح بتمرير دالة تنفيذية عند النقر
+    this.image
   }) : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class BuildDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset(
-              'assets/images/vector.svg',
+              image ??'',
               width: 61.w,
               height: 61.h,
             ),

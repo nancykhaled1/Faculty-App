@@ -39,10 +39,21 @@ class _HomePageState extends State<HomePage> {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
       if (authProvider.isLoggedIn && authProvider.userType == "graduates") {
-        setState(() {
-          _selectedIndex = index;
-        });
-      } else {
+        // final employmentStatus = authProvider.userData?.employmentStatus ?? 'غير موظف';
+        //
+        // // بناء الصفحة بناءً على حالة التوظيف
+        // setState(() {
+        //   _pages[2] = (employmentStatus == "موظف")
+        //       ? UserProfileScreen()
+        //       : ProfileScreen();
+        //   _selectedIndex = index;
+        // });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => UserProfileScreen()),
+        );
+      }
+      else {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => AlumniAuthScreen()),
@@ -74,6 +85,10 @@ class _HomePageState extends State<HomePage> {
     bool isProfileScreen = isAlumniPage && isUserLoggedIn;
     bool showIcons =  isUserLoggedIn; // لو داخل الخريجين ومسجل
     bool isAuthScreen = isAlumniPage && !isUserLoggedIn; // لو داخل الخريجين ومش مسجل
+    String? name = Provider.of<AuthProvider>(context).alumni?.graduationData?.user?.username;
+    print(authProvider.userData);
+    print("👤 username: ${authProvider.userData?.username}");
+
 
     return SafeArea(
       child: Scaffold(
@@ -139,7 +154,9 @@ class _HomePageState extends State<HomePage> {
                       if (showIcons) ...[
                         SizedBox(width: 10.w),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            await Provider.of<AuthProvider>(context, listen: false).loadUserDataFromPrefs();
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -168,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => NotificationScreen(),
+                                builder: (context) => UserProfileScreen(),
                               ),
                             );
                           },
@@ -176,12 +193,20 @@ class _HomePageState extends State<HomePage> {
                             width: 39.w,
                             height: 39.h,
                             decoration: BoxDecoration(
-                              color: ColorManager.backgroundColor,
-                              borderRadius: BorderRadius.circular(9),
+                              color: MyColors.primaryColor.withOpacity(0.2), // لون الخلفية
+                              borderRadius: BorderRadius.circular(9.r), // نفس الشكل القديم
                             ),
-                            child: Image.asset("assets/icons/profiles.png",
-                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                            child: Text(
+                              name != null && name.isNotEmpty ? name[0] : '?',
+                              style: TextStyle(
+                                fontSize: 30.sp,
+                                fontWeight: FontWeight.bold,
+                                color: MyColors.primaryColor,
+                                fontFamily: "Noto Kufi Arabic",
+                              ),
                             ),
+
                           ),
                         ),
                       ],
@@ -201,30 +226,49 @@ class _HomePageState extends State<HomePage> {
                 right: 0.w,
                 child: GestureDetector(
                   onTap: () {
-                    if (_isExpanded) {
-                      // ✅ لو كانت مفتوحة، ننتقل للصفحة
-                      Navigator.push(
+                    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+                    if (authProvider.isLoggedIn && authProvider.userType == "graduates") {
+                      // ✅ لو خريج ومسجل، روح مباشرةً على الشكاوى
+                      if (_isExpanded) {
+                        Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => StudentAuthScreen(),
-                        ),
-                      );
-                      // لازم تضيفي المسار دا في routes
+                        MaterialPageRoute(builder: (context) => Complaint()),
+                      );}else {
+                        setState(() {
+                          _isExpanded = true;
+                        });
+                        Future.delayed(Duration(seconds: 3), () {
+                          if (mounted) {
+                            setState(() {
+                              _isExpanded = false;
+                            });
+                          }
+                        });
+                      }
                     } else {
-                      // ✅ نفتح الأنيميشن أول مرة
-                      setState(() {
-                        _isExpanded = true;
-                      });
-                      // ❗️نخليها ترجع تلقائي بعد شوية لو ما دخلش
-                      Future.delayed(Duration(seconds: 3), () {
-                        if (mounted) {
-                          setState(() {
-                            _isExpanded = false;
-                          });
-                        }
-                      });
+                      // 🔄 باقي الحالة: افتح الأنيميشن ثم روح على صفحة التسجيل
+                      if (_isExpanded) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => StudentAuthScreen()),
+                        );
+                      } else {
+                        setState(() {
+                          _isExpanded = true;
+                        });
+                        Future.delayed(Duration(seconds: 3), () {
+                          if (mounted) {
+                            setState(() {
+                              _isExpanded = false;
+                            });
+                          }
+                        });
+                      }
                     }
                   },
+
+
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
