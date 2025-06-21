@@ -1,9 +1,5 @@
-import 'package:faculty/ui/Academic_teams/team1.dart';
-import 'package:faculty/ui/Academic_teams/team2.dart';
-import 'package:faculty/ui/Academic_teams/team3.dart';
-import 'package:faculty/ui/Academic_teams/team4.dart';
+import 'package:faculty/ui/Academic_teams/team_details.dart';
 import 'package:faculty/ui/home.dart';
-import 'package:faculty/ui/home/homescreen.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,7 +62,7 @@ class _AcademicTeamsState extends State<AcademicTeams> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Team1()),
+                        MaterialPageRoute(builder: (context) => TeamDetails(teamId: 1)),
                       );
                     },
                     child: SvgPicture.asset(
@@ -82,7 +78,7 @@ class _AcademicTeamsState extends State<AcademicTeams> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Team2()),
+                        MaterialPageRoute(builder: (context) => TeamDetails(teamId: 2)),
                       );
                     },
                     child: SvgPicture.asset(
@@ -98,7 +94,7 @@ class _AcademicTeamsState extends State<AcademicTeams> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Team3()),
+                        MaterialPageRoute(builder: (context) => TeamDetails(teamId: 3)),
                       );
                     },
                     child: SvgPicture.asset(
@@ -114,7 +110,7 @@ class _AcademicTeamsState extends State<AcademicTeams> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Team4()),
+                        MaterialPageRoute(builder: (context) => TeamDetails(teamId: 4)),
                       );
                     },
                     child: SvgPicture.asset(

@@ -1,5 +1,15 @@
-class ApiConstants{
-  static const String baseurl = 'smartcollegedmanhour-production.up.railway.app';
+
+class ApiConstant {
+  static const String baseUrl = "https://smartcollegedmanhour-production.up.railway.app";
+  static const String visionMission = "/core/vision-mission/";
+  static const String news = "/news/articles/";
+  static const String academicYears = "/services/academic-years/";
+  static const String facultyInfo = "/core/faculty-info/";
+  static const String complaints = "/core/complaints/";
+  static const String createComplaint = "/core/complaints/create/";
+
+
+  
 
 
   static const String studentRegisterApi = '/users/register/';
@@ -12,6 +22,7 @@ class ApiConstants{
  // static String dataApi(int userId) => '/users/graduation/$userId/';
   static const String notificationApi = '/studentportal/mynotifications/';
   static const String updateDataApi = '/users/graduation/';
+
 
 
 

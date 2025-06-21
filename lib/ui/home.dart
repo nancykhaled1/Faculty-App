@@ -1,12 +1,14 @@
-import 'package:faculty/colorManager.dart';
 import 'package:faculty/ui/auth/auth_alumni.dart';
 import 'package:faculty/ui/auth/auth_student.dart';
 import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/departments/departments.dart';
+
 import 'package:faculty/ui/home/homescreen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:faculty/ui/notification/notification_screen.dart';
 import 'package:faculty/ui/students/ElectronicServicesBody.dart';
 import 'package:faculty/ui/students/student_screen.dart';
+import 'package:faculty/utils/colorManager.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,13 +28,48 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   bool isUserLoggedIn = false;
-  final List<Widget> _pages = [
-    HomeScreen(),
+  bool _isExpanded = false;
+  
+  // 🔍 Search functionality
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  bool _isSearching = false;
+
+  // Getter for pages to pass search query
+  List<Widget> get _pages => [
+    HomeScreen(searchQuery: _searchQuery),
     Department(),
     UserProfileScreen(),
     StudentScreen(),
   ];
-  bool _isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _searchQuery = _searchController.text.trim();
+      _isSearching = _searchQuery.isNotEmpty;
+    });
+  }
+
+  void _clearSearch() {
+    setState(() {
+      _searchController.clear();
+      _searchQuery = '';
+      _isSearching = false;
+    });
+  }
 
   void _onItemTapped(int index) {
     if (index == 2) {
@@ -73,8 +110,6 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +160,9 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                           child: TextField(
+                            textAlignVertical: TextAlignVertical.center,
+
+                            controller: _searchController,
                             decoration: InputDecoration(
                               prefixIcon: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 10.sp),
@@ -133,6 +171,16 @@ class _HomePageState extends State<HomePage> {
                                   color: MyColors.greyColor,
                                 ),
                               ),
+                              suffixIcon: _isSearching ? Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.sp),
+                                child: GestureDetector(
+                                  onTap: _clearSearch,
+                                  child: Icon(
+                                    Icons.clear,
+                                    color: MyColors.greyColor,
+                                  ),
+                                ),
+                              ) : null,
                               hintText: 'ادخل كلمة البحث',
                               hintStyle: TextStyle(
                                 color: MyColors.greyColor,
@@ -141,11 +189,18 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.w500,
                               ),
                               border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 15,
+                              contentPadding: EdgeInsets.only(
+                                top: 5,
+                                bottom: 18,
+                             //   horizontal: 15,
                               ),
                             ),
+                            onChanged: (value) {
+                              setState(() {
+                                _searchQuery = value.trim();
+                                _isSearching = value.trim().isNotEmpty;
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -382,3 +437,4 @@ class _HomePageState extends State<HomePage> {
 
 
 
+// فرررررح

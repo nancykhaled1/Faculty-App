@@ -1,7 +1,8 @@
-import 'package:faculty/colorManager.dart';
+
 import 'package:faculty/ui/complaint/sendComplaint.dart';
 import 'package:faculty/ui/home.dart';
 import 'package:faculty/ui/home/homescreen.dart';
+import 'package:faculty/utils/colorManager.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,7 +46,7 @@ class Complaint extends StatelessWidget {
                     ],
                   ),
             
-                  SizedBox(height: 20.h), // مسافة بين الـ Row والـ Column الذي تحته
+                  SizedBox(height: 50.h), // مسافة بين الـ Row والـ Column الذي تحته
             
                   // 🔹 العمود الذي يحتوي على عناصر أخرى
                   Column(
@@ -55,14 +56,14 @@ class Complaint extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 73,right: 74),
                         child: Text(
                           " منصة الشكاوي والأراء   ",
-                          style: TextStyle(fontSize: 20.sp,
+                          style: TextStyle(fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
                             fontFamily: "Noto Kufi Arabic",
                             color:ColorManager.primaryColor0,),
                         ),
                       ),
             
-                      SizedBox(height: 24.h),
+                      SizedBox(height: 18.h),
                       Padding(
                         padding: const EdgeInsets.only(left: 22,right: 23),
                         child: Text(
@@ -74,7 +75,7 @@ class Complaint extends StatelessWidget {
                         ),
                       ),
             
-                      SizedBox(height: 92.h),
+                      SizedBox(height: 48.h),
             
             
                       Padding(
@@ -108,7 +109,7 @@ class Complaint extends StatelessWidget {
             
             
             
-                      SizedBox(height: 72.h),
+                      SizedBox(height: 24.h),
                       Padding(
                         padding: const EdgeInsets.only(right: 23,left: 22),
                         child: Center(
