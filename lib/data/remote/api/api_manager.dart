@@ -5,10 +5,36 @@ import 'package:faculty/data/models/response/newsModel.dart';
 import 'package:faculty/data/remote/api/api_constant.dart';
 import 'package:faculty/data/models/response/vision_mission_model.dart';
 import 'package:faculty/data/models/response/faculty_info_model.dart';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dartz/dartz.dart';
+import 'package:faculty/data/remote/model/request/loginRequest.dart';
+import 'package:faculty/data/remote/model/response/DepartmentResponse.dart';
+import 'package:faculty/data/remote/model/response/LoginResponse.dart';
+import 'package:faculty/data/remote/model/response/StudentResponse.dart';
+import 'package:faculty/data/remote/model/response/UserDataesponse.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import '../../local/preferences.dart';
+import '../model/request/studentRegisterRequest.dart';
+import '../model/request/updatedataRequest.dart';
+import '../model/response/AlumniRegisterResponse.dart';
+import '../model/response/NotificationResponse.dart';
+import '../model/response/StudentPortalResponse.dart';
+import '../model/response/UpdataDataResponse.dart';
+import '../model/response/errors.dart';
+import '../model/response/studentRegisterResponse.dart';
+import 'api_constant.dart';
+import 'failures.dart';
 import 'package:http/http.dart' as http;
 
 class ApiManager {
+  ApiManager._();
+  static ApiManager? _instance;
+  static ApiManager? getInstance() {
+    _instance ??= ApiManager._();
+    return _instance;
+  }
+
   static Future<List<VisionMissionModel>> getVisionMission() async {
     final url = Uri.parse(ApiConstant.baseUrl + ApiConstant.visionMission);
     final response = await http.get(
@@ -100,36 +126,9 @@ class ApiManager {
       throw Exception('Failed to load faculty info. Status code: ${response.statusCode}\nResponse body: ${response.body}');
     }
   }
-}
 
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dartz/dartz.dart';
-import 'package:faculty/data/remote/model/request/loginRequest.dart';
-import 'package:faculty/data/remote/model/response/DepartmentResponse.dart';
-import 'package:faculty/data/remote/model/response/LoginResponse.dart';
-import 'package:faculty/data/remote/model/response/StudentResponse.dart';
-import 'package:faculty/data/remote/model/response/UserDataesponse.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
-import '../../local/preferences.dart';
-import '../model/request/studentRegisterRequest.dart';
-import '../model/request/updatedataRequest.dart';
-import '../model/response/AlumniRegisterResponse.dart';
-import '../model/response/NotificationResponse.dart';
-import '../model/response/StudentPortalResponse.dart';
-import '../model/response/UpdataDataResponse.dart';
-import '../model/response/errors.dart';
-import '../model/response/studentRegisterResponse.dart';
-import 'api_constant.dart';
-import 'failures.dart';
 
-class ApiManager {
-  ApiManager._();
-  static ApiManager? _instance;
-  static ApiManager? getInstance() {
-    _instance ??= ApiManager._();
-    return _instance;
-  }
+
 
   static Future<Either<RegisterError, StudentRegisterResponse>> studentRegister(
       String username,
@@ -144,7 +143,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
 
-        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.studentRegisterApi);
+        Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.studentRegisterApi);
 
         var requestBody = StudentRegisterRequest(
           email: email,
@@ -204,7 +203,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
 
-        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.alumniRegisterApi);
+        Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.alumniRegisterApi);
 
         var request = http.MultipartRequest('POST', url);
 
@@ -270,7 +269,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
 
-        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.loginApi);
+        Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.loginApi);
 
         var requestBody = LoginRequest(
           email: email ??'',
@@ -318,7 +317,7 @@ class ApiManager {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.depatmentApi);
+      Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.depatmentApi);
       var response = await http.get(url);
       print(response.body);
 
@@ -338,7 +337,7 @@ class ApiManager {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.studentApi);
+      Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.studentApi);
       var response = await http.get(url);
       print(response.body);
 
@@ -358,7 +357,7 @@ class ApiManager {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.portalApi);
+      Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.portalApi);
       var response = await http.get(url);
       print(response.body);
 
@@ -381,7 +380,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
 
-        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.dataApi);
+        Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.dataApi);
 
 
         var response = await http.get(
@@ -424,7 +423,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
 
-        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.notificationApi);
+        Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.notificationApi);
 
 
         var response = await http.get(
@@ -453,67 +452,6 @@ class ApiManager {
   }
 
 
-  //
-  // static Future<Either<Failures, UpdataDataResponse>> updateData(
-  //     String token,
-  //     UpdateDataRequest request,
-  //     ) async {
-  //   final connectivityResult = await Connectivity().checkConnectivity();
-  //
-  //   if (connectivityResult == ConnectivityResult.mobile ||
-  //       connectivityResult == ConnectivityResult.wifi) {
-  //     try {
-  //       Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.updateDataApi);
-  //
-  //       var requestMultipart = http.MultipartRequest("PATCH", url);
-  //
-  //       requestMultipart.headers.addAll({
-  //         "Authorization": "Bearer $token",
-  //       });
-  //
-  //       requestMultipart.fields['username'] = request.username;
-  //       requestMultipart.fields['email'] = request.email;
-  //       requestMultipart.fields['employment_status'] = request.employmentStatus;
-  //       requestMultipart.fields['job_name'] = request.jobName!;
-  //       requestMultipart.fields['company_email'] = request.companyEmail!;
-  //       requestMultipart.fields['company_phone'] = request.companyPhone!;
-  //       requestMultipart.fields['company_link'] = request.companyLink!;
-  //       requestMultipart.fields['about_company'] = request.aboutCompany!;
-  //       requestMultipart.fields['location'] = request.location!;
-  //
-  //       // ✅ إضافة ملف الـ CV إن وُجد
-  //       if (request.cv != null && request.cv!.isNotEmpty) {
-  //         requestMultipart.files.add(await http.MultipartFile.fromPath('cv', request.cv!));
-  //       }
-  //
-  //       var streamedResponse = await requestMultipart.send();
-  //       var response = await http.Response.fromStream(streamedResponse);
-  //
-  //       print('Response status: ${response.statusCode}');
-  //       print('Response body: ${response.body}');
-  //
-  //       var jsonResponse = jsonDecode(response.body);
-  //       print('hgggg');
-  //
-  //       if (response.statusCode >= 200 && response.statusCode < 300) {
-  //         var updateDataResponse = UpdataDataResponse.fromJson(jsonResponse);
-  //         print('right');
-  //
-  //         return right(updateDataResponse);
-  //       } else {
-  //         print('left');
-  //
-  //         return Left(ServerError(errorMessage: jsonResponse["message"] ?? "حدث خطأ في السيرفر"));
-  //       }
-  //     } catch (e) {
-  //       print('error');
-  //
-  //       return Left(ServerError(errorMessage: "Exception: $e"));
-  //     }
-  //   } else {
-  //     return Left(NetworkError(errorMessage: 'من فضلك تحقق من الاتصال بالإنترنت'));
-  //   }
-  // }
 
   static Future<Either<Failures, UpdataDataResponse>> updateData(
       String token,
@@ -524,7 +462,7 @@ class ApiManager {
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
       try {
-        Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.updateDataApi);
+        Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.updateDataApi);
         var requestMultipart = http.MultipartRequest("PATCH", url);
 
         requestMultipart.headers.addAll({

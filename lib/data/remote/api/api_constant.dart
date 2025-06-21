@@ -7,11 +7,6 @@ class ApiConstant {
   static const String facultyInfo = "/core/faculty-info/";
   static const String complaints = "/core/complaints/";
   static const String createComplaint = "/core/complaints/create/";
-
-
-  
-
-
   static const String studentRegisterApi = '/users/register/';
   static const String alumniRegisterApi = '/users/graduation/';
   static const String loginApi = '/users/token/';
