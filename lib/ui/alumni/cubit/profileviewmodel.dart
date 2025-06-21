@@ -24,6 +24,18 @@ class ProfileViewModel extends Cubit<UserDataStates> {
       },
           (response) async {
             print("✅ Success: ${response.graduationData?.user?.username}");
+            // await SharedPrefsHelper.saveUserData(
+            //   username: response.graduationData!.user,
+            //   email: response.email,
+            //   employmentStatus: response.employmentStatus,
+            //   jobName: response.jobName,
+            //   companyEmail: response.companyEmail,
+            //   companyPhone: response.companyPhone,
+            //   companyLink: response.companyLink,
+            //   aboutCompany: response.aboutCompany,
+            //   location: response.location,
+            //   cv: response.cv,
+           // );
 
 
             emit(UserDataSuccessStates(userDataResponseEntity: response));

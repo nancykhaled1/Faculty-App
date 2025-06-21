@@ -288,6 +288,7 @@ class _RegisterState extends State<Register> {
                         ElevatedButton(
                           onPressed: () {
                             if (viewmodel.formKey.currentState!.validate()) {
+                              FocusScope.of(context).unfocus();
                               completeRegistration(); // 👈 استدعاء التسجيل النهائي
 
                             }

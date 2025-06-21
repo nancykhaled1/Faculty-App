@@ -4,11 +4,11 @@ class SharedPrefsHelper {
   static const _usernameKey = 'username';
   static const _emailKey = 'email';
   static const _employmentStatusKey = 'employment_status';
-  static const _jobKey = 'jobName';
-  static const _emailCompanyKey = 'companyEmail';
-  static const _phoneKey = 'companyPhone';
-  static const _urlKey = 'companyLink';
-  static const _descriptionKey = 'aboutCompany';
+  static const _jobKey = 'job_name';
+  static const _emailCompanyKey = 'company_email';
+  static const _phoneKey = 'company_phone';
+  static const _urlKey = 'company_link';
+  static const _descriptionKey = 'about_company';
   static const _cvKey = 'cv';
   static const _locationKey = 'location';
 
@@ -71,11 +71,11 @@ class SharedPrefsHelper {
       'username': prefs.getString(_usernameKey),
       'email': prefs.getString(_emailKey),
       'employment_status': prefs.getString(_employmentStatusKey),
-      'jobName': prefs.getString(_jobKey),
-      'companyEmail': prefs.getString(_emailCompanyKey),
-      'companyPhone': prefs.getString(_phoneKey),
-      'companyLink': prefs.getString(_urlKey),
-      'aboutCompany': prefs.getString(_descriptionKey),
+      'job_name': prefs.getString(_jobKey),
+      'company_email': prefs.getString(_emailCompanyKey),
+      'company_phone': prefs.getString(_phoneKey),
+      'company_link': prefs.getString(_urlKey),
+      'about_company': prefs.getString(_descriptionKey),
       'cv': prefs.getString(_cvKey),
       'location': prefs.getString(_locationKey),
 

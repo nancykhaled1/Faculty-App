@@ -23,11 +23,7 @@ class AlumniRegisterScreen extends StatefulWidget {
 
 class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
 
-
-
   var viewmodel = AlumniRegisterScreenViewModel(registerUseCase: injectRegisterUseCase());
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +31,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
       bloc: viewmodel,
         listener: (context, state) async {
           if (state is AlumniRegisterErrorState) {
-            Navigator.pop(context); // <-- قفل الـ dialog
+            Navigator.of(context, rootNavigator: true).pop();
             showDialog(
               context: context,
               builder: (context) => BuildDialog(
@@ -47,7 +43,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
           }
 
           if (state is AlumniRegisterLoadingState) {
-            Navigator.pop(context); // <-- قفل الـ dialog
+            //Navigator.pop(context); // <-- قفل الـ dialog
             showDialog(
               context: context,
               barrierDismissible: false, // لا يمكن اغلاق الديالوج بالضغط بالخارج
@@ -63,7 +59,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
           }
 
           if (state is AlumniRegisterSuccessState) {
-            Navigator.pop(context);
+            Navigator.of(context, rootNavigator: true).pop(); // ✅ ده اللي يقفل الديالوج
 
             final authProvider = Provider.of<AuthProvider>(context, listen: false);
             authProvider.login("graduates");
@@ -288,6 +284,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
 
                           // هل هو موظف؟
                           if (viewmodel.selectedEmploymentStatus == "موظف") {
+                            FocusScope.of(context).unfocus();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -295,6 +292,7 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
                               ),
                             );
                           } else {
+                            FocusScope.of(context).unfocus();
                             viewmodel.alumniRegister(data);
                           }
                         }

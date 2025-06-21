@@ -4,6 +4,7 @@ import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
 import 'package:faculty/ui/alumni/cubit/profileviewmodel.dart';
 import 'package:faculty/ui/alumni/profile_notemploee.dart';
 import 'package:faculty/ui/alumni/profilescreen.dart';
+import 'package:faculty/ui/alumni/updatesuccess.dart';
 import 'package:faculty/ui/auth/authProvider.dart';
 import 'package:faculty/ui/auth/login/forget_pass.dart';
 import 'package:faculty/ui/auth/login/loginscreen.dart';
@@ -92,7 +93,7 @@ class _MyAppState extends State<MyApp> {
     builder: (_ , child) {
           return MaterialApp(
             theme: ThemeData(
-              primaryColor: MyColors.primaryColor
+              primaryColor: Color(0xFF044C8C)
             ),
 
             locale: Locale('ar', ''), // 👈 تحديد اللغة العربية لجعل كل شيء RTL
@@ -129,6 +130,7 @@ class _MyAppState extends State<MyApp> {
               StudentActivityScreen.routeName : (context) => StudentActivityScreen(),
               //ProfileScreen.routeName : (context) => ProfileScreen(),
               AcademicTeams.routeName: (context) => AcademicTeams(),
+              UpdateSuccessScreen.routeName : (context) => UpdateSuccessScreen()
 
             },
           );

@@ -226,30 +226,49 @@ class _HomePageState extends State<HomePage> {
                 right: 0.w,
                 child: GestureDetector(
                   onTap: () {
-                    if (_isExpanded) {
-                      // ✅ لو كانت مفتوحة، ننتقل للصفحة
-                      Navigator.push(
+                    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+                    if (authProvider.isLoggedIn && authProvider.userType == "graduates") {
+                      // ✅ لو خريج ومسجل، روح مباشرةً على الشكاوى
+                      if (_isExpanded) {
+                        Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => StudentAuthScreen(),
-                        ),
-                      );
-                      // لازم تضيفي المسار دا في routes
+                        MaterialPageRoute(builder: (context) => Complaint()),
+                      );}else {
+                        setState(() {
+                          _isExpanded = true;
+                        });
+                        Future.delayed(Duration(seconds: 3), () {
+                          if (mounted) {
+                            setState(() {
+                              _isExpanded = false;
+                            });
+                          }
+                        });
+                      }
                     } else {
-                      // ✅ نفتح الأنيميشن أول مرة
-                      setState(() {
-                        _isExpanded = true;
-                      });
-                      // ❗️نخليها ترجع تلقائي بعد شوية لو ما دخلش
-                      Future.delayed(Duration(seconds: 3), () {
-                        if (mounted) {
-                          setState(() {
-                            _isExpanded = false;
-                          });
-                        }
-                      });
+                      // 🔄 باقي الحالة: افتح الأنيميشن ثم روح على صفحة التسجيل
+                      if (_isExpanded) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => StudentAuthScreen()),
+                        );
+                      } else {
+                        setState(() {
+                          _isExpanded = true;
+                        });
+                        Future.delayed(Duration(seconds: 3), () {
+                          if (mounted) {
+                            setState(() {
+                              _isExpanded = false;
+                            });
+                          }
+                        });
+                      }
                     }
                   },
+
+
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,

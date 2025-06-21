@@ -1,16 +1,15 @@
-import 'package:faculty/ui/complaint/complaint.dart';
-import 'package:faculty/ui/home.dart';
+import 'package:faculty/ui/alumni/profilescreen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/colors.dart';
 
-class SuccessScreen extends StatelessWidget{
-  static const String routeName = 'success';
-  final String userType; // graduates or complaints
+class UpdateSuccessScreen extends StatelessWidget{
+  static const String routeName = 'update';
 
-  const SuccessScreen({Key? key, required this.userType}) : super(key: key);
+  const UpdateSuccessScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,43 +23,39 @@ class SuccessScreen extends StatelessWidget{
             children: [
               SvgPicture.asset(
                 'assets/images/vector.svg', // الأيقونة الافتراضية
-               // width: 15.sp,
-               // height: 15.sp,
+                // width: 15.sp,
+                // height: 15.sp,
 
               ),
               SizedBox(
                 height: 50.h,
               ),
-              Text('تم انشاء حسابك بنجاح',
-              style: TextStyle(
-                color: MyColors.primaryColor,
-                fontSize: 30.sp,
-                fontFamily: "Noto Kufi Arabic",
-                fontWeight: FontWeight.w500
-              ),
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              Text('مرحبا بك من جديد',
+              Text('تم تغيير بياناتك بنجاح',
                 style: TextStyle(
-                    color: MyColors.greyColor,
-                    fontSize: 20.sp,
-                    fontFamily: "Work Sans",
+                    color: MyColors.primaryColor,
+                    fontSize: 30.sp,
+                    fontFamily: "Noto Kufi Arabic",
                     fontWeight: FontWeight.w500
                 ),
               ),
               SizedBox(
-                height: 150.h,
+                height: 40.h,
+              ),
+              // Text('مرحبا بك من جديد',
+              //   style: TextStyle(
+              //       color: MyColors.greyColor,
+              //       fontSize: 20.sp,
+              //       fontFamily: "Work Sans",
+              //       fontWeight: FontWeight.w500
+              //   ),
+              // ),
+              SizedBox(
+                height: 100.h,
               ),
               ElevatedButton(
                 onPressed: () {
-                  FocusScope.of(context).unfocus();
-                  if (userType == "graduates") {
-                    Navigator.pushNamed(context,HomePage.routeName);
-                  } else {
-                    Navigator.pushNamed(context, Complaint.routeName);
-                  }
+
+                    Navigator.pushReplacementNamed(context,UserProfileScreen.routeName);
 
                 },
                 child: Text(

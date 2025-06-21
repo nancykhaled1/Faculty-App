@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:faculty/ui/alumni/updatesuccess.dart';
 import 'package:faculty/ui/home.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/local/preferences.dart';
@@ -65,15 +67,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
       // ✅ صححنا هنا
       if (employmentStatus == 'employee') {
-        jobController.text = data['jobName'] ?? '';
-        emailCompanyController.text = data['companyEmail'] ?? '';
-        phoneController.text = data['companyPhone'] ?? '';
-        urlController.text = data['companyLink'] ?? '';
-        descriptionController.text = data['aboutCompany'] ?? '';
+        jobController.text = data['job_name'] ?? '';
+        emailCompanyController.text = data['company_email'] ?? '';
+        phoneController.text = data['company_phone'] ?? '';
+        urlController.text = data['company_link'] ?? '';
+        descriptionController.text = data['about_company'] ?? '';
         locationController.text = data['location'] ?? '';
-        if (data['cv'] != null && data['cv'].toString().isNotEmpty) {
-          cvController = File(data['cv']??'');
+        if (data['cv'] != null && File(data['cv']??'').existsSync()) {
+          cvController = File(data['cv'] ??'');
         }
+
 
       }
 
@@ -292,21 +295,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           );
 
                           await viewModel.updateData(request,token,);
-// ✅ نعمل إعادة تحميل للبيانات من السيرفر بعد التحديث
-                        //  await viewModel.getUserData(token);
-
+                          await viewModel.getUserData(token);
+                          setState(() {}); // يعمل Reload للصفحة
 
                           // بعد الحفظ بنجاح نرجع لصفحة البروفايل أو نعرض رسالة نجاح
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("✅ تم حفظ التغييرات بنجاح")),
-                            );
-                            Navigator.pushReplacementNamed(context, UserProfileScreen.routeName);
-                          }
+                          // if (context.mounted) {
+                          //   ScaffoldMessenger.of(context).showSnackBar(
+                          //     SnackBar(content: Text("✅ تم حفظ التغييرات بنجاح")),
+                          //   );
+                            Navigator.pushReplacementNamed(context, UpdateSuccessScreen.routeName);
+                         // }
                         },
-
-
-
                         style: ElevatedButton.styleFrom(
                           backgroundColor: MyColors.primaryColor,
                           foregroundColor: MyColors.whiteColor,
@@ -397,18 +396,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       children: [
         Text(label),
         GestureDetector(
-          onTap: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles(
-              type: FileType.custom,
-              allowedExtensions: ['pdf'],
-            );
-            if (result != null && result.files.single.path != null) {
-              setState(() {
-                cvController = File(result.files.single.path!);
-              });
-            }
-          },
-          child: Container(
+        onTap: () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+        );
+
+        if (result != null && result.files.single.path != null) {
+        final originalPath = result.files.single.path!;
+        final fileName = originalPath.split('/').last;
+
+        final appDir = await getApplicationDocumentsDirectory(); // from path_provider
+        final savedPath = '${appDir.path}/$fileName';
+
+        final savedFile = await File(originalPath).copy(savedPath);
+
+        setState(() {
+        cvController = savedFile;
+        });
+        }
+        },
+
+        child: Container(
             padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: MyColors.whiteColor,
@@ -421,9 +430,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    cvController?.path.split('/').last ?? 'اضغط لاختيار ملف PDF',
+                    cvController != null && cvController!.path.isNotEmpty
+                        ? cvController!.path.split('/').last
+                        : 'اضغط لاختيار ملف PDF',
                     overflow: TextOverflow.ellipsis,
-                  ),
+                  )
+
                 ),
                 if (cvController != null)
                   IconButton(

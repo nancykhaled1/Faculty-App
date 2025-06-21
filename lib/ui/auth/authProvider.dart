@@ -83,11 +83,11 @@ class AuthProvider with ChangeNotifier {
       _alumni = UserDataResponseEntity(
         graduationData: GraduationDataResponseEntity(
           employmentStatus: data['employment_status'],
-          jobName: data['jobName'],
-          companyEmail: data['companyEmail'],
-          companyPhone: data['companyPhone'],
-          companyLink: data['companyLink'],
-          aboutCompany: data['aboutCompany'],
+          jobName: data['job_name'],
+          companyEmail: data['company_email'],
+          companyPhone: data['company_phone'],
+          companyLink: data['company_link'],
+          aboutCompany: data['about_company'],
           location: data['location'],
           cv: data['cv'],
           user: UserResponseEntity(

@@ -219,7 +219,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 40.h),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async{
+                    FocusScope.of(context).unfocus();
                     viewModel.login();
 
                   },
