@@ -1,12 +1,16 @@
 import 'dart:io';
 import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
+import 'package:faculty/ui/Academic_teams/cubit/academic_teams_cubit.dart';
+import 'package:faculty/ui/Academic_teams/cubit/academic_teams_state.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class TeamDetails extends StatefulWidget {
   final int teamId;
@@ -18,24 +22,11 @@ class TeamDetails extends StatefulWidget {
 }
 
 class _TeamDetailsState extends State<TeamDetails> {
-  final List<Map<String, String>> pdfs = [
-    {
-      'title': 'جدول الفرقة الدراسية للفصل الدراسي الأول - العام الأكاديمي 2024/2025',
-      'path': 'assets/pdf/الجدول الدراسية (محاضرات + سكاشن).pdf',
-    },
-    {
-      'title': 'جدول امتحانات العملي للفصل الدراسي الأول للعام الأكاديمي 2024/2025',
-      'path': 'assets/pdf/جدول الترم التاني .pdf',
-    },
-    {
-      'title': 'جدول امتحانات النهائية للفصل الدراسي الأول للعام الأكاديمي 2024/2025',
-      'path': 'assets/pdf/جدول الترم التاني .pdf',
-    },
-    {
-      'title': 'أرقام الجلوس الخاصة بالمستوى',
-      'path': 'assets/pdf/ارقام الجلوس.pdf',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    context.read<AcademicTeamsCubit>().getAcademicYear(widget.teamId);
+  }
 
   String getTeamTitle() {
     switch (widget.teamId) {
@@ -49,6 +40,35 @@ class _TeamDetailsState extends State<TeamDetails> {
         return 'الفرقة الرابعة';
       default:
         return 'الفرقة الدراسية';
+    }
+  }
+
+  Future<void> openPdfFromUrl(String? url, String title) async {
+    if (url == null || url.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('لا يوجد ملف PDF متاح')),
+      );
+      return;
+    }
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final dir = await getApplicationDocumentsDirectory();
+        final fileName = '${title.replaceAll(RegExp(r'[^\w\s-]'), '')}.pdf';
+        final file = File('${dir.path}/$fileName');
+
+        await file.writeAsBytes(response.bodyBytes);
+        await OpenFilex.open(file.path);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('فشل في تحميل الملف')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطأ في فتح الملف: $e')),
+      );
     }
   }
 
@@ -93,18 +113,51 @@ class _TeamDetailsState extends State<TeamDetails> {
                       fontFamily: "Noto Kufi Arabic",
                     ),
                     textAlign: TextAlign.right,
-                  //textDirection: TextDirection.rtl,
                   ),
                 ),
               ],
             ),
             SizedBox(height: 15.h),
             Expanded(
-              child: ListView.separated(
-                itemCount: pdfs.length,
-                separatorBuilder: (context, index) => const Divider(color: Color(0XFFD4D4D4), thickness: 1, height: 30),
-                itemBuilder: (context, index) {
-                  return _buildDetailRow(pdfs[index]['title']!, pdfs[index]['path']!);
+              child: BlocBuilder<AcademicTeamsCubit, AcademicTeamsState>(
+                builder: (context, state) {
+                  if (state is AcademicTeamsLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is AcademicTeamsError) {
+                    return Center(child: Text(state.message));
+                  } else if (state is AcademicTeamsSuccess) {
+                    final year = state.academicYear;
+                    return ListView(
+                      children: [
+                        _buildDetailRow(
+                          'جدول الفرقة الدراسية للفصل الدراسي الأول - العام الأكاديمي 2024/2025',
+                          year.lectureSchedule,
+                        ),
+                        SizedBox(height: 15.h),
+                        Divider(color: Color(0XFFD4D4D4), thickness: 1, height: 20),
+                        SizedBox(height: 15.h),
+                        _buildDetailRow(
+                          'جدول امتحانات العملي للفصل الدراسي الأول للعام الأكاديمي 2024/2025',
+                          year.practicalExam,
+                        ),
+                        SizedBox(height: 15.h),
+                        Divider(color: Color(0XFFD4D4D4), thickness: 1, height: 20),
+                        SizedBox(height: 15.h),
+                        _buildDetailRow(
+                          'جدول امتحانات النهائية للفصل الدراسي الأول للعام الأكاديمي 2024/2025',
+                          year.exam,
+                        ),
+                        SizedBox(height: 15.h),
+                        Divider(color: Color(0XFFD4D4D4), thickness: 1, height: 20),
+                        SizedBox(height: 15.h),
+                        _buildDetailRow(
+                          'أرقام الجلوس الخاصة بالمستوى',
+                          year.seatingNumber,
+                        ),
+                      ],
+                    );
+                  }
+                  return const SizedBox.shrink();
                 },
               ),
             ),
@@ -114,26 +167,11 @@ class _TeamDetailsState extends State<TeamDetails> {
     );
   }
 
-  Widget _buildDetailRow(String title, String assetPath) {
+  Widget _buildDetailRow(String title, String? url) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: GestureDetector(
-        onTap: () async {
-          try {
-            final dir = await getApplicationDocumentsDirectory();
-            final file = File('${dir.path}/${assetPath.split('/').last}');
-
-            if (!await file.exists()) {
-              final byteData = await rootBundle.load(assetPath);
-              await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-            }
-            await OpenFilex.open(file.path);
-          } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Could not open file: $e')),
-            );
-          }
-        },
+        onTap: () => openPdfFromUrl(url, title),
         child: Padding(
           padding: const EdgeInsets.only(right: 20),
           child: Text(
@@ -142,7 +180,9 @@ class _TeamDetailsState extends State<TeamDetails> {
               fontSize: 13.sp,
               fontFamily: "Noto Kufi Arabic",
               fontWeight: FontWeight.w500,
-              color: MyColors.primaryColor,
+              color: (url != null && url.isNotEmpty)
+                  ? MyColors.primaryColor
+                  : Colors.grey,
             ),
             textAlign: TextAlign.right,
           ),
