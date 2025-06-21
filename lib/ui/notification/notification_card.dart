@@ -1,16 +1,20 @@
+import 'package:faculty/domain/entities/notificationEntity.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+
 
 class NotificationCard extends StatelessWidget {
-  final String message;
-  final String date;
+  final NotificationResponseEntity notification;
 
-  const NotificationCard({super.key, required this.message, required this.date});
+  const NotificationCard({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context) {
+    final DateTime parsedDate = DateTime.parse(notification.createdAt ??'').toLocal();
+    final String formattedDate = DateFormat('HH:mm – dd/MM/yyyy').format(parsedDate);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 25.w),
       child: Container(
@@ -27,12 +31,11 @@ class NotificationCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // 🔔 الجزء الأزرق بالأيقونة
             Container(
               width: 50.w,
               height: 90.h,
               decoration: BoxDecoration(
-                color: MyColors.primaryColor, // لون أزرق زي الصورة
+                color: MyColors.primaryColor,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(15.r),
                   bottomRight: Radius.circular(15.r),
@@ -41,15 +44,11 @@ class NotificationCard extends StatelessWidget {
               ),
               child: Center(
                 child: SvgPicture.asset(
-                  'assets/icons/notification.svg', // أيقونة الجرس
-                  // width: 24.w,
-                  // height: 24.h,
-                  // color: Colors.yellow, // نفس لون الجرس في الصورة
+                  'assets/icons/notification.svg',
                 ),
               ),
             ),
 
-            // 📝 النص والتاريخ
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
@@ -57,7 +56,17 @@ class NotificationCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      message,
+                      notification.title ?? '',
+                      style: TextStyle(
+                        fontFamily: 'Noto Kufi Arabic',
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: MyColors.primaryColor,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      notification.body ?? '',
                       style: TextStyle(
                         fontFamily: 'Noto Kufi Arabic',
                         fontSize: 12.sp,
@@ -67,17 +76,14 @@ class NotificationCard extends StatelessWidget {
                     ),
                     SizedBox(height: 8.h),
                     Align(
-                      alignment: Alignment.bottomLeft, // التاريخ يروح للشمال
-                      child: Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: Text(
-                          date,
-                          style: TextStyle(
-                            fontFamily: 'Numans',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 9.sp,
-                            color: MyColors.greyColor,
-                          ),
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                        formattedDate,
+                        style: TextStyle(
+                          fontFamily: 'Numans',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 9.sp,
+                          color: MyColors.greyColor,
                         ),
                       ),
                     ),
@@ -85,7 +91,6 @@ class NotificationCard extends StatelessWidget {
                 ),
               ),
             ),
-
           ],
         ),
       ),

@@ -1,8 +1,12 @@
+import 'package:faculty/domain/entities/departmentEntity.dart';
+import 'package:faculty/domain/usecase/di.dart';
+import 'package:faculty/ui/departments/cubit/states.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'cubit/departmentviewmodel.dart';
 import 'dept_details.dart';
 
 class Department extends StatelessWidget{
@@ -10,92 +14,99 @@ class Department extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: MyColors.backgroundColor,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(20.sp),
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 200.h,
-                    right: 20.w,
-                    child: Image.asset('assets/images/line2.png')),
-                Positioned(
-                    top: 410.h,
-                    right: 190.w,
-                    child: Image.asset('assets/images/line.png')),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('الاقسام المتاحة',
-                      style: TextStyle(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: "Noto Kufi Arabic"
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight, // العنصر الأول على اليمين
-                      child: _buildDepartmentCard(imagePath: 'assets/images/cs.png',
-                          title: 'قسم علوم الحاسب CS',
-                        description: '''يهتم القسم بتدريس وإجراء البحوث المتعلقة بالموضوعات والتخصصات العلمية التالية:أساسيات ومفاهيم لغات الحاسب ومترجماتها – لغة البرمجة – هياكل البيانات – تحليل وتصميم الخوارزميات – نظم تشغيل الحاسبات – بنية وتنظيم الحاسبات- تشفير البيانات وامن الحاسب – ضغط البيانات- هندسة البرمجيات – الذكاء الاصطناعي- النظم الذكية- النظم الخبيرة- معالجة الصور- معالجة اللغات الطبيعية – نظم الوكلاء المتعددة – نظم قواعد المعرفة – المعالجة على التوازي والنظم الموزعة – الحوسبة الشبكية والسحابية- نظم التعليم الذكية – تعليم الحاسبات – التعرف على النماذج – طرق اتصال الانسان بالحاسب – الرؤية بالحاسب – نظم الرسم بالحاسب- تعريب الحاسبات – برمجة التطبيقات.''',
-                          context: context
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Align(
-                      alignment: Alignment.centerLeft, // العنصر الثاني على اليسار
-                      child:  _buildDepartmentCard(imagePath: 'assets/images/it.png',
-                          title: 'قسم تكنولوجيا المعلومات IT',
-                          description: '''يهتم القسم بتدريس وإجراء البحوث المتعلقة بالموضوعات والتخصصات العلمية التالية:أساسيات ومفاهيم لغات الحاسب ومترجماتها – لغة البرمجة – هياكل البيانات – تحليل وتصميم الخوارزميات – نظم تشغيل الحاسبات – بنية وتنظيم الحاسبات- تشفير البيانات وامن الحاسب – ضغط البيانات- هندسة البرمجيات – الذكاء الاصطناعي- النظم الذكية- النظم الخبيرة- معالجة الصور- معالجة اللغات الطبيعية – نظم الوكلاء المتعددة – نظم قواعد المعرفة – المعالجة على التوازي والنظم الموزعة – الحوسبة الشبكية والسحابية- نظم التعليم الذكية – تعليم الحاسبات – التعرف على النماذج – طرق اتصال الانسان بالحاسب – الرؤية بالحاسب – نظم الرسم بالحاسب- تعريب الحاسبات – برمجة التطبيقات.''',
-                          context: context
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Align(
-                      alignment: Alignment.centerRight, // العنصر الثالث على اليمين
-                      child:  _buildDepartmentCard(imagePath: 'assets/images/is.png',
-                          title: 'قسم نظم المعلومات IS',
-                          description: '''يهتم القسم بتدريس وإجراء البحوث المتعلقة بالموضوعات والتخصصات العلمية التالية:أساسيات ومفاهيم لغات الحاسب ومترجماتها – لغة البرمجة – هياكل البيانات – تحليل وتصميم الخوارزميات – نظم تشغيل الحاسبات – بنية وتنظيم الحاسبات- تشفير البيانات وامن الحاسب – ضغط البيانات- هندسة البرمجيات – الذكاء الاصطناعي- النظم الذكية- النظم الخبيرة- معالجة الصور- معالجة اللغات الطبيعية – نظم الوكلاء المتعددة – نظم قواعد المعرفة – المعالجة على التوازي والنظم الموزعة – الحوسبة الشبكية والسحابية- نظم التعليم الذكية – تعليم الحاسبات – التعرف على النماذج – طرق اتصال الانسان بالحاسب – الرؤية بالحاسب – نظم الرسم بالحاسب- تعريب الحاسبات – برمجة التطبيقات.''',
-                          context: context
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            )
+    return BlocProvider(
+        create: (_) => DepartmentScreenviewmodel(
+            getAllDepartmentUseCase: injectGetAllDepartmentUseCase())..getDepartment(),
+      child: BlocBuilder<DepartmentScreenviewmodel,DepartmentStates>(
+          builder: (context, state) {
+            if (state is DepartmentLoadingStates) {
+              return Center(child: CircularProgressIndicator());
+            }
+            else if (state is DepartmentErrorStates) {
+              return Center(child: Text(state.errorMessage?? ''));
+            }
+            else if (state is DepartmentSuccessStates) {
+              final List<DepartmentResponseEntity> data = state.departmentResponseEntity;
+              return SafeArea(
+                child: Scaffold(
+                  backgroundColor: MyColors.backgroundColor,
+                  body: SingleChildScrollView(
+                    child: Padding(
+                        padding: EdgeInsets.all(20.sp),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                                top: 200.h,
+                                right: 20.w,
+                                child: Image.asset(
+                                    'assets/images/line2.png')),
+                            Positioned(
+                                top: 410.h,
+                                right: 190.w,
+                                child: Image.asset(
+                                    'assets/images/line.png')),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('الاقسام المتاحة',
+                                  style: TextStyle(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "Noto Kufi Arabic"
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30.h,
+                                ),
+                                ...data.asMap().entries.map((entry) {
+                                  int index = entry.key;
+                                  final department = entry.value;
 
-          ),
-        ),
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: 10.h
+                                    ),
+                                    child: Align(
+                                      alignment: index.isEven ? Alignment.centerRight : Alignment.centerLeft,
+                                      child: _buildDepartmentCard(
+                                        department: department,
+                                        context: context,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+
+                              ],
+                            ),
+                          ],
+                        )
+
+                    ),
+                  ),
+                ),
+              );
+            }
+            return Container(); // initial state
+          }
+
       ),
     );
-
+        }
 
 
   }
 
 
   Widget _buildDepartmentCard({
-    required BuildContext context,  // ✅ تمرير الـ context هنا
-    required String imagePath,
-    required String title,
-    required String description,
+    required BuildContext context,
+    required DepartmentResponseEntity department,
   }) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DepartmentDetails(
-              imagePath: imagePath,
-              title: title,
-              description: description,
-            ),
+            builder: (context) => DepartmentDetails(department: department,),
           ),
         );
       },
@@ -126,16 +137,17 @@ class Department extends StatelessWidget{
                     topRight: Radius.circular(5.r),
                     topLeft: Radius.circular(5.r),
                   ),
-                  child: Image.asset(
-                    imagePath,
+                  child: Image.network(
+                    department.image ?? 'not found',
                     fit: BoxFit.cover,
                     width: 198.sp,
+                    height: 100.h,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.all(8.sp),
                   child: Text(
-                    title,
+                    department.name ?? 'not found',
                     style: TextStyle(
                       color: MyColors.softBlackColor,
                       fontFamily: "Noto Kufi Arabic",
@@ -147,7 +159,7 @@ class Department extends StatelessWidget{
                 Padding(
                   padding: EdgeInsets.all(8.sp),
                   child: Text(
-                    description.replaceAll('\n', ' '),
+                    department.about ?? 'not found'.replaceAll('\n', ' '),
                     style: TextStyle(
                       height: 1.5,
                       color: MyColors.softBlackColor,
@@ -175,5 +187,4 @@ class Department extends StatelessWidget{
 
 
 
-}
 

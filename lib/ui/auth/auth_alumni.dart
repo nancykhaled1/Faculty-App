@@ -28,7 +28,7 @@ class _AlumniAuthScreenState extends State<AlumniAuthScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 10.sp, right: 20.sp),
+                padding: EdgeInsets.only(top: 10.h, right: 20.w),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pushReplacementNamed(context, HomePage.routeName);

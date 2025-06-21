@@ -55,6 +55,7 @@ class SuccessScreen extends StatelessWidget{
               ),
               ElevatedButton(
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   if (userType == "graduates") {
                     Navigator.pushNamed(context,HomePage.routeName);
                   } else {
