@@ -1,13 +1,12 @@
+import 'dart:io';
 import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
-import 'package:faculty/ui/Academic_teams/cubit/academic_teams_cubit.dart';
-import 'package:faculty/ui/Academic_teams/cubit/academic_teams_state.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 
 class TeamDetails extends StatefulWidget {
   final int teamId;
@@ -19,10 +18,38 @@ class TeamDetails extends StatefulWidget {
 }
 
 class _TeamDetailsState extends State<TeamDetails> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<AcademicTeamsCubit>().getAcademicYear(widget.teamId);
+  final List<Map<String, String>> pdfs = [
+    {
+      'title': 'جدول الفرقة الدراسية للفصل الدراسي الأول - العام الأكاديمي 2024/2025',
+      'path': 'assets/pdf/الجدول الدراسية (محاضرات + سكاشن).pdf',
+    },
+    {
+      'title': 'جدول امتحانات العملي للفصل الدراسي الأول للعام الأكاديمي 2024/2025',
+      'path': 'assets/pdf/جدول الترم التاني .pdf',
+    },
+    {
+      'title': 'جدول امتحانات النهائية للفصل الدراسي الأول للعام الأكاديمي 2024/2025',
+      'path': 'assets/pdf/جدول الترم التاني .pdf',
+    },
+    {
+      'title': 'أرقام الجلوس الخاصة بالمستوى',
+      'path': 'assets/pdf/ارقام الجلوس.pdf',
+    },
+  ];
+
+  String getTeamTitle() {
+    switch (widget.teamId) {
+      case 1:
+        return 'الفرقة الأولى';
+      case 2:
+        return 'الفرقة الثانية';
+      case 3:
+        return 'الفرقة الثالثة';
+      case 4:
+        return 'الفرقة الرابعة';
+      default:
+        return 'الفرقة الدراسية';
+    }
   }
 
   @override
@@ -30,10 +57,9 @@ class _TeamDetailsState extends State<TeamDetails> {
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
       body: Padding(
-        padding: const EdgeInsets.only(top: 35 ,right: 12),
+        padding: const EdgeInsets.only(top: 35, right: 12),
         child: Column(
           children: [
-            // زر العودة
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -42,7 +68,7 @@ class _TeamDetailsState extends State<TeamDetails> {
                   GestureDetector(
                     onTap: () => Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (_) => AcademicTeams()),
+                      MaterialPageRoute(builder: (_) => const AcademicTeams()),
                     ),
                     child: SvgPicture.asset(
                       "assets/images/Upload.svg",
@@ -53,58 +79,32 @@ class _TeamDetailsState extends State<TeamDetails> {
                 ],
               ),
             ),
-
             SizedBox(height: 16.h),
-
-            // المحتوى القابل للتمرير
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Text(
+                    getTeamTitle(),
+                    style: TextStyle(
+                      color: MyColors.softBlackColor,
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: "Noto Kufi Arabic",
+                    ),
+                    textAlign: TextAlign.right,
+                  //textDirection: TextDirection.rtl,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15.h),
             Expanded(
-              child: BlocBuilder<AcademicTeamsCubit, AcademicTeamsState>(
-                builder: (context, state) {
-                  if (state is AcademicTeamsLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is AcademicTeamsError) {
-                    return Center(child: Text(state.message));
-                  } else if (state is AcademicTeamsSuccess) {
-                    final year = state.academicYear;
-                    return ListView(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Text(
-                            year.year ?? '',
-                            style: TextStyle(
-                              color: MyColors.softBlackColor,
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Noto Kufi Arabic",
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                        SizedBox(height: 50.h),
-                        _buildDetailRow('جدول الفرقة الدراسية للفصل الدراسي الأول - العام الأكاديمي 2024/2025 ', year.lectureSchedule),
-                          SizedBox(height: 15.h),
-                Divider(color: Color(0XFFD4D4D4), thickness: 1, height: 20),
-                SizedBox(height: 15.h),
-
-                        _buildDetailRow('جدول امتحانات العملي للفصل الدراسي الأول للعام الأكاديمي 2024/2025', year.practicalExam),
-                          SizedBox(height: 15.h),
-                Divider(color: Color(0XFFD4D4D4), thickness: 1, height: 20),
-                SizedBox(height: 15.h),
-
-                        _buildDetailRow('جدول امتحانات النهائية للفصل الدراسي الأول للعام الأكاديمي 2024/2025', year.exam),
-                          SizedBox(height: 15.h),
-                Divider(color: Color(0XFFD4D4D4), thickness: 1, height: 20),
-                SizedBox(height: 15.h),
-
-                        _buildDetailRow(
-                     "أرقام الجلوس الخاصة بالمستوى",
-                          year.seatingNumber,
-                        ),
-                      ],
-                    );
-                  }
-                  return const SizedBox.shrink();
+              child: ListView.separated(
+                itemCount: pdfs.length,
+                separatorBuilder: (context, index) => const Divider(color: Color(0XFFD4D4D4), thickness: 1, height: 30),
+                itemBuilder: (context, index) {
+                  return _buildDetailRow(pdfs[index]['title']!, pdfs[index]['path']!);
                 },
               ),
             ),
@@ -114,60 +114,39 @@ class _TeamDetailsState extends State<TeamDetails> {
     );
   }
 
-  Widget _buildDetailRow(String title, String? url) {
+  Widget _buildDetailRow(String title, String assetPath) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: GestureDetector(
-        onTap: (url != null && url.isNotEmpty)
-            ? () async {
-                try {
-                  final uri = Uri.parse(url);
-                  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-                    throw 'Could not launch $url';
-                  }
-                } catch (e) {
-                  _showErrorDialog(url, e.toString());
-                }
-              }
-            : null,
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 13.sp,
-            fontFamily: "Noto Kufi Arabic",
-            fontWeight: FontWeight.w500,
+        onTap: () async {
+          try {
+            final dir = await getApplicationDocumentsDirectory();
+            final file = File('${dir.path}/${assetPath.split('/').last}');
 
-           
-            color: (url != null && url.isNotEmpty)
-                ? MyColors.primaryColor
-                : null,
+            if (!await file.exists()) {
+              final byteData = await rootBundle.load(assetPath);
+              await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+            }
+            await OpenFilex.open(file.path);
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Could not open file: $e')),
+            );
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 13.sp,
+              fontFamily: "Noto Kufi Arabic",
+              fontWeight: FontWeight.w500,
+              color: MyColors.primaryColor,
+            ),
+            textAlign: TextAlign.right,
           ),
         ),
-      ),
-    );
-  }
-
-  void _showErrorDialog(String? url, String error) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Invalid URL'),
-        content: SingleChildScrollView(
-          child: Text('Could not launch the URL: $url\n\nError: $error'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: url ?? ''));
-              Navigator.of(context).pop();
-            },
-            child: const Text('Copy URL'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
       ),
     );
   }
