@@ -1,15 +1,14 @@
+import 'package:faculty/data/models/response/newsModel.dart';
 import 'package:faculty/ui/home.dart';
 import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:faculty/ui/home/newsModel.dart'; // تأكد من استيراد NewsModel
-import 'package:faculty/ui/home/homescreen.dart'; // تأكد من استيراد الصفحة الرئيسية
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Newsdetails extends StatefulWidget {
-  final News news; // استقبال خبر واحد فقط عبر الـ constructor.
+  final NewsModel news;
 
-  const Newsdetails({super.key, required this.news}); // استقبال الخبر المحدد
+  const Newsdetails({super.key, required this.news});
 
   @override
   State<Newsdetails> createState() => _NewsdetailsState();
@@ -22,24 +21,20 @@ class _NewsdetailsState extends State<Newsdetails> {
       child: Scaffold(
         backgroundColor: MyColors.backgroundColor,
         body: Padding(
-          padding: EdgeInsets.only(top: 10.h, right: 15.w,left: 15.w),
+          padding: EdgeInsets.only(top: 10.h, right: 15.w, left: 15.w),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 🔹 الصف في الأعلى
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
+                        Navigator.pop(context);
                       },
                       child: SvgPicture.asset(
-                       "assets/images/Upload.svg" , 
+                        "assets/icons/backarrow.svg",
                         width: 24.w,
                         height: 24.h,
                       ),
@@ -47,15 +42,20 @@ class _NewsdetailsState extends State<Newsdetails> {
                   ],
                 ),
                 SizedBox(height: 30.h),
-                Image.asset(
-                  widget.news.image, // استخدام صورة الخبر المحدد
-                  width: 342.w,
-                  height: 255.h,
-                     fit: BoxFit.cover,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.network(
+                    widget.news.image ?? "",
+                    width: 342.w,
+                    height: 255.h,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Image.asset("assets/images/doctors.png"),
+                  ),
                 ),
-                SizedBox(height: 30.h),
+                SizedBox(height: 30.h),  
                 Text(
-                  widget.news.title, // استخدام العنوان من الخبر المحدد
+                  widget.news.title ?? "",
                   style: TextStyle(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w500,
@@ -65,44 +65,59 @@ class _NewsdetailsState extends State<Newsdetails> {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  widget.news.content, // عرض المحتوى الكامل من الخبر المحدد
+                  widget.news.content ?? "",
                   style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Noto Kufi Arabic",
                     color: MyColors.softBlackColor,
-                    height: 2.h,
+                    height: 2 .h,
                   ),
                   textAlign: TextAlign.right,
                   textDirection: TextDirection.rtl,
                   softWrap: true,
                 ),
-                SizedBox(height: 40.h),
-                // إذا كان لديك قائمة أخرى من الأخبار، يمكنك التعامل معها هنا
-                // وإذا كانت الأخبار موجودة في `widget.newsList` فيجب تمريرها بشكل صحيح.
-                // إذا كنت لا تحتاج إلى `newsList` في هذا الجزء، يمكنك إزالته.
-               SizedBox(
-                height: 137.h,
-                 child: ListView.builder(
-                  itemCount: 3,
-                         scrollDirection: Axis.horizontal,
-                 
-                            itemBuilder: (context, index) {
-                         
-                 
-                     return Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Image.asset(
-
-                         widget.news.image, // استخدام الصورة الخاصة بالخبر
-                         width: 147.w, // عرض الصورة
-                         height: 152.h, // ارتفاع الصورة
-                         fit: BoxFit.cover,
-                       ),
-                     );
-                   },
-                 ),
-               ),            ],
+                
+              
+                if (widget.news.images != null && widget.news.images!.isNotEmpty) ...[
+                  SizedBox(height: 30.h),
+                  
+                  SizedBox(height: 15.h),
+                  Container(
+                    height: 152.h,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.news.images!.length,
+                      itemBuilder: (context, index) {
+                        final newsImage = widget.news.images![index];
+                        return Container(
+                          margin: EdgeInsets.only(right: 10.w, bottom: 10.w),
+                          width: 147.w,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              newsImage.image ?? "",
+                              width: 147.w,
+                              height: 152.h,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    width: 147.w,
+                                    height: 152.h,
+                                    color: Colors.grey[300],
+                                    child: Icon(
+                                      Icons.image_not_supported,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
         ),

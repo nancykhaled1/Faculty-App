@@ -1,6 +1,5 @@
-
-
 import 'package:faculty/ui/Academic_teams/Academic_teams.dart';
+import 'package:faculty/ui/Academic_teams/cubit/academic_teams_cubit.dart';
 import 'package:faculty/ui/alumni/profile_notemploee.dart';
 import 'package:faculty/ui/alumni/profilescreen.dart';
 import 'package:faculty/ui/auth/authProvider.dart';
@@ -13,6 +12,8 @@ import 'package:faculty/ui/auth/register/success.dart';
 import 'package:faculty/ui/complaint/complaint.dart';
 import 'package:faculty/ui/departments/departments.dart';
 import 'package:faculty/ui/home.dart';
+import 'package:faculty/ui/home/cubit/states/news_cubit.dart';
+import 'package:faculty/ui/home/cubit/states/faculty_info_cubit.dart';
 import 'package:faculty/ui/notification/notification_screen.dart';
 import 'package:faculty/ui/splash/splash_screen.dart';
 import 'package:faculty/ui/students/scholarships-screen.dart';
@@ -22,14 +23,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:faculty/ui/home/cubit/states/vision_mission_cubit.dart';
 import 'ui/auth/auth_alumni.dart';
+import 'package:faculty/ui/complaint/cubit/send_complaint_cubit.dart';
+import 'package:faculty/domain/usecases/send_complaint_usecase.dart';
+import 'package:faculty/data/remote/api/complaint_remote_data_source.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        // ممكن تزود providers تانين هنا
+        BlocProvider(create: (_) => VisionMissionCubit()),
+        BlocProvider(create: (_) => NewsCubit()..getNews()),
+        BlocProvider(create: (_) => AcademicTeamsCubit()),
+        BlocProvider(create: (_) => FacultyInfoCubit()),
+        BlocProvider(
+          create: (_) => SendComplaintCubit(
+            SendComplaintUseCase(ComplaintRemoteDataSource()),
+          ),
+        ),
       ],
       child: MyApp(),
     ),
@@ -84,11 +99,6 @@ class MyApp extends StatelessWidget {
               StudentActivityScreen.routeName : (context) => StudentActivityScreen(),
               ProfileScreen.routeName : (context) => ProfileScreen(),
               AcademicTeams.routeName: (context) => AcademicTeams(),
-              StudentScreen.routeName : (context) => StudentScreen(),
-              NotificationScreen.routeName : (context) => NotificationScreen(),
-          
-
-                 
               StudentScreen.routeName : (context) => StudentScreen(),
               NotificationScreen.routeName : (context) => NotificationScreen(),
               Complaint.routeName: (context) => Complaint(),

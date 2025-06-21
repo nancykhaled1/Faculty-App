@@ -12,7 +12,7 @@ class MyColors{
   static const Color backgroundColor = Color(0xFFF5F5F5);
   static const Color softBlackColor = Color(0xFF383838);
   static const Color softYellowColor = Color(0x33FAA926);
-
+ static const Color newcolor =Color(0XFFDBD8D8);
 
 
 }

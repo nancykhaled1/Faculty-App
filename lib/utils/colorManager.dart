@@ -11,7 +11,8 @@ class ColorManager {
  static const Color textColor =Color(0XFFFAA926);
  static const Color textColor1 =Color(0XFF383838);
  static const Color black =Color(0XFF000000);
- 
+ static const Color colorgrey =Color(0XFF919094);
+ static const Color newcolor =Color(0XFFDBD8D8);
 
  
      
