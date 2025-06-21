@@ -78,11 +78,14 @@ class _RegisterState extends State<Register> {
       listener: (context, state) {
         if (state is AlumniRegisterErrorState) {
           //  BuildDialog.hideLoading(context);
+          Navigator.pop(context); // <-- قفل الـ dialog
+
           showDialog(
             context: context,
             builder:
                 (context) => BuildDialog(
                   message: state.errorMessage ?? "حدث خطأ غير متوقع",
+                  image: 'assets/icons/error.svg',
                 ),
           );
         }
@@ -93,12 +96,16 @@ class _RegisterState extends State<Register> {
             builder:
                 (_) => WillPopScope(
                   onWillPop: () async => false, // يمنع زر الرجوع أيضاً
-                  child: BuildDialog(message: 'جارٍ انشاء الحساب...'),
+                  child: BuildDialog(message: 'جارٍ انشاء الحساب...',
+                    image: 'assets/images/vector.svg',
+
+                  ),
                 ),
           );
         }
         if (state is AlumniRegisterSuccessState) {
           //  BuildDialog.hideLoading(context);
+
           Navigator.pop(context); // <-- قفل الـ dialog
 
           // Provider.of<AuthProvider>(context, listen: false).login('graduates');

@@ -114,7 +114,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           }
           else if (state is UserDataErrorStates) {
             return Center(child: Text(state.errorMessage?? ''));
-          }else if (state is UserDataSuccessStates) {
+          }
+          else if (state is UserDataSuccessStates) {
             return Scaffold(
               backgroundColor: MyColors.backgroundColor,
               appBar: AppBar(
@@ -292,7 +293,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
                           await viewModel.updateData(request,token,);
 // ✅ نعمل إعادة تحميل للبيانات من السيرفر بعد التحديث
-                          await viewModel.getUserData(token);
+                        //  await viewModel.getUserData(token);
 
 
                           // بعد الحفظ بنجاح نرجع لصفحة البروفايل أو نعرض رسالة نجاح

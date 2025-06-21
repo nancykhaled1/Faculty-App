@@ -8,6 +8,7 @@ import 'package:faculty/data/remote/model/response/StudentResponse.dart';
 import 'package:faculty/data/remote/model/response/UserDataesponse.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
+import '../../local/preferences.dart';
 import '../model/request/studentRegisterRequest.dart';
 import '../model/request/updatedataRequest.dart';
 import '../model/response/AlumniRegisterResponse.dart';
@@ -349,6 +350,67 @@ class ApiManager {
   }
 
 
+  //
+  // static Future<Either<Failures, UpdataDataResponse>> updateData(
+  //     String token,
+  //     UpdateDataRequest request,
+  //     ) async {
+  //   final connectivityResult = await Connectivity().checkConnectivity();
+  //
+  //   if (connectivityResult == ConnectivityResult.mobile ||
+  //       connectivityResult == ConnectivityResult.wifi) {
+  //     try {
+  //       Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.updateDataApi);
+  //
+  //       var requestMultipart = http.MultipartRequest("PATCH", url);
+  //
+  //       requestMultipart.headers.addAll({
+  //         "Authorization": "Bearer $token",
+  //       });
+  //
+  //       requestMultipart.fields['username'] = request.username;
+  //       requestMultipart.fields['email'] = request.email;
+  //       requestMultipart.fields['employment_status'] = request.employmentStatus;
+  //       requestMultipart.fields['job_name'] = request.jobName!;
+  //       requestMultipart.fields['company_email'] = request.companyEmail!;
+  //       requestMultipart.fields['company_phone'] = request.companyPhone!;
+  //       requestMultipart.fields['company_link'] = request.companyLink!;
+  //       requestMultipart.fields['about_company'] = request.aboutCompany!;
+  //       requestMultipart.fields['location'] = request.location!;
+  //
+  //       // ✅ إضافة ملف الـ CV إن وُجد
+  //       if (request.cv != null && request.cv!.isNotEmpty) {
+  //         requestMultipart.files.add(await http.MultipartFile.fromPath('cv', request.cv!));
+  //       }
+  //
+  //       var streamedResponse = await requestMultipart.send();
+  //       var response = await http.Response.fromStream(streamedResponse);
+  //
+  //       print('Response status: ${response.statusCode}');
+  //       print('Response body: ${response.body}');
+  //
+  //       var jsonResponse = jsonDecode(response.body);
+  //       print('hgggg');
+  //
+  //       if (response.statusCode >= 200 && response.statusCode < 300) {
+  //         var updateDataResponse = UpdataDataResponse.fromJson(jsonResponse);
+  //         print('right');
+  //
+  //         return right(updateDataResponse);
+  //       } else {
+  //         print('left');
+  //
+  //         return Left(ServerError(errorMessage: jsonResponse["message"] ?? "حدث خطأ في السيرفر"));
+  //       }
+  //     } catch (e) {
+  //       print('error');
+  //
+  //       return Left(ServerError(errorMessage: "Exception: $e"));
+  //     }
+  //   } else {
+  //     return Left(NetworkError(errorMessage: 'من فضلك تحقق من الاتصال بالإنترنت'));
+  //   }
+  // }
 
   static Future<Either<Failures, UpdataDataResponse>> updateData(
       String token,
@@ -360,57 +422,80 @@ class ApiManager {
         connectivityResult == ConnectivityResult.wifi) {
       try {
         Uri url = Uri.https(ApiConstants.baseurl, ApiConstants.updateDataApi);
-
         var requestMultipart = http.MultipartRequest("PATCH", url);
 
         requestMultipart.headers.addAll({
           "Authorization": "Bearer $token",
-          // ❌ لاحظ أننا لا نضيف Content-Type هنا يدويًا
         });
 
-        // 🟢 إضافة البيانات
+        // 🧠 إرسال الحقول الأساسية
         requestMultipart.fields['username'] = request.username;
-        requestMultipart.fields['email'] = request.email;
         requestMultipart.fields['employment_status'] = request.employmentStatus;
-        requestMultipart.fields['jobName'] = request.jobName!;
-        requestMultipart.fields['companyEmail'] = request.companyEmail!;
-        requestMultipart.fields['companyPhone'] = request.companyPhone!;
-        requestMultipart.fields['companyLink'] = request.companyLink!;
-        requestMultipart.fields['aboutCompany'] = request.aboutCompany!;
-        requestMultipart.fields['location'] = request.location!;
 
-        // ✅ إضافة ملف الـ CV إن وُجد
+        // 🛡️ إرسال الإيميل فقط لو مختلف عن القديم
+        final savedEmail = SharedPrefsHelper.prefs.getString('email');
+        if ((request.email ?? '').trim().toLowerCase() != (savedEmail ?? '').trim().toLowerCase()) {
+          requestMultipart.fields['email'] = request.email!;
+        }
+
+        // ✏️ إرسال الحقول الاختيارية
+        if ((request.jobName ?? '').isNotEmpty) {
+          requestMultipart.fields['job_name'] = request.jobName!;
+        }
+
+        if ((request.companyEmail ?? '').isNotEmpty) {
+          requestMultipart.fields['company_email'] = request.companyEmail!;
+        }
+
+        if ((request.companyPhone ?? '').isNotEmpty) {
+          requestMultipart.fields['company_phone'] = request.companyPhone!;
+        }
+
+        if ((request.companyLink ?? '').isNotEmpty) {
+          requestMultipart.fields['company_link'] = request.companyLink!;
+        }
+
+        if ((request.aboutCompany ?? '').isNotEmpty) {
+          requestMultipart.fields['about_company'] = request.aboutCompany!;
+        }
+
+        if ((request.location ?? '').isNotEmpty) {
+          requestMultipart.fields['location'] = request.location!;
+        }
+
+        // 📎 CV (ملف)
         if (request.cv != null && request.cv!.isNotEmpty) {
-          requestMultipart.files.add(await http.MultipartFile.fromPath('cv', request.cv!));
+          requestMultipart.files.add(
+            await http.MultipartFile.fromPath('cv', request.cv!),
+          );
         }
 
         var streamedResponse = await requestMultipart.send();
         var response = await http.Response.fromStream(streamedResponse);
 
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        print('📡 Response status: ${response.statusCode}');
+        print('📄 Response body: ${response.body}');
 
-        var jsonResponse = jsonDecode(response.body);
-        print('hgggg');
+        final jsonResponse = jsonDecode(response.body);
 
         if (response.statusCode >= 200 && response.statusCode < 300) {
-          var updateDataResponse = UpdataDataResponse.fromJson(jsonResponse);
-          print('right');
-
-          return right(updateDataResponse);
+          final updateDataResponse = UpdataDataResponse.fromJson(jsonResponse);
+          return Right(updateDataResponse);
         } else {
-          print('left');
-
-          return Left(ServerError(errorMessage: jsonResponse["message"] ?? "حدث خطأ في السيرفر"));
+          final errorMsg = jsonResponse["email"]?[0] ??
+              jsonResponse["message"] ??
+              "حدث خطأ في السيرفر";
+          return Left(ServerError(errorMessage: errorMsg));
         }
       } catch (e) {
-        print('error');
-
         return Left(ServerError(errorMessage: "Exception: $e"));
       }
     } else {
       return Left(NetworkError(errorMessage: 'من فضلك تحقق من الاتصال بالإنترنت'));
     }
   }
+
+
+
 
 }

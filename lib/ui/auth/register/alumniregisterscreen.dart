@@ -40,17 +40,23 @@ class _AlumniRegisterScreenState extends State<AlumniRegisterScreen> {
               context: context,
               builder: (context) => BuildDialog(
                 message: state.errorMessage ?? "حدث خطأ غير متوقع",
+                image: 'assets/icons/error.svg',
+
               ),
             );
           }
 
           if (state is AlumniRegisterLoadingState) {
+            Navigator.pop(context); // <-- قفل الـ dialog
             showDialog(
               context: context,
               barrierDismissible: false, // لا يمكن اغلاق الديالوج بالضغط بالخارج
               builder: (_) => WillPopScope(
                 onWillPop: () async => false, // يمنع زر الرجوع أيضاً
-                child: BuildDialog(message: 'جارٍ انشاء الحساب...'),
+                child: BuildDialog(message: 'جارٍ انشاء الحساب...',
+                  image: 'assets/images/vector.svg',
+
+                ),
               ),
             );
 

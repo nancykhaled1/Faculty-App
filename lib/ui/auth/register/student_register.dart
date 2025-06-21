@@ -40,6 +40,8 @@ class _StudentRegisterState extends State<StudentRegister> {
               context: context,
               builder: (context) => BuildDialog(
                 message: state.errorMessage ?? "حدث خطأ غير متوقع",
+                image: 'assets/icons/error.svg',
+
               ),
             );
           }
@@ -61,6 +63,8 @@ class _StudentRegisterState extends State<StudentRegister> {
               barrierDismissible: false,
               builder: (context) => BuildDialog(
                 message: 'جارٍ انشاء الحساب...',
+                image: 'assets/images/vector.svg',
+
               ),
             );
           }

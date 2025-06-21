@@ -84,6 +84,22 @@ class SharedPrefsHelper {
       'token': prefs.getString('token'),
     };
   }
+  // static Map<String, String?> getUserData() {
+  //   return {
+  //     'username': prefs.getString(_usernameKey),
+  //     'email': prefs.getString(_emailKey),
+  //     'employment_status': prefs.getString(_employmentStatusKey),
+  //     'jobName': prefs.getString(_jobKey),
+  //     'companyEmail': prefs.getString(_emailCompanyKey),
+  //     'companyPhone': prefs.getString(_phoneKey),
+  //     'companyLink': prefs.getString(_urlKey),
+  //     'aboutCompany': prefs.getString(_descriptionKey),
+  //     'cv': prefs.getString(_cvKey),
+  //     'location': prefs.getString(_locationKey),
+  //     'token': prefs.getString('token'),
+  //   };
+  // }
+
 
 
   static Future<void> clearUserData() async {
@@ -98,7 +114,6 @@ class SharedPrefsHelper {
     await prefs.remove(_descriptionKey);
     await prefs.remove(_cvKey);
     await prefs.remove(_locationKey);
-
   }
 
   static Future<void> setToken(String token) async {
@@ -110,5 +125,25 @@ class SharedPrefsHelper {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
+  // static Future<void> clearUserData() async {
+  //   await prefs.remove(_usernameKey);
+  //   await prefs.remove(_emailKey);
+  //   await prefs.remove(_employmentStatusKey);
+  //   await prefs.remove(_jobKey);
+  //   await prefs.remove(_emailCompanyKey);
+  //   await prefs.remove(_phoneKey);
+  //   await prefs.remove(_urlKey);
+  //   await prefs.remove(_descriptionKey);
+  //   await prefs.remove(_cvKey);
+  //   await prefs.remove(_locationKey);
+  // }
+  //
+  // static Future<void> setToken(String token) async {
+  //   await prefs.setString('token', token);
+  // }
+  //
+  // static String? getToken() {
+  //   return prefs.getString('token');
+  // }
 
 }

@@ -50,6 +50,8 @@ class _StudentLifeBodyState extends State<StudentLifeBody> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7.r),
                   border: Border.all(color: MyColors.primaryColor),
+                    color: MyColors.whiteColor
+
                 ),
                 child: Image.network(
                   item.image??'',

@@ -47,6 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
               barrierDismissible: false,
               builder: (context) => BuildDialog(
                 message: 'جارٍ تسجيل الدخول...',
+                image: 'assets/images/vector.svg',
+
               ),
             );
           }
@@ -57,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               context: context,
               builder: (context) => BuildDialog(
                 message: state.errorMessage ?? "حدث خطأ غير متوقع",
+                image: 'assets/icons/error.svg',
               ),
             );
           }
@@ -304,6 +307,8 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         builder: (context) => BuildDialog(
           message: 'فشل في تحميل بيانات المستخدم',
+          image: 'assets/icons/error.svg',
+
         ),
       );
     }

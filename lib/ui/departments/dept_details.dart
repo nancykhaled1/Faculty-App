@@ -76,8 +76,7 @@ class _DepartmentDetailsState extends State<DepartmentDetails> {
                   top: 10.sp, right: 20.sp, left: 10.sp),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                      context, HomePage.routeName);
+                  Navigator.pop(context);
                 },
                 child: SvgPicture.asset(
                   'assets/icons/backarrow.svg', // الأيقونة الافتراضية
@@ -412,7 +411,7 @@ class _DepartmentDetailsState extends State<DepartmentDetails> {
                 CircleAvatar(
                   radius: 40.r,
                   backgroundColor: Colors.white,
-                  backgroundImage: NetworkImage(doctor.image ?? 'not found'),
+                  backgroundImage: NetworkImage(doctor.image ?? 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg'),
                 ),
                 SizedBox(height: 10.h),
                 Text(

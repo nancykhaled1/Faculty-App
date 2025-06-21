@@ -20,6 +20,7 @@ import 'package:faculty/ui/students/cubit/studentviewmodel.dart';
 import 'package:faculty/ui/students/scholarships-screen.dart';
 import 'package:faculty/ui/students/student-activity-screen.dart';
 import 'package:faculty/ui/students/student_screen.dart';
+import 'package:faculty/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -90,6 +91,10 @@ class _MyAppState extends State<MyApp> {
     // Use builder only if you need to use library outside ScreenUtilInit context
     builder: (_ , child) {
           return MaterialApp(
+            theme: ThemeData(
+              primaryColor: MyColors.primaryColor
+            ),
+
             locale: Locale('ar', ''), // 👈 تحديد اللغة العربية لجعل كل شيء RTL
             supportedLocales: [
               Locale('ar', ''), // Arabic
