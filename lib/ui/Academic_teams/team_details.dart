@@ -52,7 +52,29 @@ class _TeamDetailsState extends State<TeamDetails> {
     }
 
     try {
-      final response = await http.get(Uri.parse(url));
+      print('🔍 Opening PDF from URL: $url');
+      
+      // فحص إذا كان URL صحيح
+      Uri uri;
+      try {
+        if (url.startsWith('//')) {
+          uri = Uri.parse('https:$url');
+        } else if (!url.startsWith('http')) {
+          uri = Uri.parse('https://smartcollegedmanhour-production.up.railway.app$url');
+        } else {
+          uri = Uri.parse(url);
+        }
+      } catch (uriError) {
+        print('❌ Error parsing URL: $uriError');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('خطأ في تنسيق الرابط')),
+        );
+        return;
+      }
+      
+      print('🔍 Parsed URI: $uri');
+      final response = await http.get(uri);
+      
       if (response.statusCode == 200) {
         final dir = await getApplicationDocumentsDirectory();
         final fileName = '${title.replaceAll(RegExp(r'[^\w\s-]'), '')}.pdf';
@@ -61,11 +83,13 @@ class _TeamDetailsState extends State<TeamDetails> {
         await file.writeAsBytes(response.bodyBytes);
         await OpenFilex.open(file.path);
       } else {
+        print('❌ HTTP Error: ${response.statusCode}');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('فشل في تحميل الملف')),
         );
       }
     } catch (e) {
+      print('❌ Error opening PDF: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('خطأ في فتح الملف: $e')),
       );

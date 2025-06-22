@@ -1,4 +1,5 @@
 import 'package:faculty/domain/entities/departmentEntity.dart';
+import 'package:faculty/data/models/response/academic_year_model.dart';
 
 /// id : 2
 /// name : "تكنولوجيا المعلومات"
@@ -26,54 +27,269 @@ class DepartmentResponse extends DepartmentResponseEntity{
     super.createdAt,
     super.updatedAt,});
 
-  DepartmentResponse.fromJson(dynamic json) {
-    id = json['id'];
-    name = json['name'];
-    about = json['about'];
-    image = json['image'];
-    vision = json['vision'];
-    mission = json['mission'];
-    doctors = json['doctors'] != null ? json['doctors'].cast<int>() : [];
-    if (json['doctors_detail'] != null) {
-      doctorsDetail = [];
-      json['doctors_detail'].forEach((v) {
-        doctorsDetail?.add(DoctorsDetail.fromJson(v));
+  factory DepartmentResponse.fromJson(Map<String, dynamic> json) {
+    try {
+      print('🔍 Starting DepartmentResponse.fromJson');
+      print('🔍 Input JSON: $json');
+      
+      // فحص كل حقل قبل المعالجة
+      print('🔍 Checking all fields before processing:');
+      json.forEach((key, value) {
+        print('  - $key: $value (type: ${value?.runtimeType})');
       });
+      
+      // معالجة كل حقل بشكل منفصل مع try-catch
+      int? id;
+      try {
+        print('🔍 Processing id field: ${json['id']}');
+        id = _safeParseInt(json['id']);
+        print('✅ id processed successfully: $id');
+      } catch (e) {
+        print('❌ Error processing id: $e');
+        id = null;
+      }
+      
+      String? name;
+      try {
+        print('🔍 Processing name field: ${json['name']}');
+        name = json['name']?.toString();
+        print('✅ name processed successfully: $name');
+      } catch (e) {
+        print('❌ Error processing name: $e');
+        name = null;
+      }
+      
+      String? about;
+      try {
+        print('🔍 Processing about field: ${json['about']}');
+        about = json['about']?.toString();
+        print('✅ about processed successfully: $about');
+      } catch (e) {
+        print('❌ Error processing about: $e');
+        about = null;
+      }
+      
+      String? image;
+      try {
+        print('🔍 Processing image field: ${json['image']}');
+        image = _prependBaseUrl(json['image']);
+        print('✅ image processed successfully: $image');
+      } catch (e) {
+        print('❌ Error processing image: $e');
+        image = null;
+      }
+      
+      String? vision;
+      try {
+        print('🔍 Processing vision field: ${json['vision']}');
+        vision = json['vision']?.toString();
+        print('✅ vision processed successfully: $vision');
+      } catch (e) {
+        print('❌ Error processing vision: $e');
+        vision = null;
+      }
+      
+      String? mission;
+      try {
+        print('🔍 Processing mission field: ${json['mission']}');
+        mission = json['mission']?.toString();
+        print('✅ mission processed successfully: $mission');
+      } catch (e) {
+        print('❌ Error processing mission: $e');
+        mission = null;
+      }
+      
+      List<int>? doctors;
+      try {
+        print('🔍 Processing doctors field: ${json['doctors']}');
+        if (json['doctors'] != null) {
+          doctors = (json['doctors'] as List)
+              .map((doctorJson) {
+                print('🔍 Processing doctor: $doctorJson');
+                return _safeParseInt(doctorJson);
+              })
+              .where((id) => id != null)
+              .cast<int>()
+              .toList();
+        }
+        print('✅ doctors processed successfully: ${doctors?.length} doctors');
+      } catch (e) {
+        print('❌ Error processing doctors: $e');
+        doctors = null;
+      }
+      
+      List<DoctorsDetailEntity>? doctorsDetail;
+      try {
+        print('🔍 Processing doctors_detail field: ${json['doctors_detail']}');
+        if (json['doctors_detail'] != null) {
+          doctorsDetail = (json['doctors_detail'] as List)
+              .map((doctorJson) {
+                print('🔍 Processing doctor: $doctorJson');
+                return DoctorsDetail.fromJson(doctorJson);
+              })
+              .toList();
+        }
+        print('✅ doctors_detail processed successfully: ${doctorsDetail?.length} doctors');
+      } catch (e) {
+        print('❌ Error processing doctors_detail: $e');
+        doctorsDetail = null;
+      }
+      
+      String? pdf;
+      try {
+        print('🔍 Processing pdf field: ${json['pdf']}');
+        pdf = json['pdf']?.toString();
+        print('✅ pdf processed successfully: $pdf');
+      } catch (e) {
+        print('❌ Error processing pdf: $e');
+        pdf = null;
+      }
+      
+      String? createdAt;
+      try {
+        print('🔍 Processing created_at field: ${json['created_at']}');
+        createdAt = json['created_at']?.toString();
+        print('✅ created_at processed successfully: $createdAt');
+      } catch (e) {
+        print('❌ Error processing created_at: $e');
+        createdAt = null;
+      }
+      
+      String? updatedAt;
+      try {
+        print('🔍 Processing updated_at field: ${json['updated_at']}');
+        updatedAt = json['updated_at']?.toString();
+        print('✅ updated_at processed successfully: $updatedAt');
+      } catch (e) {
+        print('❌ Error processing updated_at: $e');
+        updatedAt = null;
+      }
+      
+      print('🔍 Creating DepartmentResponse object...');
+      var result = DepartmentResponse(
+        id: id,
+        name: name,
+        about: about,
+        image: image,
+        vision: vision,
+        mission: mission,
+        doctors: doctors,
+        doctorsDetail: doctorsDetail,
+        pdf: pdf,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+      print('✅ DepartmentResponse.fromJson completed successfully');
+      return result;
+      
+    } catch (e) {
+      print('❌ Error in DepartmentResponse.fromJson: $e');
+      print('❌ Error stack trace: ${e.toString()}');
+      print('❌ JSON data: $json');
+      rethrow;
     }
-    pdf = json['pdf'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
   }
-  // int? id;
-  // String? name;
-  // String? about;
-  // String? image;
-  // String? vision;
-  // String? mission;
-  // List<int>? doctors;
-  // List<DoctorsDetail>? doctorsDetail;
-  // String? pdf;
-  // String? createdAt;
-  // String? updatedAt;
 
-  // Map<String, dynamic> toJson() {
-  //   final map = <String, dynamic>{};
-  //   map['id'] = id;
-  //   map['name'] = name;
-  //   map['about'] = about;
-  //   map['image'] = image;
-  //   map['vision'] = vision;
-  //   map['mission'] = mission;
-  //   map['doctors'] = doctors;
-  //   if (doctorsDetail != null) {
-  //     map['doctors_detail'] = doctorsDetail?.map((v) => v.toJson()).toList();
-  //   }
-  //   map['pdf'] = pdf;
-  //   map['created_at'] = createdAt;
-  //   map['updated_at'] = updatedAt;
-  //   return map;
-  // }
+  static int? _safeParseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is String) {
+      try {
+        // فحص إذا كان الـ string يحتوي على URL
+        if (value.contains('://') || value.startsWith('//')) {
+          print('⚠️ Warning: Attempting to parse URL as int: $value');
+          return null;
+        }
+        return int.parse(value);
+      } catch (e) {
+        print('❌ Error parsing int from string: $value');
+        print('❌ Error details: $e');
+        return null;
+      }
+    }
+    print('⚠️ Warning: Unknown type for int parsing: $value (${value.runtimeType})');
+    return null;
+  }
 
+  static List<int>? _safeParseIntList(dynamic value) {
+    if (value == null) return null;
+    if (value is List) {
+      try {
+        print('🔍 Processing int list with ${value.length} items');
+        List<int> result = [];
+        for (int i = 0; i < value.length; i++) {
+          try {
+            print('🔍 Processing list item $i: ${value[i]} (type: ${value[i]?.runtimeType})');
+            var parsed = _safeParseInt(value[i]);
+            if (parsed != null) {
+              result.add(parsed);
+              print('✅ List item $i processed successfully: $parsed');
+            } else {
+              print('⚠️ List item $i is null, skipping');
+            }
+          } catch (itemError) {
+            print('❌ Error processing list item $i: $itemError');
+            print('❌ Item data: ${value[i]}');
+          }
+        }
+        print('✅ Int list processed successfully: $result');
+        return result;
+      } catch (e) {
+        print('❌ Error parsing int list: $e');
+        return null;
+      }
+    }
+    print('⚠️ Warning: Value is not a list: $value (${value.runtimeType})');
+    return null;
+  }
+
+  static DoctorsDetailEntity? _safeParseDoctorsDetail(dynamic value) {
+    if (value == null) return null;
+    if (value is Map<String, dynamic>) {
+      try {
+        print('🔍 Processing doctor detail: $value');
+        var doctor = DoctorsDetail.fromJson(value);
+        print('✅ Doctor detail processed successfully');
+        return doctor;
+      } catch (e) {
+        print('❌ Error parsing doctor detail: $e');
+        return null;
+      }
+    }
+    print('⚠️ Warning: Value is not a Map: $value (${value.runtimeType})');
+    return null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['about'] = about;
+    data['image'] = image;
+    data['vision'] = vision;
+    data['mission'] = mission;
+    data['doctors'] = doctors;
+    if (doctorsDetail != null) {
+      data['doctors_detail'] = doctorsDetail?.map((v) {
+        if (v is DoctorsDetail) {
+          return v.toJson();
+        } else {
+          // إذا كان v من نوع DoctorsDetailEntity، قم بتحويله يدوياً
+          return {
+            'id': v.id,
+            'cv': v.cv,
+            'position': v.position,
+            'image': v.image,
+            'name': v.name,
+          };
+        }
+      }).toList();
+    }
+    data['pdf'] = pdf;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    return data;
+  }
 }
 
 /// id : 2
@@ -90,27 +306,96 @@ class DoctorsDetail extends DoctorsDetailEntity{
     super.image,
     super.name,});
 
-  DoctorsDetail.fromJson(dynamic json) {
-    id = json['id'];
-    cv = json['cv'];
-    position = json['position'];
-    image = json['image'];
-    name = json['name'];
+  factory DoctorsDetail.fromJson(dynamic json) {
+    try {
+      print('🔍 Parsing DoctorsDetail JSON: $json');
+      
+      // فحص كل حقل قبل التحويل
+      print('🔍 doctor id: ${json['id']} (type: ${json['id']?.runtimeType})');
+      print('🔍 doctor cv: ${json['cv']} (type: ${json['cv']?.runtimeType})');
+      print('🔍 doctor position: ${json['position']} (type: ${json['position']?.runtimeType})');
+      print('🔍 doctor image: ${json['image']} (type: ${json['image']?.runtimeType})');
+      print('🔍 doctor name: ${json['name']} (type: ${json['name']?.runtimeType})');
+      
+      // معالجة كل حقل على حدة
+      print('🔍 Processing doctor id...');
+      var id = DepartmentResponse._safeParseInt(json['id']);
+      print('✅ doctor id processed: $id');
+      
+      print('🔍 Processing doctor cv...');
+      var cv = json['cv']?.toString();
+      print('✅ doctor cv processed: $cv');
+      
+      print('🔍 Processing doctor position...');
+      var position = json['position']?.toString();
+      print('✅ doctor position processed: $position');
+      
+      print('🔍 Processing doctor image...');
+      var image = json['image']?.toString();
+      print('✅ doctor image processed: $image');
+      
+      print('🔍 Processing doctor name...');
+      var name = json['name']?.toString();
+      print('✅ doctor name processed: $name');
+      
+      return DoctorsDetail(
+        id: id,
+        cv: cv,
+        position: position,
+        image: image,
+        name: name,
+      );
+    } catch (e) {
+      print('❌ Error parsing DoctorsDetail: $e');
+      print('❌ JSON data: $json');
+      return DoctorsDetail();
+    }
   }
-  // int? id;
-  // String? cv;
-  // String? position;
-  // String? image;
-  // String? name;
-  //
-  // Map<String, dynamic> toJson() {
-  //   final map = <String, dynamic>{};
-  //   map['id'] = id;
-  //   map['cv'] = cv;
-  //   map['position'] = position;
-  //   map['image'] = image;
-  //   map['name'] = name;
-  //   return map;
-  // }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['cv'] = cv;
+    data['position'] = position;
+    data['image'] = image;
+    data['name'] = name;
+    return data;
+  }
+}
+
+String? _prependBaseUrl(dynamic url) {
+  try {
+    if (url == null) return null;
+    
+    String urlString = url.toString();
+    if (urlString.isEmpty) return null;
+    
+    print('🔍 Processing URL: $urlString');
+    
+    // إذا كان URL يحتوي على http أو https، ارجعه كما هو
+    if (urlString.startsWith('http://') || urlString.startsWith('https://')) {
+      print('✅ Full URL detected: $urlString');
+      return urlString;
+    }
+    
+    // إذا كان URL يبدأ بـ //، أضف https:
+    if (urlString.startsWith('//')) {
+      String fullUrl = 'https:$urlString';
+      print('✅ Protocol-relative URL converted: $fullUrl');
+      return fullUrl;
+    }
+    
+    // إذا كان URL نسبي، أضف baseUrl
+    if (!urlString.startsWith('http')) {
+      String fullUrl = 'https://smartcollegedmanhour-production.up.railway.app$urlString';
+      print('✅ Relative URL converted: $fullUrl');
+      return fullUrl;
+    }
+    
+    return urlString;
+  } catch (e) {
+    print('❌ Error in _prependBaseUrl: $e');
+    print('❌ URL value: $url');
+    return null;
+  }
 }

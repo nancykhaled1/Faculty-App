@@ -1,6 +1,5 @@
-
 class ApiConstant {
-  static const String baseUrl = "https://smartcollegedmanhour-production.up.railway.app";
+  static const String baseUrl = "smartcollegedmanhour-production.up.railway.app";
   static const String visionMission = "/core/vision-mission/";
   static const String news = "/news/articles/";
   static const String academicYears = "/services/academic-years/";
@@ -18,20 +17,9 @@ class ApiConstant {
   static const String notificationApi = '/studentportal/mynotifications/';
   static const String updateDataApi = '/users/graduation/';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  static void debugPrint() {
+    print('🔍 ApiConstant.baseUrl: "$baseUrl"');
+    print('🔍 ApiConstant.baseUrl starts with //: ${baseUrl.startsWith('//')}');
+    print('🔍 ApiConstant.baseUrl starts with http: ${baseUrl.startsWith('http')}');
+  } 
 }

@@ -15,23 +15,31 @@ class DepartmentScreenviewmodel extends Cubit<DepartmentStates> {
 
 
   void getDepartment() async {
-    emit(DepartmentLoadingStates(loadingMessage: 'Loading...'));
-    var either = await getAllDepartmentUseCase.invoke();
-    either.fold(
-          (l) {
-        emit(DepartmentErrorStates(errorMessage: l.errorMessage));
-      },
-          (response) {
-        departments = response;
+    try {
+      emit(DepartmentLoadingStates(loadingMessage: 'جاري تحميل الأقسام...'));
+      
+      var either = await getAllDepartmentUseCase.invoke();
+      either.fold(
+        (error) {
+          print('Department Error: ${error.errorMessage}');
+          emit(DepartmentErrorStates(errorMessage: error.errorMessage));
+        },
+        (response) {
+          departments = response;
+          print('Loaded ${departments.length} departments');
 
-        // إذا أردت تقسيم المدرسين والمساعدين لقسم معين
-        if (departments.isNotEmpty) {
-          _filterDoctors(departments.first); // افتراضيًا القسم الأول
-        }
+          // إذا أردت تقسيم المدرسين والمساعدين لقسم معين
+          if (departments.isNotEmpty) {
+            _filterDoctors(departments.first); // افتراضيًا القسم الأول
+          }
 
-        emit(DepartmentSuccessStates(departmentResponseEntity: response));
-      },
-    );
+          emit(DepartmentSuccessStates(departmentResponseEntity: response));
+        },
+      );
+    } catch (e) {
+      print('Exception in getDepartment: $e');
+      emit(DepartmentErrorStates(errorMessage: 'حدث خطأ غير متوقع: $e'));
+    }
   }
 
   void _filterDoctors(DepartmentResponseEntity department) {

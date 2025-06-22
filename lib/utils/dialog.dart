@@ -32,40 +32,51 @@ class BuildDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.r),
         ),
         contentPadding: EdgeInsets.only(top: 30.h, bottom: 40.h),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(
-              image ??'',
-              width: 61.w,
-              height: 61.h,
-            ),
-            SizedBox(height: 30.h),
-            Padding(
-              padding:  EdgeInsets.symmetric(
-                vertical: 8.w,
-                horizontal: 20.h
-              ),
-              child: Text(
-                message,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: "Noto Kufi Arabic",
-                  color: MyColors.blackColor,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (image != null && image!.isNotEmpty)
+                SvgPicture.asset(
+                  image!,
+                  width: 61.w,
+                  height: 61.h,
+                ),
+              if (image != null && image!.isNotEmpty)
+                SizedBox(height: 30.h),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8.w,
+                  horizontal: 20.h
+                ),
+                child: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Noto Kufi Arabic",
+                    color: MyColors.blackColor,
+                  ),
                 ),
               ),
-            ),
-            if (subMessage != null) ...[
-              SizedBox(height: 8),
-              Text(
-                subMessage!,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15.sp, color: Colors.grey[700]),
-              ),
+              if (subMessage != null) ...[
+                SizedBox(height: 8),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.h),
+                  child: Text(
+                    subMessage!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 15.sp, 
+                      color: Colors.grey[700],
+                      fontFamily: "Noto Kufi Arabic",
+                    ),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
