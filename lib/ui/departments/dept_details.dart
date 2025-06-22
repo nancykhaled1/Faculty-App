@@ -296,36 +296,38 @@ class _DepartmentDetailsState extends State<DepartmentDetails> {
                             }
                           },
                           child: Center(
-                            child: Container(
-                              width: 217.w,
-                              height: 91.h,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                // color: MyColors.softYellowColor,
-                                borderRadius: BorderRadius.circular(10.r),
-                                border: Border.all(
-                                  color: MyColors.yellowColor,
+                            child: SingleChildScrollView(
+                              child: Container(
+                                width: 217.w,
+                                height: 100.h,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  // color: MyColors.softYellowColor,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: Border.all(
+                                    color: MyColors.yellowColor,
+                                  ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: Column(
-                                  // crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/Download.svg',
-                                    ),
-                                    SizedBox(height: 5.h),
-                                    Text(
-                                      "اضغط هنا لتحميل الملف",
-                                      style: TextStyle(
-                                        color: MyColors.blackColor,
-                                        fontSize: 10.sp,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: "Noto Kufi Arabic",
+                                child: Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Column(
+                                    // crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/Download.svg',
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(height: 5.h),
+                                      Text(
+                                        "اضغط هنا لتحميل الملف",
+                                        style: TextStyle(
+                                          color: MyColors.blackColor,
+                                          fontSize: 10.sp,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Noto Kufi Arabic",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

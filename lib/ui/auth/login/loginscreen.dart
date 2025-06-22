@@ -255,63 +255,63 @@ class _LoginScreenState extends State<LoginScreen> {
 
   }
   void _handleLoginSuccess(String token) async {
-   // Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-   // final userId = decodedToken['user_id'];
-
-    final profileViewModel = context.read<ProfileViewModel>();
-    await profileViewModel.getUserData(token);
-
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userData = profileViewModel.state is UserDataSuccessStates
-        ? (profileViewModel.state as UserDataSuccessStates).userDataResponseEntity
-        : null;
+    authProvider.setToken(token); // ضروري يتخزن التوكن
 
-    if (userData != null) {
-      authProvider.setAlumniData(userData);
-      authProvider.setToken(token);
-      authProvider.login(widget.userType);
+    if (widget.userType == "graduates") {
+      final profileViewModel = context.read<ProfileViewModel>();
+      await profileViewModel.getUserData(token);
 
-      // استخراج البيانات من الكائن:
-      final employmentStatus = userData.graduationData?.employmentStatus ?? '';
-      final username = userData.graduationData?.user?.username ?? '';
-      final email = userData.graduationData?.user?.email ?? '';
+      final userData = profileViewModel.state is UserDataSuccessStates
+          ? (profileViewModel.state as UserDataSuccessStates).userDataResponseEntity
+          : null;
 
-      // حفظ البيانات في SharedPreferences
-      if (employmentStatus == "employee") {
-        await SharedPrefsHelper.saveUserData(
-          username: username,
-          email: email,
-          employmentStatus: employmentStatus,
-          jobName: userData.graduationData?.jobName,
-          companyEmail: userData.graduationData?.companyEmail,
-          companyPhone: userData.graduationData?.companyPhone,
-          companyLink: userData.graduationData?.companyLink,
-          aboutCompany: userData.graduationData?.aboutCompany,
+      if (userData != null) {
+        authProvider.setAlumniData(userData);
+        authProvider.login(widget.userType);
 
-        );
-      } else {
-        await SharedPrefsHelper.saveUserData(
-          username: username,
-          email: email,
-          employmentStatus: employmentStatus,
-        );
-      }
-      await SharedPrefsHelper.setToken(token); // ✅ مهم جدًا
+        // استخراج البيانات من الكائن:
+        final employmentStatus = userData.graduationData?.employmentStatus ?? '';
+        final username = userData.graduationData?.user?.username ?? '';
+        final email = userData.graduationData?.user?.email ?? '';
 
-      if (widget.userType == "graduates") {
+        // حفظ البيانات في SharedPreferences
+        if (employmentStatus == "employee") {
+          await SharedPrefsHelper.saveUserData(
+            username: username,
+            email: email,
+            employmentStatus: employmentStatus,
+            jobName: userData.graduationData?.jobName,
+            companyEmail: userData.graduationData?.companyEmail,
+            companyPhone: userData.graduationData?.companyPhone,
+            companyLink: userData.graduationData?.companyLink,
+            aboutCompany: userData.graduationData?.aboutCompany,
+          );
+        } else {
+          await SharedPrefsHelper.saveUserData(
+            username: username,
+            email: email,
+            employmentStatus: employmentStatus,
+          );
+        }
+
+        await SharedPrefsHelper.setToken(token);
         Navigator.pushNamed(context, HomePage.routeName);
+
       } else {
-        Navigator.pushNamed(context, Complaint.routeName);
+        showDialog(
+          context: context,
+          builder: (context) => BuildDialog(
+            message: 'فشل في تحميل بيانات المستخدم',
+            image: 'assets/icons/error.svg',
+          ),
+        );
       }
     } else {
-      showDialog(
-        context: context,
-        builder: (context) => BuildDialog(
-          message: 'فشل في تحميل بيانات المستخدم',
-          image: 'assets/icons/error.svg',
-
-        ),
-      );
+      // لو مش خريج
+      authProvider.login(widget.userType);
+      await SharedPrefsHelper.setToken(token);
+      Navigator.pushNamed(context, Complaint.routeName);
     }
   }
 

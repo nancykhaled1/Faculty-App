@@ -15,8 +15,8 @@ class ComplaintModel {
     this.response,
     this.createdAt,
     this.updatedAt,
-    this.userEmail,
-    this.userName,
+this.userEmail,
+   this.userName,
   });
 
   factory ComplaintModel.fromJson(Map<String, dynamic> json) {

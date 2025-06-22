@@ -177,7 +177,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                color: MyColors.primaryColor,
+                              ),
                             ),
                           );
                         } else if (facultyInfoState is FacultyInfoSuccess && facultyInfoState.facultyInfo.isNotEmpty) {

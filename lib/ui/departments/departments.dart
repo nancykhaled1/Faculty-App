@@ -20,13 +20,105 @@ class Department extends StatelessWidget{
       child: BlocBuilder<DepartmentScreenviewmodel,DepartmentStates>(
           builder: (context, state) {
             if (state is DepartmentLoadingStates) {
-              return Center(child: CircularProgressIndicator());
+              return Scaffold(
+                backgroundColor: MyColors.backgroundColor,
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        color: MyColors.primaryColor,
+                      ),
+                      SizedBox(height: 16.h),
+                      Text(
+                        state.loadingMessage ?? 'جاري التحميل...',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: "Noto Kufi Arabic",
+                          color: MyColors.softBlackColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             }
             else if (state is DepartmentErrorStates) {
-              return Center(child: Text(state.errorMessage?? ''));
+              return Scaffold(
+                backgroundColor: MyColors.backgroundColor,
+                body: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20.sp),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 64.sp,
+                          color: Colors.red,
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          state.errorMessage ?? 'حدث خطأ في التحميل',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontFamily: "Noto Kufi Arabic",
+                            color: MyColors.softBlackColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 16.h),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<DepartmentScreenviewmodel>().getDepartment();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: MyColors.primaryColor,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: Text(
+                            'إعادة المحاولة',
+                            style: TextStyle(
+                              fontFamily: "Noto Kufi Arabic",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
             }
             else if (state is DepartmentSuccessStates) {
               final List<DepartmentResponseEntity> data = state.departmentResponseEntity;
+              
+              if (data.isEmpty) {
+                return Scaffold(
+                  backgroundColor: MyColors.backgroundColor,
+                  body: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.folder_open,
+                          size: 64.sp,
+                          color: Colors.grey[600],
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          'لا توجد أقسام متاحة',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontFamily: "Noto Kufi Arabic",
+                            color: MyColors.softBlackColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              
               return SafeArea(
                 child: Scaffold(
                   backgroundColor: MyColors.backgroundColor,
@@ -137,17 +229,52 @@ class Department extends StatelessWidget{
                     topRight: Radius.circular(5.r),
                     topLeft: Radius.circular(5.r),
                   ),
-                  child: Image.network(
-                    department.image ?? 'not found',
-                    fit: BoxFit.cover,
-                    width: 198.sp,
-                    height: 100.h,
-                  ),
+                  child: department.image != null && department.image!.isNotEmpty
+                      ? Image.network(
+                          department.image!,
+                          fit: BoxFit.cover,
+                          width: 198.sp,
+                          height: 100.h,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              width: 198.sp,
+                              height: 100.h,
+                              color: Colors.grey[300],
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: MyColors.primaryColor,
+                                ),
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              width: 198.sp,
+                              height: 100.h,
+                              color: Colors.grey[300],
+                              child: Icon(
+                                Icons.image_not_supported,
+                                color: Colors.grey[600],
+                              ),
+                            );
+                          },
+                        )
+                      : Container(
+                          width: 198.sp,
+                          height: 100.h,
+                          color: Colors.grey[300],
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey[600],
+                          ),
+                        ),
                 ),
                 Padding(
                   padding: EdgeInsets.all(8.sp),
                   child: Text(
-                    department.name ?? 'not found',
+                    department.name ?? 'غير محدد',
                     style: TextStyle(
                       color: MyColors.softBlackColor,
                       fontFamily: "Noto Kufi Arabic",
@@ -159,7 +286,7 @@ class Department extends StatelessWidget{
                 Padding(
                   padding: EdgeInsets.all(8.sp),
                   child: Text(
-                    department.about ?? 'not found'.replaceAll('\n', ' '),
+                    department.about?.replaceAll('\n', ' ') ?? 'لا يوجد وصف',
                     style: TextStyle(
                       height: 1.5,
                       color: MyColors.softBlackColor,

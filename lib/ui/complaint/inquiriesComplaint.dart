@@ -1,14 +1,14 @@
-import 'package:faculty/utils/colorManager.dart';
-import 'package:faculty/utils/colors.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'ComplaintDetailsPage.dart';
 import 'complaint.dart';
 import '../../data/models/response/complaint_model.dart';
 import '../complaint/cubit/send_complaint_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../utils/colorManager.dart';
+import '../../utils/colors.dart';
 
 class Inquriescomplaint extends StatefulWidget {
   const Inquriescomplaint({super.key});

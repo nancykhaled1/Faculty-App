@@ -25,7 +25,6 @@ import '../model/response/errors.dart';
 import '../model/response/studentRegisterResponse.dart';
 import 'api_constant.dart';
 import 'failures.dart';
-import 'package:http/http.dart' as http;
 
 class ApiManager {
   ApiManager._();
@@ -36,7 +35,7 @@ class ApiManager {
   }
 
   static Future<List<VisionMissionModel>> getVisionMission() async {
-    final url = Uri.parse(ApiConstant.baseUrl + ApiConstant.visionMission);
+    final url = Uri.https(ApiConstant.baseUrl, ApiConstant.visionMission);
     final response = await http.get(
       url,
       headers: {
@@ -59,7 +58,7 @@ class ApiManager {
   }
 
   static Future<List<NewsModel>> getNews() async {
-    final url = Uri.parse(ApiConstant.baseUrl + ApiConstant.news);
+    final url = Uri.https(ApiConstant.baseUrl, ApiConstant.news);
     final response = await http.get(
       url,
       headers: {
@@ -82,30 +81,48 @@ class ApiManager {
   }
 
   static Future<AcademicYearModel> getAcademicYear(int id) async {
-    final url = Uri.parse('${ApiConstant.baseUrl}${ApiConstant.academicYears}$id/');
-    final response = await http.get(
-      url,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    );
+    try {
+      print('🔍 Getting academic year for ID: $id');
+      
+      final url = Uri.https(ApiConstant.baseUrl, '${ApiConstant.academicYears}$id/');
+      print('🔍 URL: $url');
+      
+      final response = await http.get(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
 
-    if (response.statusCode == 200) {
-      try {
-        final decoded = utf8.decode(response.bodyBytes);
-        final json = jsonDecode(decoded);
-        return AcademicYearModel.fromJson(json);
-      } catch (e) {
-        throw Exception('Failed to parse JSON: ${e.toString()}\nResponse body: ${response.body}');
+      print('🔍 Response status: ${response.statusCode}');
+      print('🔍 Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        try {
+          final decoded = utf8.decode(response.bodyBytes);
+          final json = jsonDecode(decoded);
+          print('🔍 JSON decoded successfully');
+          
+          final academicYear = AcademicYearModel.fromJson(json);
+          print('✅ Academic year parsed successfully');
+          return academicYear;
+        } catch (parseError) {
+          print('❌ JSON Parse Error: $parseError');
+          throw Exception('خطأ في تحليل البيانات: $parseError');
+        }
+      } else {
+        print('❌ HTTP Error: ${response.statusCode}');
+        throw Exception('خطأ في الخادم: ${response.statusCode}');
       }
-    } else {
-      throw Exception('Failed to load academic year. Status code: ${response.statusCode}\nResponse body: ${response.body}');
+    } catch (e) {
+      print('❌ Exception in getAcademicYear: $e');
+      throw e;
     }
   }
 
   static Future<List<FacultyInfoModel>> getFacultyInfo() async {
-    final url = Uri.parse(ApiConstant.baseUrl + ApiConstant.facultyInfo);
+    final url = Uri.https(ApiConstant.baseUrl, ApiConstant.facultyInfo);
     final response = await http.get(
       url,
       headers: {
@@ -126,9 +143,6 @@ class ApiManager {
       throw Exception('Failed to load faculty info. Status code: ${response.statusCode}\nResponse body: ${response.body}');
     }
   }
-
-
-
 
   static Future<Either<RegisterError, StudentRegisterResponse>> studentRegister(
       String username,
@@ -178,8 +192,6 @@ class ApiManager {
       return left(RegisterError(nonFieldErrors: ['Something went wrong: $e']));
     }
   }
-
-
 
   static Future<Either<RegisterError, AlumniRegisterResponse>> alumniRegister(
      // String userId,
@@ -257,8 +269,6 @@ class ApiManager {
     }
   }
 
-
-
   static Future<Either<RegisterError, LoginResponse>> login(
       String email,
       String password
@@ -305,31 +315,83 @@ class ApiManager {
       print('Exception: $e');
       return left(RegisterError(nonFieldErrors: ['Something went wrong: $e']));
     }
-
-
-
-
   }
 
-
-
   static Future<Either<Failures, List<DepartmentResponse>>> getDepartment() async {
-    final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
-      Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.depatmentApi);
-      var response = await http.get(url);
-      print(response.body);
+    try {
+      print('🔍 Starting getDepartment...');
+      ApiConstant.debugPrint();
+      print('🔍 ApiConstant.baseUrl: ${ApiConstant.baseUrl}');
+      print('🔍 ApiConstant.depatmentApi: ${ApiConstant.depatmentApi}');
+      
+      final connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        print('🔍 About to create Uri...');
+        try {
+          Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.depatmentApi);
+          print('🔍 Uri created successfully: $url');
+        } catch (uriError) {
+          print('❌ Error creating Uri: $uriError');
+          print('❌ baseUrl: ${ApiConstant.baseUrl}');
+          print('❌ depatmentApi: ${ApiConstant.depatmentApi}');
+          throw uriError;
+        }
+        Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.depatmentApi);
+        print('🔍 Making HTTP request to: $url');
+        var response = await http.get(url);
+        print('Department API Response: ${response.statusCode}');
+        print('Department API Body: ${response.body}');
 
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        var jsonList = jsonDecode(response.body) as List;
-        var departments = jsonList.map((e) => DepartmentResponse.fromJson(e)).toList();
-        return Right(departments);
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          try {
+            print('🔍 Starting JSON decode...');
+            var jsonList = jsonDecode(response.body) as List;
+            print('🔍 JSON decoded successfully, found ${jsonList.length} departments');
+            
+            List<DepartmentResponse> departments = [];
+            for (int i = 0; i < jsonList.length; i++) {
+              try {
+                print('🔍 Processing department ${i + 1}/${jsonList.length}');
+                print('🔍 Department data: ${jsonList[i]}');
+                
+                // فحص كل حقل في الـ JSON قبل المعالجة
+                var deptJson = jsonList[i] as Map<String, dynamic>;
+                print('🔍 Department fields:');
+                deptJson.forEach((key, value) {
+                  print('  - $key: $value (type: ${value?.runtimeType})');
+                });
+                
+                print('🔍 About to call DepartmentResponse.fromJson...');
+                var dept = DepartmentResponse.fromJson(jsonList[i]);
+                print('🔍 DepartmentResponse.fromJson completed successfully');
+                departments.add(dept);
+                print('✅ Department ${i + 1} processed successfully');
+              } catch (deptError) {
+                print('❌ Error processing department ${i + 1}: $deptError');
+                print('❌ Department data: ${jsonList[i]}');
+                print('❌ Error stack trace: ${deptError.toString()}');
+                // استمر في معالجة باقي الأقسام
+              }
+            }
+            
+            print('✅ Successfully processed ${departments.length}/${jsonList.length} departments');
+            return Right(departments);
+          } catch (parseError) {
+            print('❌ JSON Parse Error: $parseError');
+            print('❌ Parse error stack trace: ${parseError.toString()}');
+            return Left(ServerError(errorMessage: "خطأ في تحليل البيانات: $parseError"));
+          }
+        } else {
+          return Left(ServerError(errorMessage: "خطأ في الخادم: ${response.statusCode}"));
+        }
       } else {
-        return Left(ServerError(errorMessage: "error in server"));
+        return Left(NetworkError(errorMessage: 'يرجى التحقق من الاتصال بالإنترنت'));
       }
-    } else {
-      return Left(NetworkError(errorMessage: 'please check connection'));
+    } catch (e) {
+      print('❌ Exception in getDepartment: $e');
+      print('❌ Exception stack trace: ${e.toString()}');
+      return Left(ServerError(errorMessage: "حدث خطأ غير متوقع: $e"));
     }
   }
 
@@ -410,12 +472,7 @@ class ApiManager {
       print('Exception: $e');
       return left(RegisterError(nonFieldErrors: ['Something went wrong: $e']));
     }
-
-
-
-
   }
-
 
   static Future<Either<Failures, List<NotificationResponse>>> getNotification(String token) async {
       final connectivityResult = await Connectivity().checkConnectivity();
@@ -450,8 +507,6 @@ class ApiManager {
         return Left(NetworkError(errorMessage: 'please check connection'));
       }
   }
-
-
 
   static Future<Either<Failures, UpdataDataResponse>> updateData(
       String token,
@@ -535,8 +590,4 @@ class ApiManager {
       return Left(NetworkError(errorMessage: 'من فضلك تحقق من الاتصال بالإنترنت'));
     }
   }
-
-
-
-
 }
